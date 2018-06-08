@@ -18,6 +18,7 @@ import java.awt.GraphicsEnvironment;
 import java.util.Vector;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 final public class Tetris
@@ -127,14 +128,22 @@ final public class Tetris
 				sh_boxes.get(i).bottom_end+=25;
 			}
 		}
+		//go up
+		public void go_up() {
+			loc_y-=25;
+			for(int i= 0 ; i< 4 ; i++) {
+				sh_boxes.get(i).y -=25;
+				sh_boxes.get(i).bottom_end-=25;
+			}
+		}
 	}
 	
 	//this class is the most important class.
 	public static class gameComponents{
 		//declare borders
-		public final static int top_border = 3*25;
-		public final static int left_border = 1*25;
-		public final static int right_border = 21*25;
+		public final int top_border = 1*25;
+		public final int left_border = 1*25;
+		public final int right_border = 21*25;
 		public final int bottom_border = 28*25;
 
 		//Game info states
@@ -179,40 +188,63 @@ final public class Tetris
     private void moveIt(DrawPanel drawPanel)
     {
     	//endless loop for game running.
+    	boolean left = true;
+    	boolean right = true;
+    	boolean bottom = true;
+    	boolean top = true;
+    	generate_a_new_shape("L");
         while (true)
         {
-        	if(my_tetris.call_new_shape) {
-            	generate_a_new_shape("L");
-            	my_tetris.set_call_new_shape(false);
-        	}
-        	//selecting last index to catch active shape which is need to move to down,left and right.
-        	shape sh_last_index = my_tetris.all_shapes.lastElement();
-        	//check collision with other shapes
-        	boolean loop_quit = false;
-        	for(int i = 0 ; i < my_tetris.all_shapes.size()-1 ; i++) {
-        		for(int k = 0 ; k < 4 ; k++) {
-        			//check active shape bottom end with passive shapes top sides.
-        			if(sh_last_index.sh_boxes.get(k).bottom_end >= my_tetris.all_shapes.get(i).sh_boxes.get(k).y-50) {
-            			System.out.println("box["+i+"_"+k+"]_y : " + my_tetris.all_shapes.get(i).sh_boxes.get(k).y);
-            			System.out.println("active_bottom : " + sh_last_index.sh_boxes.get(k).bottom_end);
-        				sh_last_index.set_shape_active(false);
-                		my_tetris.set_call_new_shape(true);
-                		loop_quit = true;
-                		break;
-        			}
-        			if(loop_quit) break;
+        	shape active = my_tetris.all_shapes.lastElement();
+        	/*if(active.sh_boxes.lastElement().bottom_end >= my_tetris.bottom_border) 
+        		active.set_shape_active(false);*/
+        	for(int i = 0 ; i < 4 ; i++) {
+        		int active_bottom = active.sh_boxes.get(i).bottom_end;
+        		if(active_bottom >= my_tetris.bottom_border) {
+        			active.set_shape_active(false);
         		}
         	}
-        	//move it to down -- a basic version with bug just written to try mechanism --
-        	if(sh_last_index.active  && sh_last_index.sh_boxes.lastElement().bottom_end < my_tetris.bottom_border)
-        		sh_last_index.go_down();
-        	else {
-        		sh_last_index.set_shape_active(false);
-        		my_tetris.set_call_new_shape(true);
+        	
+        	for(int i = 0 ; i < 4 ; i++) {
+        		int active_top = active.sh_boxes.get(i).y;
+        		if(active_top < my_tetris.top_border) {
+        			top = false;
+        		}
         	}
+        	System.out.println(my_tetris.all_shapes.size());
+        	//check for top side of all passive shapes
+        	for(int i = 0 ; i < my_tetris.all_shapes.size()-1 ; i++) {
+        		for(int k = 0 ; k < 4 ; k++) {
+        			for(int t = 0 ; t < 4 ; t++) {
+        				int active_bottom = active.sh_boxes.get(k).bottom_end;
+        				int passive_top = my_tetris.all_shapes.get(i).sh_boxes.get(t).y;
+        				if(active_bottom == passive_top) {
+        					active.set_shape_active(false);
+        				}
+        				if(active_bottom > passive_top) {
+        					top = false;
+        				}
+        			}
+        		}
+        	}
+        	
+        	if(bottom && active.active) {
+        		active.go_down();
+        	}
+        	
+        	if(!active.active && top) {
+        		generate_a_new_shape("I");
+        	}
+        	if(!top) {
+        		JOptionPane.showConfirmDialog(null, "You LOST .. :(");
+        		System.exit(1);
+        	}
+        	
+        	
+        	
             try
             { 
-                Thread.sleep(300);
+                Thread.sleep(100);
             }
             catch (Exception e)
             {
@@ -270,9 +302,12 @@ final public class Tetris
 			for(int i = 0 ; i < 4  ; i++) {
 				g.drawString("Shape No: " + k + " - Box No: " + Integer.toString(i), x, y);
 				y+=25;
-				g.drawString("active_box["+i+"]_(X,Y):(" + sh_last_index.sh_boxes.get(i).x+ "," + sh_last_index.sh_boxes.get(i).y + ")", x, y);
+				String act;
+				if(my_tetris.all_shapes.get(k).active) act = "active";
+				else act = "passive";
+				g.drawString(act+"_box["+i+"]_(X,Y):(" + my_tetris.all_shapes.get(k).sh_boxes.get(i).x+ "," + my_tetris.all_shapes.get(k).sh_boxes.get(i).y + ")", x, y);
 				y+=25;
-				g.drawString("active_box["+i+"]_(e_bot,e_r):(" + sh_last_index.sh_boxes.get(i).bottom_end+ "," + sh_last_index.sh_boxes.get(i).right_end + ")", x, y);
+				g.drawString(act+"_box["+i+"]_(e_bot,e_r):(" + my_tetris.all_shapes.get(k).sh_boxes.get(i).bottom_end+ "," + my_tetris.all_shapes.get(k).sh_boxes.get(i).right_end + ")", x, y);
 				y+=25;
 			}
 		}
@@ -307,7 +342,10 @@ final public class Tetris
 			}
     		draw_x += 25;
     	}
+    	new_generated_shape.set_shape_active(true);
     	my_tetris.newShape(new_generated_shape);
+    	my_tetris.set_call_new_shape(false);
+    	System.out.println("!! --> New Shape Generated");
     }
     private void draw_Shapes(Graphics g) {
     	//string are created with 16 characters for indexing think it 0-15 each 4 grouped character dedicated to a single line.think like 4x4 matrix compressed a string value to get it easier.
