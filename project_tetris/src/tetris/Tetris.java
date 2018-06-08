@@ -61,8 +61,29 @@ final public class Tetris
         moveIt(drawPanel);
     }
     
-    
+    static class box{
+    	private int x;
+    	private int y;
+    	private int bottom_end;
+    	private int right_end;
+    	
+    	//Constructor
+    	box(int p_x, int p_y, int p_bottom_end , int p_right_end){
+    		x = p_x;
+    		y = p_y;
+    		bottom_end = p_bottom_end;
+    		right_end = p_right_end;
+    	}
+    	//getter methods
+    	public int get_box_x() { return x;}
+    	public int get_box_y() { return y;}
+    	
+    	//setter methods
+    	public void set_box_x(int p_x) { x = p_x;}
+    	public void set_box_y(int p_y) { y = p_y;}
+    }
 	static class shape{
+		private Vector<box> sh_boxes = new Vector<box>(4);
 		private String shape_type;
 		private String shape_code;
 		private long shape_id;
@@ -80,6 +101,9 @@ final public class Tetris
 			loc_y = y;
 			gameLog.addElement("shape constructed");
 		}
+		public void add_box(box newbox) {
+			sh_boxes.addElement(newbox);
+		}
 		//getter methods for shape objects
 		public String get_shape_type() { return shape_type; }
 		public String get_shape_code() { return shape_code; }
@@ -94,15 +118,24 @@ final public class Tetris
 		public void set_shape_active(boolean act) { active = act; }
 		public void set_shape_loc_X(int x) { loc_x = x; }
 		public void set_shape_loc_Y(int y) { loc_y = y; }
+		
+		//go down
+		public void go_down() {
+			loc_y+=25;
+			for(int i= 0 ; i< 4 ; i++) {
+				sh_boxes.get(i).y +=25;
+				sh_boxes.get(i).bottom_end+=25;
+			}
+		}
 	}
 	
 	//this class is the most important class.
 	public static class gameComponents{
 		//declare borders
 		public final static int top_border = 3*25;
-		public final static int left_border = 2*25;
+		public final static int left_border = 1*25;
 		public final static int right_border = 21*25;
-		public final static int bottom_border = 28*25;
+		public final int bottom_border = 28*25;
 
 		//Game info states
 		Vector<shape> all_shapes = new Vector<shape>(0); //this vector keeps the information of the all shapes has drawed and also returning to draw function to draw it for all game time.
@@ -115,7 +148,7 @@ final public class Tetris
 		}
 		public void set_call_new_shape (boolean b) {
 			call_new_shape = b;
-			System.out.print("sasd");
+			System.out.println("!! --> size of v_all_shapes : "+ all_shapes.size() + "<-- call_new_shape setted up -->" + Boolean.toString(b));
 		}
 	}
     
@@ -140,7 +173,6 @@ final public class Tetris
         	draw_Grid(g);
         	draw_GameInfo(g);
         	draw_Shapes(g);
-        	
         }
     }
 
@@ -150,17 +182,37 @@ final public class Tetris
         while (true)
         {
         	if(my_tetris.call_new_shape) {
-            	generate_a_new_shape("I");
+            	generate_a_new_shape("L");
             	my_tetris.set_call_new_shape(false);
         	}
         	//selecting last index to catch active shape which is need to move to down,left and right.
         	shape sh_last_index = my_tetris.all_shapes.lastElement();
+        	//check collision with other shapes
+        	boolean loop_quit = false;
+        	for(int i = 0 ; i < my_tetris.all_shapes.size()-1 ; i++) {
+        		for(int k = 0 ; k < 4 ; k++) {
+        			//check active shape bottom end with passive shapes top sides.
+        			if(sh_last_index.sh_boxes.get(k).bottom_end >= my_tetris.all_shapes.get(i).sh_boxes.get(k).y-50) {
+            			System.out.println("box["+i+"_"+k+"]_y : " + my_tetris.all_shapes.get(i).sh_boxes.get(k).y);
+            			System.out.println("active_bottom : " + sh_last_index.sh_boxes.get(k).bottom_end);
+        				sh_last_index.set_shape_active(false);
+                		my_tetris.set_call_new_shape(true);
+                		loop_quit = true;
+                		break;
+        			}
+        			if(loop_quit) break;
+        		}
+        	}
         	//move it to down -- a basic version with bug just written to try mechanism --
-        	if(my_tetris.all_shapes.size() > 0  && sh_last_index.loc_y < 24*25)
-        		sh_last_index.loc_y += 25;
+        	if(sh_last_index.active  && sh_last_index.sh_boxes.lastElement().bottom_end < my_tetris.bottom_border)
+        		sh_last_index.go_down();
+        	else {
+        		sh_last_index.set_shape_active(false);
+        		my_tetris.set_call_new_shape(true);
+        	}
             try
             { 
-                Thread.sleep(500);
+                Thread.sleep(300);
             }
             catch (Exception e)
             {
@@ -203,7 +255,31 @@ final public class Tetris
 		g.drawString("game_state : " + my_tetris.game_state, x, y);
 		y+=25;
 		shape sh_last_index = my_tetris.all_shapes.lastElement();
-		g.drawString("active_shape_loc_y : " + sh_last_index.loc_y, x, y);
+		g.drawString("active_shape_loc_(X,Y):(" + sh_last_index.loc_x + "," + sh_last_index.loc_y + ")", x, y);
+		y+=25;
+		/*for(int i = 0 ; i < 4  ; i++) {
+			g.drawString("Shape No: " + shape_cnt + " - Box No: " + Integer.toString(i), x, y);
+			y+=25;
+			g.drawString("active_box["+i+"]_(X,Y):(" + sh_last_index.sh_boxes.get(i).x+ "," + sh_last_index.sh_boxes.get(i).y + ")", x, y);
+			y+=25;
+			g.drawString("active_box["+i+"]_(e_bot,e_r):(" + sh_last_index.sh_boxes.get(i).bottom_end+ "," + sh_last_index.sh_boxes.get(i).right_end + ")", x, y);
+			y+=25;
+		}*/
+
+		for(int k = 0 ; k < my_tetris.all_shapes.size();k++) {
+			for(int i = 0 ; i < 4  ; i++) {
+				g.drawString("Shape No: " + k + " - Box No: " + Integer.toString(i), x, y);
+				y+=25;
+				g.drawString("active_box["+i+"]_(X,Y):(" + sh_last_index.sh_boxes.get(i).x+ "," + sh_last_index.sh_boxes.get(i).y + ")", x, y);
+				y+=25;
+				g.drawString("active_box["+i+"]_(e_bot,e_r):(" + sh_last_index.sh_boxes.get(i).bottom_end+ "," + sh_last_index.sh_boxes.get(i).right_end + ")", x, y);
+				y+=25;
+			}
+		}
+		for(int i = 0 ; i < my_tetris.all_shapes.size();i++) {
+			g.drawString("Shape["+Integer.toString(i)+"]_active: " + Boolean.toString(my_tetris.all_shapes.get(i).active), x, y);
+			y+=25;
+		}
 	}
     
 	private static void generate_a_new_shape(String p_type) {
@@ -218,32 +294,37 @@ final public class Tetris
     	int draw_y = 0*25;
 
     	shape new_generated_shape = new shape(draw_x,draw_y,p_type,code);
-    	
+    	for(int i = 0 ; i < 16 ; i++) {
+    		char ch_at = code.charAt(i);
+    		if(i % 4 == 0) {
+    			draw_y += 25;
+    			draw_x -= 100;
+    		}
+    		if(ch_at == 'A') {
+    			new_generated_shape.add_box(new box(draw_x,draw_y,draw_y+25,draw_x+25));
+    			new_generated_shape.set_shape_loc_X(draw_x);
+    			new_generated_shape.set_shape_loc_Y(draw_y);
+			}
+    		draw_x += 25;
+    	}
     	my_tetris.newShape(new_generated_shape);
     }
     private void draw_Shapes(Graphics g) {
     	//string are created with 16 characters for indexing think it 0-15 each 4 grouped character dedicated to a single line.think like 4x4 matrix compressed a string value to get it easier.
     	//drawing formula from string to graphic like : shape type "I": AXXX-AXXX-AXXX-AXXX
-    	char ch_at;
+    	int draw_x,draw_y;
     	int size = 25;
+    	
     	Vector<shape>my_shapes = my_tetris.all_shapes;
+    	//draw each boxes.
     	for(int k = 0 ; k < my_shapes.size();k++) {
-    		String code = my_shapes.get(k).shape_code;
-    		int draw_x = my_shapes.get(k).loc_x;
-    		int draw_y = my_shapes.get(k).loc_y;
-    		
-    		for(int i = 0 ; i < 16 ; i++) {
-        		ch_at = code.charAt(i);
-        		if(i % 4 == 0) {
-        			draw_y += 25;
-        			draw_x -= 100;
-        		}
-        		if(ch_at == 'A') {
-        			g.setColor(Color.GREEN);
-    				g.fill3DRect(draw_x, draw_y, size, size,false);
-    			}
-        		draw_x += 25;
-        	}
+    		for(int i = 0 ; i < 4 ; i++) {
+    			draw_x = my_shapes.get(k).sh_boxes.get(i).x;
+    			draw_y = my_shapes.get(k).sh_boxes.get(i).y;
+    			g.setColor(Color.GREEN);
+				g.fill3DRect(draw_x, draw_y, size, size,false);
+				g.drawString(Integer.toString(i), draw_x+3, draw_y+17);
+    		}
     	}
     }
 }
