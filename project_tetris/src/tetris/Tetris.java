@@ -1,20 +1,33 @@
 package tetris;
-
 /*
- * TODO list : 
- * 		create a new class for each produced 3dfilled rectangle or each shape(think about it more) -if necessary- and keep x1,x2,y1,y2 coordinates for each box to check the collisions -be careful about this, save a backup of project-
- * 		keyboard key handlers will be added
- * 		produce randomly color for each shape
- * 		and don't forget for the comment lines to understand the code when looked again.
- *		also add a key to pause game or resume.
+ * Version No : 0.05
+ * Version Notes : 
+ * 	.Collision problems around %95 solved. ( tested with shape "I" and "L" works fine for now)
+ *  .Left-Right keyboard arrows handlers added (tested - works fine)
+ *  @Author : Taner Esmeroğlu
  */
-
+/*
+ * TODO list for next versions: 
+ * 		0) Separate the script pages to read the code easier.
+ * 		1) Add all shapes as a string.
+ * 		2) Make randomly the shape generate function
+ * 		3) Assign random color to generated shapes,( color range will be max 10 )
+ * 		4) Design a game menu
+ * 		5) Add a pause button to game
+ * 		6) Implement a score system
+ * 		7) Design a highscore page 
+ * 		
+ * 		!!)and don't forget for the comment lines to understand the code when looked again.
+ * 		!!)Don't forget to add version notes after worked.
+ */
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.Vector;
 
 import javax.swing.JFrame;
@@ -47,9 +60,9 @@ final public class Tetris
     private void go()
     {
     	//this block to configure window settings 
-        frame = new JFrame("Tetris v0.02");
+        frame = new JFrame("Tetris v0.05");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+        frame.addKeyListener(new ActionListener());
         drawPanel = new DrawPanel();
 
         frame.getContentPane().add(BorderLayout.CENTER, drawPanel);
@@ -136,6 +149,22 @@ final public class Tetris
 				sh_boxes.get(i).bottom_end-=25;
 			}
 		}
+		//go left
+		public void go_left() {
+			loc_x-=25;
+			for(int i= 0 ; i< 4 ; i++) {
+				sh_boxes.get(i).x -=25;
+				sh_boxes.get(i).right_end -= 25;
+			}
+		}
+		//go right
+		public void go_right() {
+			loc_x += 25;
+			for(int i= 0 ; i< 4 ; i++) {
+				sh_boxes.get(i).x +=25;
+				sh_boxes.get(i).right_end += 25;
+			}
+		}
 	}
 	
 	//this class is the most important class.
@@ -153,6 +182,7 @@ final public class Tetris
 		//this method has really really critical role in the program it gets the new shape data and adding to all shapes list (vector) and goes on for everything.
 		public void newShape(shape new_shape) {
 			all_shapes.addElement(new_shape);
+			shape_cnt++;
 			gameLog.addElement("New Shape Added to Array list.");
 		}
 		public void set_call_new_shape (boolean b) {
@@ -185,56 +215,128 @@ final public class Tetris
         }
     }
 
-    private void moveIt(DrawPanel drawPanel)
+	boolean left;
+	boolean right;
+    //Key Events
+    String key_pressed = null;
+    class ActionListener extends KeyAdapter{
+    	public void keyPressed(KeyEvent e){
+    		int key = e.getKeyCode();
+        	if(key == KeyEvent.VK_RIGHT) {
+        		left = false;
+        		right = true;
+        	}
+        	else if(key == KeyEvent.VK_LEFT) {
+        		right = false;
+        		left = true;
+        	}
+        	else {
+        		right = false;
+        		left = false;
+        	}
+        }
+    	public void keyReleased(KeyEvent e){
+    		int key = e.getKeyCode();
+    		if(key == KeyEvent.VK_RIGHT) {
+    			right = false;
+    		}
+    		else if(key == KeyEvent.VK_LEFT) {
+    			left = false;
+    		}
+    	}
+    }
+    
+	private void moveIt(DrawPanel drawPanel)
     {
-    	//endless loop for game running.
-    	boolean left = true;
-    	boolean right = true;
+    	
     	boolean bottom = true;
     	boolean top = true;
-    	generate_a_new_shape("L");
+    	int active_bottom;
+		int active_x;
+		int active_y;
+		int active_right_end;
+    	//start a game with generating a new shape
+    	generate_a_new_shape("I");
+    	
+    	//endless loop for game running.
         while (true)
         {
         	shape active = my_tetris.all_shapes.lastElement();
-        	/*if(active.sh_boxes.lastElement().bottom_end >= my_tetris.bottom_border) 
-        		active.set_shape_active(false);*/
+        	//checks for bottom border.
         	for(int i = 0 ; i < 4 ; i++) {
-        		int active_bottom = active.sh_boxes.get(i).bottom_end;
+        		active_bottom = active.sh_boxes.get(i).bottom_end;
         		if(active_bottom >= my_tetris.bottom_border) {
         			active.set_shape_active(false);
         		}
         	}
         	
+        	//checks for top border
         	for(int i = 0 ; i < 4 ; i++) {
         		int active_top = active.sh_boxes.get(i).y;
         		if(active_top < my_tetris.top_border) {
         			top = false;
         		}
         	}
-        	System.out.println(my_tetris.all_shapes.size());
-        	//check for top side of all passive shapes
+
+			//check for just horizontal matching according to left
+        	active_x = active.loc_x;
+			if(active_x == my_tetris.right_border-25) {
+				right = false;
+			}
+			//check for just horizontal matching according to left
+			active_right_end = active.loc_x;
+			if(active_right_end == my_tetris.left_border+25) {
+				left = false;
+			}
+    		System.out.println("size " + my_tetris.all_shapes.size());
         	for(int i = 0 ; i < my_tetris.all_shapes.size()-1 ; i++) {
-        		for(int k = 0 ; k < 4 ; k++) {
-        			for(int t = 0 ; t < 4 ; t++) {
-        				int active_bottom = active.sh_boxes.get(k).bottom_end;
+        		for(int k = 0 ; k < 4 ; k++) {//this loop checks for active to game borders
+        			active_bottom = active.sh_boxes.get(k).bottom_end;
+        			active_x = active.sh_boxes.get(k).x;
+        			active_y = active.sh_boxes.get(k).y;
+        			active_right_end = active.sh_boxes.get(k).right_end;
+        			for(int t = 0 ; t < 4 ; t++) { //this loop checking with passive shapes
         				int passive_top = my_tetris.all_shapes.get(i).sh_boxes.get(t).y;
-        				if(active_bottom == passive_top) {
+        				int passive_x = my_tetris.all_shapes.get(i).sh_boxes.get(t).x;
+        				int passive_right_end = my_tetris.all_shapes.get(i).sh_boxes.get(t).right_end;
+        				int passive_y = my_tetris.all_shapes.get(i).sh_boxes.get(t).y;
+        				//check horizontal and vertical matching
+        				if(active_bottom == passive_top && active_x == passive_x) {
         					active.set_shape_active(false);
         				}
-        				if(active_bottom > passive_top) {
-        					top = false;
+        				//check for just horizontal matching according to right
+        				if( (active_right_end == passive_x && active_y == passive_y) || (active_right_end == passive_x && active_y+25 == passive_y)) {
+        					right = false;
+        				}
+        				//check for just horizontal matching according to left
+        				if( (active_x == passive_right_end && active_y == passive_y) || (active_x == passive_right_end && active_y+25 == passive_y)) {
+        					left = false;
+        				}
+        				//check if there no place for new shape and finish the game
+        				if(active_bottom > passive_top && active_bottom < 4*25) {
+        					//top = false;
         				}
         			}
         		}
         	}
         	
+        	//left event
+        	if(left && active.active) {
+        		active.go_left();
+        	}
+        	//right event
+        	if(right && active.active) {
+        		active.go_right();
+        	}
+        	//down event
         	if(bottom && active.active) {
         		active.go_down();
         	}
-        	
+        	//generate new shape
         	if(!active.active && top) {
         		generate_a_new_shape("I");
         	}
+        	//check game has finished or not
         	if(!top) {
         		JOptionPane.showConfirmDialog(null, "You LOST .. :(");
         		System.exit(1);
@@ -244,7 +346,7 @@ final public class Tetris
         	
             try
             { 
-                Thread.sleep(100);
+                Thread.sleep(50);
             }
             catch (Exception e)
             {
@@ -282,13 +384,37 @@ final public class Tetris
     	int x = 23*25+3;
     	int y = 19;
 		g.setFont(new Font("Tahoma", Font.BOLD, 15));
+		//select active shape
+		shape sh_last_index = my_tetris.all_shapes.lastElement();
+		
+		g.drawString("active_x : ", x, y);
+		y+=25;
+		for(int i = 0 ; i< 4 ; i++) {
+			g.drawString("active_loc_x : " +Integer.toString(sh_last_index.loc_x), x, y);
+			y+=25;
+		}
+		g.drawString("shape 0 x : ", x, y);
+		y+=25;
+		for(int i = 0 ; i< 4 ; i++) {
+			g.drawString("passive.box["+i+"].x : " +Integer.toString(my_tetris.all_shapes.get(0).sh_boxes.get(i).x), x, y);
+			y+=25;
+		}
+		/*g.drawString("right_end : ", x, y);
+		y+=25;
+		for(int i = 0 ; i< 4 ; i++) {
+			g.drawString("active.box["+i+"].right_end : " +Integer.toString(sh_last_index.sh_boxes.get(i).right_end), x, y);
+			y+=25;
+		}*/
+		
+		/*g.drawString("all_shapes.size : " +my_tetris.all_shapes.size(), x, y);
+		y+=25;
 		g.drawString("call_new_shape : " +Boolean.toString(my_tetris.call_new_shape), x, y);
 		y+=25;
 		g.drawString("game_state : " + my_tetris.game_state, x, y);
 		y+=25;
-		shape sh_last_index = my_tetris.all_shapes.lastElement();
+		
 		g.drawString("active_shape_loc_(X,Y):(" + sh_last_index.loc_x + "," + sh_last_index.loc_y + ")", x, y);
-		y+=25;
+		y+=25;*/
 		/*for(int i = 0 ; i < 4  ; i++) {
 			g.drawString("Shape No: " + shape_cnt + " - Box No: " + Integer.toString(i), x, y);
 			y+=25;
@@ -298,7 +424,7 @@ final public class Tetris
 			y+=25;
 		}*/
 
-		for(int k = 0 ; k < my_tetris.all_shapes.size();k++) {
+		/*for(int k = 0 ; k < my_tetris.all_shapes.size();k++) {
 			for(int i = 0 ; i < 4  ; i++) {
 				g.drawString("Shape No: " + k + " - Box No: " + Integer.toString(i), x, y);
 				y+=25;
@@ -314,7 +440,7 @@ final public class Tetris
 		for(int i = 0 ; i < my_tetris.all_shapes.size();i++) {
 			g.drawString("Shape["+Integer.toString(i)+"]_active: " + Boolean.toString(my_tetris.all_shapes.get(i).active), x, y);
 			y+=25;
-		}
+		}*/
 	}
     
 	private static void generate_a_new_shape(String p_type) {
