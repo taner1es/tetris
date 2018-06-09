@@ -6,6 +6,8 @@ import tetris.box;
 public class shape extends genericVariables{
 	Vector<box> sh_boxes = new Vector<box>(4);
 	String shape_type;
+	int shape_type_no;
+	int shape_rotation_no;
 	String shape_code;
 	long shape_id;
 	boolean active;
@@ -14,9 +16,11 @@ public class shape extends genericVariables{
 	
 	
 	//constructor
-	public shape(int x , int y ,String type, String code) {
+	public shape(int x , int y ,String type,int type_no,int rot_no, String code) {
 		shape_id = shape_cnt;
 		shape_type = type;
+		shape_type_no = type_no;
+		shape_rotation_no = rot_no;
 		shape_code = code;
 		active = true;
 		loc_x = x;
@@ -73,4 +77,36 @@ public class shape extends genericVariables{
 			sh_boxes.get(i).right_end += 25;
 		}
 	}
+	//rotate the shape
+	/*public void rotate_shape() {
+		
+		
+		
+		
+		
+		//--------------
+		for(int box_i = 0 ; box_i < 4 ; box_i++) {
+			int draw_x = this.sh_boxes.get(box_i).x;
+	    	int draw_y = this.sh_boxes.get(box_i).y;
+	    	shape_code = "AAAXXAXXXXXXXXXX";
+	    	box rotated_box;
+			for(int i = 0 ; i < 16 ; i++) {
+	    		char ch_at = shape_code.charAt(i);
+	    		if(i % 4 == 0) {
+	    			draw_y += 25;
+	    			draw_x -= 100;
+	    		}
+	    		if(ch_at == 'A') {
+	    			//new_generated_shape.add_box(new box(draw_x,draw_y,draw_y+25,draw_x+25));
+	    			rotated_box = new box(draw_x,draw_y,draw_y+25,draw_x+25);
+	    			this.sh_boxes.setElementAt(null, box_i);
+	    			this.sh_boxes.setElementAt(rotated_box,box_i); //set_shape_loc_X(draw_x);
+	    			continue;
+	    			//new_generated_shape.set_shape_loc_Y(draw_y);
+				}
+	    		draw_x += 25;
+	    	}
+		}
+	}*/
+
 }

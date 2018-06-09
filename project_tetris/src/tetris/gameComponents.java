@@ -24,4 +24,35 @@ public class gameComponents extends genericVariables{
 		call_new_shape = b;
 		System.out.println("!! --> size of v_all_shapes : "+ all_shapes.size() + "<-- call_new_shape setted up -->" + Boolean.toString(b));
 	}
+	public void rotate_shape() {
+		int last_index = all_shapes.size()-1;
+		int actual_x = all_shapes.lastElement().loc_x+75;
+		int actual_y = all_shapes.lastElement().loc_y-50;
+		String type = all_shapes.lastElement().shape_type;
+		
+		int type_no = all_shapes.lastElement().shape_type_no; //shape_codes array first dimension number
+		int rot_no = all_shapes.lastElement().shape_rotation_no; // shape_codes array second dimension number
+		String code = null;
+		if(type_no != 3 ) {
+			 // will be taken from array list with new rotation no
+			System.out.println("type_no & rot_no : " + type_no + rot_no );
+			if(shape_codes[type_no].length-1 == rot_no) {
+				rot_no = 0;
+				code = shape_codes[type_no][rot_no];
+			}else {
+				rot_no++;
+				code = shape_codes[type_no][rot_no];
+			}
+			shape rotatedshape;
+			rotatedshape = stringtoShape(code,type,type_no,rot_no,actual_x,actual_y);
+			
+			if(checkcollisions(rotatedshape))
+				all_shapes.setElementAt(rotatedshape, last_index);
+			else System.out.println("Collision exists while rotating.");
+		}
+		else {
+			System.out.println("no rotation for this shape.");
+		}
+		
+	}
 }

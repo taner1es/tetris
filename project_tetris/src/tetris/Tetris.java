@@ -2,7 +2,10 @@ package tetris;
 /*
  * Version No : 0.08
  * Version Notes : 
- * 
+ * 	rotation function added.
+ * 	gamespeed changes with down arrow key.
+ *  unnecessary "variable:bottom" removed completely.
+ *  check collision while rotating fixed.
  *  @Author : Taner Esmeroğlu
  */
 
@@ -52,13 +55,22 @@ final public class Tetris extends genericVariables
     			if(key == KeyEvent.VK_ENTER)
     				pause_apply = true;
     		}
+    		//started and continues game input
     		if(started) {
     			if(!pause) {
+    				//pause game
             		if(key == KeyEvent.VK_P) {
             			if(pause) pause = false;
             			else pause = true;
             		}
-        		}
+            		//rotate shape
+            		if(key == KeyEvent.VK_SPACE) {
+            			my_tetris.rotate_shape();
+            		}
+            		if(key == KeyEvent.VK_DOWN) {
+            			gameSpeed = 50;
+            		}
+    			}
     		}
         	if(key == KeyEvent.VK_RIGHT) {
         		left = false;
@@ -75,11 +87,19 @@ final public class Tetris extends genericVariables
         }
     	public void keyReleased(KeyEvent e){
     		int key = e.getKeyCode();
-    		if(key == KeyEvent.VK_RIGHT) {
-    			right = false;
-    		}
-    		else if(key == KeyEvent.VK_LEFT) {
-    			left = false;
+    		//started and continues game input
+    		if(started) {
+    			if(!pause) {
+    	    		if(key == KeyEvent.VK_RIGHT) {
+    	    			right = false;
+    	    		}
+    	    		else if(key == KeyEvent.VK_LEFT) {
+    	    			left = false;
+    	    		}
+            		if(key == KeyEvent.VK_DOWN) {
+            			gameSpeed = 250;
+            		}
+    			}
     		}
     	}
     }
@@ -111,73 +131,12 @@ final public class Tetris extends genericVariables
         	frame.repaint();
         }
     }
+    
+    
 	private void run_gameLoop() {
-		boolean bottom = true;
-    	boolean top = true;
-    	int active_bottom;
-		int active_x;
-		int active_y;
-		int active_right_end;
-		
-    	shape active = my_tetris.all_shapes.lastElement();
-    	//checks for bottom border.
-    	for(int i = 0 ; i < 4 ; i++) {
-    		active_bottom = active.sh_boxes.get(i).bottom_end;
-    		if(active_bottom >= my_tetris.bottom_border) {
-    			active.set_shape_active(false);
-    		}
-    	}
-    	
-    	//checks for top border
-    	for(int i = 0 ; i < 4 ; i++) {
-    		int active_top = active.sh_boxes.get(i).y;
-    		if(active_top < my_tetris.top_border) {
-    			top = false;
-    		}
-    	}
+		shape active = my_tetris.all_shapes.lastElement();
 
-		//check for just horizontal matching according to left
-    	active_x = active.loc_x;
-		if(active_x == my_tetris.right_border-25) {
-			right = false;
-		}
-		//check for just horizontal matching according to left
-		active_right_end = active.loc_x;
-		if(active_right_end == my_tetris.left_border+25) {
-			left = false;
-		}
-		System.out.println("size " + my_tetris.all_shapes.size());
-    	for(int i = 0 ; i < my_tetris.all_shapes.size()-1 ; i++) {
-    		for(int k = 0 ; k < 4 ; k++) {//this loop checks for active to game borders
-    			active_bottom = active.sh_boxes.get(k).bottom_end;
-    			active_x = active.sh_boxes.get(k).x;
-    			active_y = active.sh_boxes.get(k).y;
-    			active_right_end = active.sh_boxes.get(k).right_end;
-    			for(int t = 0 ; t < 4 ; t++) { //this loop checking with passive shapes
-    				int passive_top = my_tetris.all_shapes.get(i).sh_boxes.get(t).y;
-    				int passive_x = my_tetris.all_shapes.get(i).sh_boxes.get(t).x;
-    				int passive_right_end = my_tetris.all_shapes.get(i).sh_boxes.get(t).right_end;
-    				int passive_y = my_tetris.all_shapes.get(i).sh_boxes.get(t).y;
-    				//check horizontal and vertical matching
-    				if(active_bottom == passive_top && active_x == passive_x) {
-    					active.set_shape_active(false);
-    				}
-    				//check for just horizontal matching according to right
-    				if( (active_right_end == passive_x && active_y == passive_y) || (active_right_end == passive_x && active_y+25 == passive_y)) {
-    					right = false;
-    				}
-    				//check for just horizontal matching according to left
-    				if( (active_x == passive_right_end && active_y == passive_y) || (active_x == passive_right_end && active_y+25 == passive_y)) {
-    					left = false;
-    				}
-    				//check if there no place for new shape and finish the game
-    				if(active_bottom > passive_top && active_bottom < 4*25) {
-    					//top = false;
-    				}
-    			}
-    		}
-    	}
-    	
+		checkcollisions(active);
     	//left event
     	if(left && active.active) {
     		active.go_left();
@@ -187,7 +146,7 @@ final public class Tetris extends genericVariables
     		active.go_right();
     	}
     	//down event
-    	if(bottom && active.active) {
+    	if(active.active) {
     		active.go_down();
     	}
     	//generate new shape
@@ -196,10 +155,10 @@ final public class Tetris extends genericVariables
     	}
     	//check game has finished or not
     	if(!top) {
+    		//temporary popup , i will change later
     		JOptionPane.showConfirmDialog(null, "You LOST .. :(");
     		System.exit(1);
     	}
-		
 	}
 	public void go()
     {
@@ -304,7 +263,7 @@ final public class Tetris extends genericVariables
             	draw_GameInfo(g);
             	draw_Shapes(g);
         		if(started)if(pause)pause_gameLoop(g);
-        		System.out.println("started : " + started);
+        		//System.out.println("started : " + started);
         		if(!started)g.drawImage(image, 0, 0, gw_WIDTH-325, gw_HEIGHT-25, Color.WHITE, null);
             }
             
