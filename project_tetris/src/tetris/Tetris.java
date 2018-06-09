@@ -1,28 +1,9 @@
 package tetris;
 /*
- * Version No : 0.07
+ * Version No : 0.08
  * Version Notes : 
- * shape type fixed in shape generate function .
  * 
  *  @Author : Taner Esmeroğlu
- */
-/*
- * TODO list for next versions: 
- * 		0) Separate the script pages to read the code easier. (Completed @v0.06)
- * 		1) Add all shapes as a string.(Completed @v0.06)
- * 		2) Make randomly the shape generate function (Completed @v0.06)
- * 		3) Assign fixed color for each different shape (Completed @v0.07)
- * 		4) Design a game menu "start" and "pause" menu (Completed @v0.07)
- * 		5) Add a pause button to game "key:P" (Completed @v0.07)
- * 		6) Debug : boundary issue for all shapes
- * 		7) Implement a score system
- * 		8) Design a highscore page
- * 		
- * 		!!)and don't forget for the comment lines to understand the code when looked again.
- * 		!!)Don't forget to add version notes after worked.
- * 
- * 
- * ----WHAT I DID CURRENT SESSION----
  */
 
 import java.awt.BorderLayout;

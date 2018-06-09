@@ -2,7 +2,6 @@ package tetris;
 
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
-import java.awt.image.BufferedImage;
 import java.util.Random;
 import java.util.Vector;
 
@@ -44,13 +43,13 @@ public class genericVariables {
 		//TODO : All shapes exists with first position. Add rotated shapes.
 		String[][] shape_codes = 
 			{
-				/* 0. --> I*/		{"AXXXAXXXAXXXAXXX"},  
-				/* 1. --> L*/		{"AXXXAXXXAAXXXXXX"},
-				/* 2. --> J*/		{"XAXXXAXXAAXXXXXX"},
+				/* 0. --> I*/		{"AXXXAXXXAXXXAXXX","AAAAXXXXXXXXXXXX"},  
+				/* 1. --> L*/		{"AXXXAXXXAAXXXXXX","AAAXAXXXXXXXXXXX","AAXXXAXXXAXXXXXX","XXAXAAAXXXXXXXXX"},
+				/* 2. --> J*/		{"XAXXXAXXAAXXXXXX","AXXXAAAXXXXXXXXX","AAXXAXXXAXXXXXXX","AAAXXXAXXXXXXXXX"},
 				/* 3. --> O*/		{"AAXXAAXXXXXXXXXX"},
-				/* 4. --> T*/		{"XAXXAAAXXXXXXXXX"},
-				/* 5. --> S*/		{"XAAXAAXXXXXXXXXX"},
-				/* 6. --> Z*/		{"AAXXXAAXXXXXXXXX"}
+				/* 4. --> T*/		{"XAXXAAAXXXXXXXXX","AXXXAAXXAXXXXXXX","AAAXXAXXXXXXXXXX","XAXXAAXXXAXXXXXX"},
+				/* 5. --> S*/		{"XAAXAAXXXXXXXXXX","AXXXAAXXXAXXXXXX"},
+				/* 6. --> Z*/		{"AAXXXAAXXXXXXXXX","XAXXAAXXAXXXXXXX"}
 			};
 		String code = null;
 		String s_type = null;
