@@ -26,8 +26,8 @@ public class gameComponents extends genericVariables{
 	}
 	public void rotate_shape() {
 		int last_index = all_shapes.size()-1;
-		int actual_x = all_shapes.lastElement().loc_x+75;
-		int actual_y = all_shapes.lastElement().loc_y-50;
+		int actual_x = all_shapes.lastElement().start_loc_x+100;		//all_shapes.lastElement().loc_x+75;
+		int actual_y = all_shapes.lastElement().start_loc_y;		//all_shapes.lastElement().loc_y-50;
 		String type = all_shapes.lastElement().shape_type;
 		
 		int type_no = all_shapes.lastElement().shape_type_no; //shape_codes array first dimension number
