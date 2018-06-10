@@ -12,14 +12,15 @@ import java.awt.Graphics;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Vector;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+
 
 
 final public class Tetris extends genericVariables
@@ -162,10 +163,10 @@ final public class Tetris extends genericVariables
 	}
 	public void go()
     {
-		//try to load image
     	try {
-			image = ImageIO.read(new File("C:\\Users\\taner\\Documents\\GitHub\\Tetris\\project_tetris\\src\\tetris\\tetris_menu.png"));
-		} catch (IOException e) {	
+    		URL url_tetris_menu = Tetris.class.getResource("/images/tetris_menu.png"); //gets the folder/file from runnable jar file location
+    		image = ImageIO.read(url_tetris_menu);
+    	} catch (IOException e) {	
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
