@@ -13,6 +13,10 @@ public class shape extends genericVariables{
 	boolean active;
 	int loc_x;
 	int loc_y;
+	int end_loc_x;
+	int end_loc_y;
+	int start_loc_x;
+	int start_loc_y;
 	
 	
 	//constructor
@@ -77,36 +81,32 @@ public class shape extends genericVariables{
 			sh_boxes.get(i).right_end += 25;
 		}
 	}
-	//rotate the shape
-	/*public void rotate_shape() {
-		
-		
-		
-		
-		
-		//--------------
-		for(int box_i = 0 ; box_i < 4 ; box_i++) {
-			int draw_x = this.sh_boxes.get(box_i).x;
-	    	int draw_y = this.sh_boxes.get(box_i).y;
-	    	shape_code = "AAAXXAXXXXXXXXXX";
-	    	box rotated_box;
-			for(int i = 0 ; i < 16 ; i++) {
-	    		char ch_at = shape_code.charAt(i);
-	    		if(i % 4 == 0) {
-	    			draw_y += 25;
-	    			draw_x -= 100;
-	    		}
-	    		if(ch_at == 'A') {
-	    			//new_generated_shape.add_box(new box(draw_x,draw_y,draw_y+25,draw_x+25));
-	    			rotated_box = new box(draw_x,draw_y,draw_y+25,draw_x+25);
-	    			this.sh_boxes.setElementAt(null, box_i);
-	    			this.sh_boxes.setElementAt(rotated_box,box_i); //set_shape_loc_X(draw_x);
-	    			continue;
-	    			//new_generated_shape.set_shape_loc_Y(draw_y);
-				}
-	    		draw_x += 25;
-	    	}
+	//calculate shape start location and end location to clarify collision checker
+	public void calc_shape_start_end_loc(){
+		int min_x = 5000, min_y = 5000,max_x = 0,max_y = 0;
+		box fetch;
+		for(int i = 0 ; i < 4 ; i++) {
+			fetch = this.sh_boxes.get(i);
+			if(fetch.x < min_x) { //find start loc x
+				min_x = fetch.x;
+			}
+			if(fetch.y < min_y) { //find start loc y
+				min_y = fetch.y;
+			}
+			if(fetch.x > max_x) { //find end loc x
+				max_x = fetch.x;
+			}
+			if(fetch.y > max_y) { //find end loc y
+				max_y = fetch.y;
+			}
 		}
-	}*/
+		
+		this.start_loc_x = min_x;
+		this.start_loc_y = min_y;
+		this.end_loc_x = max_x;
+		this.end_loc_y = max_y;
+		
+	}
+	
 
 }

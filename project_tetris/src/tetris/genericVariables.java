@@ -129,16 +129,33 @@ public class genericVariables {
     		}
     	}
 
-		//check for just horizontal matching according to left
-    	active_x = active.loc_x;
-		if(active_x == my_tetris.right_border-25) {
-			right = false;
+    	//check right and main border with each boxes
+    	if(active.active) {
+    		for(int i = 0 ; i < 4 ; i++) {
+        		//check for just horizontal matching according to left
+            	active_x = active.sh_boxes.get(i).x;
+        		if(active_x == my_tetris.left_border+25) {
+        			left = false;
+        		}
+        		//check for just horizontal matching according to right
+        		active_right_end = active.sh_boxes.get(i).right_end;
+        		if(active_right_end == my_tetris.right_border) {
+        			right = false;
+        		}
+        	}
+    	}
+    	
+    	
+    	System.out.println("active.active  : " + active.active );
+    	//check right and main border with shape start & end locations for rotatable or not
+		checkforshape.calc_shape_start_end_loc();
+		if(checkforshape.start_loc_x <= my_tetris.left_border) {
+			col_left_exists = true;
 		}
-		//check for just horizontal matching according to left
-		active_right_end = active.loc_x;
-		if(active_right_end == my_tetris.left_border+25) {
-			left = false;
+		if(checkforshape.end_loc_x >= my_tetris.right_border) {
+			col_right_exists = true;
 		}
+    	
 		//System.out.println("size " + my_tetris.all_shapes.size());
     	for(int i = 0 ; i < my_tetris.all_shapes.size()-1 ; i++) {
     		for(int k = 0 ; k < 4 ; k++) {//this loop checks for active to game borders
@@ -146,7 +163,9 @@ public class genericVariables {
     			active_x = active.sh_boxes.get(k).x;
     			active_y = active.sh_boxes.get(k).y;
     			active_right_end = active.sh_boxes.get(k).right_end;
-    			for(int t = 0 ; t < 4 ; t++) { //this loop checking with passive shapes
+    			
+    			//this loop checking with passive shapes
+    			for(int t = 0 ; t < 4 ; t++) { 
     				int passive_top = my_tetris.all_shapes.get(i).sh_boxes.get(t).y;
     				int passive_x = my_tetris.all_shapes.get(i).sh_boxes.get(t).x;
     				int passive_right_end = my_tetris.all_shapes.get(i).sh_boxes.get(t).right_end;

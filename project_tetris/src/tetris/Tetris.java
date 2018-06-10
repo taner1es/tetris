@@ -170,7 +170,7 @@ final public class Tetris extends genericVariables
 			e.printStackTrace();
 		}
     	//this block to configure window settings 
-        frame = new JFrame("Tetris v0.07");
+        frame = new JFrame("Tetris v0.09");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.addKeyListener(new ActionListener());
         drawPanel = new DrawPanel();

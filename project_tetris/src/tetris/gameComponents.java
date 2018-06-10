@@ -45,9 +45,12 @@ public class gameComponents extends genericVariables{
 			}
 			shape rotatedshape;
 			rotatedshape = stringtoShape(code,type,type_no,rot_no,actual_x,actual_y);
-			
-			if(checkcollisions(rotatedshape))
+			rotatedshape.active = false;
+			if(checkcollisions(rotatedshape)) {
+				rotatedshape.active = true;
 				all_shapes.setElementAt(rotatedshape, last_index);
+			}
+				
 			else System.out.println("Collision exists while rotating.");
 		}
 		else {
