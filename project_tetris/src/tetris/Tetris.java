@@ -1,11 +1,7 @@
 package tetris;
 /*
- * Version No : 0.08
+ * Version No : 0.09
  * Version Notes : 
- * 	rotation function added.
- * 	gamespeed changes with down arrow key.
- *  unnecessary "variable:bottom" removed completely.
- *  check collision while rotating fixed.
  *  @Author : Taner Esmeroğlu
  */
 
@@ -64,8 +60,9 @@ final public class Tetris extends genericVariables
             			else pause = true;
             		}
             		//rotate shape
-            		if(key == KeyEvent.VK_SPACE) {
+            		if(key == KeyEvent.VK_SPACE && rotate_available) {
             			my_tetris.rotate_shape();
+            			rotate_available = false;
             		}
             		if(key == KeyEvent.VK_DOWN) {
             			gameSpeed = 50;
@@ -98,6 +95,9 @@ final public class Tetris extends genericVariables
     	    		}
             		if(key == KeyEvent.VK_DOWN) {
             			gameSpeed = 250;
+            		}
+            		if(key == KeyEvent.VK_SPACE && !rotate_available) {
+            			rotate_available = true;
             		}
     			}
     		}

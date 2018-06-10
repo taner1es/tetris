@@ -36,7 +36,7 @@ public class genericVariables {
 	boolean started = false; //record game started or not
 
 	static boolean top = true;
-	
+	boolean rotate_available = true;
 	
     //Key Events
     String key_pressed = null;
@@ -55,8 +55,7 @@ public class genericVariables {
     
 	public static void generate_a_new_shape() {
 		//this block written to generate a shape and add it to vector<shape> all_shapes
-		//TODO : All shapes exists with first position. Add rotated shapes.
-		
+	
 		String code = null;
 		String s_type = null;
 		int s_type_no;
