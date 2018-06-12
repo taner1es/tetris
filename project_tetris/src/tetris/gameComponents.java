@@ -9,7 +9,12 @@ public class gameComponents extends genericVariables{
 	public final int left_border = 1*25;
 	public final int right_border = 21*25;
 	public final int bottom_border = 28*25;
-
+	public int[] explode_lines = new int[25];
+	gameComponents() {
+		for(int i = 0 ; i < 25 ; i++) {
+			explode_lines[i] = 0;
+		}
+	}
 	//Game info states
 	Vector<shape> all_shapes = new Vector<shape>(0); //this vector keeps the information of the all shapes has drawed and also returning to draw function to draw it for all game time.
 	public boolean call_new_shape = true;
@@ -22,7 +27,6 @@ public class gameComponents extends genericVariables{
 	}
 	public void set_call_new_shape (boolean b) {
 		call_new_shape = b;
-		System.out.println("!! --> size of v_all_shapes : "+ all_shapes.size() + "<-- call_new_shape setted up -->" + Boolean.toString(b));
 	}
 	public void rotate_shape() {
 		int last_index = all_shapes.size()-1;

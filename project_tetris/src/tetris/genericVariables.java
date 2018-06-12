@@ -2,6 +2,7 @@ package tetris;
 
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.io.IOException;
 import java.util.Random;
 import java.util.Vector;
 
@@ -54,9 +55,73 @@ public class genericVariables {
 			/* 6. --> Z*/		{"AAXXXAAXXXXXXXXX","XAXXAAXXAXXXXXXX"}
 		};
     
+    //check for exploding lines
+    public static void check_exploding_line() {
+		System.out.println("================================");
+    	int row_y;
+    	shape sh;
+    	box bx;
+    	//int size = my_tetris.all_shapes.size();
+		//select shape
+		sh = my_tetris.all_shapes.lastElement();
+		//System.out.println("active " + sh.active);
+		//System.out.println("selected shape.type,orderno : " + sh.shape_type + "," + size);
+		for(int k = 0 ; k < 4 ;k++) {
+			//select box
+			bx = sh.sh_boxes.get(k);
+			//System.out.println("\tselected box.y : " + bx.y);
+			for(int t = 0 ; t < my_tetris.explode_lines.length ; t++) {
+				row_y = (t+3) * 25;
+				if(row_y == bx.y) {
+					my_tetris.explode_lines[t]++;
+					//System.out.println("upadate : explode_lines["+t+"] : " + 
+					//my_tetris.explode_lines[t]);
+					if(my_tetris.explode_lines[t] == 19) 
+						explode_line(t);
+					else
+						System.out.println("line " + (t+3) +" : not filled : " + my_tetris.explode_lines[t]);
+						
+				}
+			}
+		}
+    }
+    
+    public static void explode_line(int line_number) {
+    	System.out.println("Process : Delete Line " + (line_number+3));
+    	int row_y = (line_number+3) * 25;
+		shape sh;
+    	box bx;
+    	int size = my_tetris.all_shapes.size();
+    	
+    	int counter = 0;
+    	for(int i = 0 ; i < size ; i++) {
+    		if(my_tetris.all_shapes.get(i) != null)
+    		{
+    			sh = my_tetris.all_shapes.get(i);
+        		for(int k = 0 ; k < 4 ; k++) {
+        			if(sh.sh_boxes.get(k) != null)
+        			{
+        				bx = sh.sh_boxes.get(k);
+            			if(row_y == bx.y) {
+            				sh.sh_boxes.setElementAt(null, k);
+            				counter++;
+            			}
+        			}
+        		}
+    		}
+    		
+    	}
+    	System.out.println("counter = " + counter);
+    	if(counter == 19) 
+    		my_tetris.explode_lines[line_number] = 0;
+    }
+    
+    
+    
+    
 	public static void generate_a_new_shape() {
 		//this block written to generate a shape and add it to vector<shape> all_shapes
-	
+		if(my_tetris.all_shapes.size() > 0)check_exploding_line();
 		String code = null;
 		String s_type = null;
 		int s_type_no;
@@ -159,41 +224,46 @@ public class genericVariables {
     	
 		//System.out.println("size " + my_tetris.all_shapes.size());
     	for(int i = 0 ; i < my_tetris.all_shapes.size()-1 ; i++) {
-    		for(int k = 0 ; k < 4 ; k++) {//this loop selects active shape boxes
-    			active_bottom = active.sh_boxes.get(k).bottom_end;
-    			active_x = active.sh_boxes.get(k).x;
-    			active_y = active.sh_boxes.get(k).y;
-    			active_right_end = active.sh_boxes.get(k).right_end;
-    			
-    			//this loop checking selected active shape box with boxes of all passive shapes 
-    			for(int t = 0 ; t < 4 ; t++) { 
-    				int passive_top = my_tetris.all_shapes.get(i).sh_boxes.get(t).y;
-    				int passive_x = my_tetris.all_shapes.get(i).sh_boxes.get(t).x;
-    				int passive_right_end = my_tetris.all_shapes.get(i).sh_boxes.get(t).right_end;
-    				int passive_y = my_tetris.all_shapes.get(i).sh_boxes.get(t).y;
-    				//check horizontal and vertical matching
-    				if(active_bottom == passive_top && active_x == passive_x) {
-    					active.set_shape_active(false);
-    				}
-    				//check for just horizontal matching according to right
-    				if(right) {
-    					if(active_right_end == passive_x && active_y+25 == passive_y) {
-        					right = false;
-        					col_right_exists = true;
+    		if(my_tetris.all_shapes.get(i) != null) {
+
+        		for(int k = 0 ; k < 4 ; k++) {//this loop selects active shape boxes
+        			active_bottom = active.sh_boxes.get(k).bottom_end;
+        			active_x = active.sh_boxes.get(k).x;
+        			active_y = active.sh_boxes.get(k).y;
+        			active_right_end = active.sh_boxes.get(k).right_end;
+        			
+        			//this loop checking selected active shape box with boxes of all passive shapes
+        			for(int t = 0 ; t < 4 ; t++) { 
+        				if(my_tetris.all_shapes.get(i).sh_boxes.get(t) != null) {
+        					int passive_top = my_tetris.all_shapes.get(i).sh_boxes.get(t).y;
+            				int passive_x = my_tetris.all_shapes.get(i).sh_boxes.get(t).x;
+            				int passive_right_end = my_tetris.all_shapes.get(i).sh_boxes.get(t).right_end;
+            				int passive_y = my_tetris.all_shapes.get(i).sh_boxes.get(t).y;
+            				//check horizontal and vertical matching
+            				if(active_bottom == passive_top && active_x == passive_x) {
+            					active.set_shape_active(false);
+            				}
+            				//check for just horizontal matching according to right
+            				if(right) {
+            					if(active_right_end == passive_x && active_y+25 == passive_y) {
+                					right = false;
+                					col_right_exists = true;
+                				}
+            				}
+            				//check for just horizontal matching according to left
+            				if(left) {
+            					if(active_x == passive_right_end && active_y+25 == passive_y) {
+                					left = false;
+                					col_left_exists = true;
+                				}
+            				}
+            				//check if there no place for new shape and finish the game
+            				if(active_bottom > passive_top && active_bottom < 4*25) {
+            					top = false;
+            				}
         				}
-    				}
-    				//check for just horizontal matching according to left
-    				if(left) {
-    					if(active_x == passive_right_end && active_y+25 == passive_y) {
-        					left = false;
-        					col_left_exists = true;
-        				}
-    				}
-    				//check if there no place for new shape and finish the game
-    				if(active_bottom > passive_top && active_bottom < 4*25) {
-    					top = false;
-    				}
-    			}
+        			}
+        		}
     		}
     	}
     	//System.out.println("col_left_exists , col_right_exists , active.active  : " +col_left_exists + col_right_exists + active.active);

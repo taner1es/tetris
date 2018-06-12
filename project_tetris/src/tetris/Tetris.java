@@ -277,21 +277,27 @@ final public class Tetris extends genericVariables
             	Vector<shape>my_shapes = my_tetris.all_shapes;
             	//draw each boxes.
             	for(int k = 0 ; k < my_shapes.size();k++) {
-            		for(int i = 0 ; i < 4 ; i++) {
-            			draw_x = my_shapes.get(k).sh_boxes.get(i).x;
-            			draw_y = my_shapes.get(k).sh_boxes.get(i).y;
-            			switch(my_shapes.get(k).shape_type) {
-            				case "I": g.setColor(Color.GREEN);break;
-	            				case "L":g.setColor(Color.RED);break;
-		            				case "J":g.setColor(Color.GRAY);break;
-			            				case "O":g.setColor(Color.BLUE);break;
-				            				case "T":g.setColor(Color.YELLOW);break;
-					            				case "S":g.setColor(Color.CYAN);break;
-						            				case "Z":g.setColor(Color.ORANGE);break;
-            			}
-        				g.fill3DRect(draw_x, draw_y, size, size,false);
-        				g.drawString(Integer.toString(i), draw_x+3, draw_y+17);
+            		if(my_shapes.get(k) != null) {
+            			for(int i = 0 ; i < 4 ; i++) {
+            				if(my_shapes.get(k).sh_boxes.get(i) != null)
+            				{
+            					draw_x = my_shapes.get(k).sh_boxes.get(i).x;
+                    			draw_y = my_shapes.get(k).sh_boxes.get(i).y;
+                    			switch(my_shapes.get(k).shape_type) {
+                    				case "I": g.setColor(Color.GREEN);break;
+        	            				case "L":g.setColor(Color.RED);break;
+        		            				case "J":g.setColor(Color.GRAY);break;
+        			            				case "O":g.setColor(Color.BLUE);break;
+        				            				case "T":g.setColor(Color.YELLOW);break;
+        					            				case "S":g.setColor(Color.CYAN);break;
+        						            				case "Z":g.setColor(Color.ORANGE);break;
+                    			}
+                				g.fill3DRect(draw_x, draw_y, size, size,false);
+                				g.drawString(Integer.toString(i), draw_x+3, draw_y+17);
+            				}
+                		}
             		}
+            		
             	}
             }
             
@@ -358,14 +364,22 @@ final public class Tetris extends genericVariables
         			k = 0;
         		for(; k< my_tetris.all_shapes.size() ; k++) {
         			y+=25;
-        			for(int i = 0 ; i< 4 ; i++) {
-        				g.drawString("shape["+k+"]box["+i+"].(x,y) : (" +
-        						Integer.toString(my_tetris.all_shapes.get(k).sh_boxes.get(i).x)
-        						+","+
-        						Integer.toString(my_tetris.all_shapes.get(k).sh_boxes.get(i).y)
-        						+")", 
-        						x, y);
-        				y+=25;
+        			if(my_tetris.all_shapes.get(k) != null)
+        			{
+            			for(int i = 0 ; i< 4 ; i++) {
+            				if(my_tetris.all_shapes.get(k).sh_boxes.get(i) != null)
+            				{
+                				g.drawString("shape["+k+"]box["+i+"].(x,y) : (" +
+                						Integer.toString(my_tetris.all_shapes.get(k).sh_boxes.get(i).x)
+                						+","+
+                						Integer.toString(my_tetris.all_shapes.get(k).sh_boxes.get(i).y)
+                						+")", 
+                						x, y);
+                				y+=25;
+            					
+            				}
+            			}
+        				
         			}
         		}
         		/*g.drawString("right_end : ", x, y);
