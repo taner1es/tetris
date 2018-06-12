@@ -147,7 +147,7 @@ public class genericVariables {
     	}
     	
     	
-    	System.out.println("active.active  : " + active.active );
+    	//System.out.println("active.active  : " + active.active );
     	//check right and left main borders with shape start & end locations for rotatable or not
 		checkforshape.calc_shape_start_end_loc();
 		if(checkforshape.start_loc_x <= my_tetris.left_border) {
@@ -176,8 +176,6 @@ public class genericVariables {
     					active.set_shape_active(false);
     				}
     				//check for just horizontal matching according to right
-    				if(active_right_end == passive_x)
-					System.out.println("!!!!!!!!!!-->active right end  & passive_x: " + active_right_end+","+passive_x );
     				if(right) {
     					if(active_right_end == passive_x && active_y+25 == passive_y) {
         					right = false;
@@ -185,9 +183,11 @@ public class genericVariables {
         				}
     				}
     				//check for just horizontal matching according to left
-    				if(active_x == passive_right_end && active_y+25 == passive_y) {
-    					left = false;
-    					col_left_exists = true;
+    				if(left) {
+    					if(active_x == passive_right_end && active_y+25 == passive_y) {
+        					left = false;
+        					col_left_exists = true;
+        				}
     				}
     				//check if there no place for new shape and finish the game
     				if(active_bottom > passive_top && active_bottom < 4*25) {
@@ -196,7 +196,7 @@ public class genericVariables {
     			}
     		}
     	}
-    	System.out.println("col_left_exists , col_right_exists , active.active  : " +col_left_exists + col_right_exists + active.active);
+    	//System.out.println("col_left_exists , col_right_exists , active.active  : " +col_left_exists + col_right_exists + active.active);
     	if(!col_left_exists && !col_right_exists && active.active) return true;
     	else return false;
     			
