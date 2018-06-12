@@ -37,6 +37,7 @@ public class genericVariables {
 
 	static boolean top = true;
 	boolean rotate_available = true;
+	boolean go_right = false;
 	
     //Key Events
     String key_pressed = null;
@@ -147,7 +148,7 @@ public class genericVariables {
     	
     	
     	System.out.println("active.active  : " + active.active );
-    	//check right and main border with shape start & end locations for rotatable or not
+    	//check right and left main borders with shape start & end locations for rotatable or not
 		checkforshape.calc_shape_start_end_loc();
 		if(checkforshape.start_loc_x <= my_tetris.left_border) {
 			col_left_exists = true;
@@ -158,13 +159,13 @@ public class genericVariables {
     	
 		//System.out.println("size " + my_tetris.all_shapes.size());
     	for(int i = 0 ; i < my_tetris.all_shapes.size()-1 ; i++) {
-    		for(int k = 0 ; k < 4 ; k++) {//this loop checks for active to game borders
+    		for(int k = 0 ; k < 4 ; k++) {//this loop selects active shape boxes
     			active_bottom = active.sh_boxes.get(k).bottom_end;
     			active_x = active.sh_boxes.get(k).x;
     			active_y = active.sh_boxes.get(k).y;
     			active_right_end = active.sh_boxes.get(k).right_end;
     			
-    			//this loop checking with passive shapes
+    			//this loop checking selected active shape box with boxes of all passive shapes 
     			for(int t = 0 ; t < 4 ; t++) { 
     				int passive_top = my_tetris.all_shapes.get(i).sh_boxes.get(t).y;
     				int passive_x = my_tetris.all_shapes.get(i).sh_boxes.get(t).x;
@@ -175,18 +176,22 @@ public class genericVariables {
     					active.set_shape_active(false);
     				}
     				//check for just horizontal matching according to right
-    				if( (active_right_end == passive_x && active_y == passive_y) || (active_right_end == passive_x && active_y+25 == passive_y)) {
-    					right = false;
-    					col_right_exists = true;
+    				if(active_right_end == passive_x)
+					System.out.println("!!!!!!!!!!-->active right end  & passive_x: " + active_right_end+","+passive_x );
+    				if(right) {
+    					if(active_right_end == passive_x && active_y+25 == passive_y) {
+        					right = false;
+        					col_right_exists = true;
+        				}
     				}
     				//check for just horizontal matching according to left
-    				if( (active_x == passive_right_end && active_y == passive_y) || (active_x == passive_right_end && active_y+25 == passive_y)) {
+    				if(active_x == passive_right_end && active_y+25 == passive_y) {
     					left = false;
     					col_left_exists = true;
     				}
     				//check if there no place for new shape and finish the game
     				if(active_bottom > passive_top && active_bottom < 4*25) {
-    					//top = false;
+    					top = false;
     				}
     			}
     		}
