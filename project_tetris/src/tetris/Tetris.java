@@ -68,30 +68,31 @@ final public class Tetris extends genericVariables
             		if(key == KeyEvent.VK_DOWN) {
             			gameSpeed = 50;
             		}
+            		//move shape
+                	if(key == KeyEvent.VK_RIGHT) {
+                		left = false;
+                		right = true;
+                	}
+                	else if(key == KeyEvent.VK_LEFT) {
+                		right = false;
+                		left = true;
+                	}
+                	else {
+                		right = false;
+                		left = false;
+                	}
     			}
     		}
-        	if(key == KeyEvent.VK_RIGHT) {
-        		left = false;
-        		right = true;
-        	}
-        	else if(key == KeyEvent.VK_LEFT) {
-        		right = false;
-        		left = true;
-        	}
-        	else {
-        		right = false;
-        		left = false;
-        	}
         }
     	public void keyReleased(KeyEvent e){
     		int key = e.getKeyCode();
     		//started and continues game input
     		if(started) {
     			if(!pause) {
-    	    		if(key == KeyEvent.VK_RIGHT) {
+    	    		if(key == KeyEvent.VK_RIGHT && right) {
     	    			right = false;
     	    		}
-    	    		else if(key == KeyEvent.VK_LEFT) {
+    	    		else if(key == KeyEvent.VK_LEFT && left) {
     	    			left = false;
     	    		}
             		if(key == KeyEvent.VK_DOWN) {
@@ -107,8 +108,6 @@ final public class Tetris extends genericVariables
     
     public void moveIt(DrawPanel drawPanel)
     {
-    	
-    	
     	//start a game with generating a new shape
     	generate_a_new_shape();
     	
@@ -121,19 +120,19 @@ final public class Tetris extends genericVariables
         	}else { //game paused state
         		
         	}
-        	try
-            { 
-                Thread.sleep(gameSpeed);
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
+        	sleep(gameSpeed);
         	frame.repaint();
         }
     }
     
-    
+    private void sleep(int speed) {
+    	try {
+			Thread.sleep(speed);
+		} catch (InterruptedException e) {
+			System.err.println("ERROR : sleep");
+			e.printStackTrace();
+		}
+    }
 	private void run_gameLoop() {
 		shape active = my_tetris.all_shapes.lastElement();
 
@@ -382,48 +381,6 @@ final public class Tetris extends genericVariables
         				
         			}
         		}
-        		/*g.drawString("right_end : ", x, y);
-        		y+=25;
-        		for(int i = 0 ; i< 4 ; i++) {
-        			g.drawString("active.box["+i+"].right_end : " +Integer.toString(sh_last_index.sh_boxes.get(i).right_end), x, y);
-        			y+=25;
-        		}*/
-        		
-        		/*g.drawString("all_shapes.size : " +my_tetris.all_shapes.size(), x, y);
-        		y+=25;
-        		g.drawString("call_new_shape : " +Boolean.toString(my_tetris.call_new_shape), x, y);
-        		y+=25;
-        		g.drawString("game_state : " + my_tetris.game_state, x, y);
-        		y+=25;
-        		
-        		g.drawString("active_shape_loc_(X,Y):(" + sh_last_index.loc_x + "," + sh_last_index.loc_y + ")", x, y);
-        		y+=25;*/
-        		/*for(int i = 0 ; i < 4  ; i++) {
-        			g.drawString("Shape No: " + shape_cnt + " - Box No: " + Integer.toString(i), x, y);
-        			y+=25;
-        			g.drawString("active_box["+i+"]_(X,Y):(" + sh_last_index.sh_boxes.get(i).x+ "," + sh_last_index.sh_boxes.get(i).y + ")", x, y);
-        			y+=25;
-        			g.drawString("active_box["+i+"]_(e_bot,e_r):(" + sh_last_index.sh_boxes.get(i).bottom_end+ "," + sh_last_index.sh_boxes.get(i).right_end + ")", x, y);
-        			y+=25;
-        		}*/
-
-        		/*for(int k = 0 ; k < my_tetris.all_shapes.size();k++) {
-        			for(int i = 0 ; i < 4  ; i++) {
-        				g.drawString("Shape No: " + k + " - Box No: " + Integer.toString(i), x, y);
-        				y+=25;
-        				String act;
-        				if(my_tetris.all_shapes.get(k).active) act = "active";
-        				else act = "passive";
-        				g.drawString(act+"_box["+i+"]_(X,Y):(" + my_tetris.all_shapes.get(k).sh_boxes.get(i).x+ "," + my_tetris.all_shapes.get(k).sh_boxes.get(i).y + ")", x, y);
-        				y+=25;
-        				g.drawString(act+"_box["+i+"]_(e_bot,e_r):(" + my_tetris.all_shapes.get(k).sh_boxes.get(i).bottom_end+ "," + my_tetris.all_shapes.get(k).sh_boxes.get(i).right_end + ")", x, y);
-        				y+=25;
-        			}
-        		}
-        		for(int i = 0 ; i < my_tetris.all_shapes.size();i++) {
-        			g.drawString("Shape["+Integer.toString(i)+"]_active: " + Boolean.toString(my_tetris.all_shapes.get(i).active), x, y);
-        			y+=25;
-        		}*/
         	}
     }
 }

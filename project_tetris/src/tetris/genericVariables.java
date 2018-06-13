@@ -2,7 +2,6 @@ package tetris;
 
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
-import java.io.IOException;
 import java.util.Random;
 import java.util.Vector;
 
@@ -30,14 +29,14 @@ public class genericVariables {
 	static gameComponents my_tetris = new gameComponents();
 	public static boolean left;
 	public static boolean right;
-	public int gameSpeed = 500; //lower value has more speed
+	public int gameSpeed = 50; //lower value has more speed
 	boolean pause = false;
 	public int pause_selection = 0;
 	public boolean pause_apply = false;
 	boolean started = false; //record game started or not
 
 	static boolean top = true;
-	boolean rotate_available = true;
+	static boolean rotate_available = true;
 	boolean go_right = false;
 	
     //Key Events
@@ -178,33 +177,34 @@ public class genericVariables {
 		int active_y;
 		int active_right_end;
 		
-    	shape active = my_tetris.all_shapes.lastElement();
+    	//shape active = my_tetris.all_shapes.lastElement();
     	//checks for bottom border.
     	for(int i = 0 ; i < 4 ; i++) {
-    		active_bottom = active.sh_boxes.get(i).bottom_end;
-    		if(active_bottom >= my_tetris.bottom_border) {
-    			active.set_shape_active(false);
+    		if(checkforshape.sh_boxes.get(i).bottom_end >= my_tetris.bottom_border) {
+    			if(checkforshape.active)
+    				checkforshape.set_shape_active(false);
+    			else
+    				return false;
     		}
     	}
     	
     	//checks for top border
     	for(int i = 0 ; i < 4 ; i++) {
-    		int active_top = active.sh_boxes.get(i).y;
-    		if(active_top < my_tetris.top_border) {
+    		if(checkforshape.sh_boxes.get(i).y < my_tetris.top_border) {
     			top = false;
     		}
     	}
 
     	//check right and main border with each boxes
-    	if(active.active) {
+    	if(checkforshape.active) {
     		for(int i = 0 ; i < 4 ; i++) {
         		//check for just horizontal matching according to left
-            	active_x = active.sh_boxes.get(i).x;
+            	active_x = checkforshape.sh_boxes.get(i).x;
         		if(active_x == my_tetris.left_border+25) {
         			left = false;
         		}
         		//check for just horizontal matching according to right
-        		active_right_end = active.sh_boxes.get(i).right_end;
+        		active_right_end = checkforshape.sh_boxes.get(i).right_end;
         		if(active_right_end == my_tetris.right_border) {
         			right = false;
         		}
@@ -227,10 +227,10 @@ public class genericVariables {
     		if(my_tetris.all_shapes.get(i) != null) {
 
         		for(int k = 0 ; k < 4 ; k++) {//this loop selects active shape boxes
-        			active_bottom = active.sh_boxes.get(k).bottom_end;
-        			active_x = active.sh_boxes.get(k).x;
-        			active_y = active.sh_boxes.get(k).y;
-        			active_right_end = active.sh_boxes.get(k).right_end;
+        			active_bottom = checkforshape.sh_boxes.get(k).bottom_end;
+        			active_x = checkforshape.sh_boxes.get(k).x;
+        			active_y = checkforshape.sh_boxes.get(k).y;
+        			active_right_end = checkforshape.sh_boxes.get(k).right_end;
         			
         			//this loop checking selected active shape box with boxes of all passive shapes
         			for(int t = 0 ; t < 4 ; t++) { 
@@ -241,17 +241,17 @@ public class genericVariables {
             				int passive_y = my_tetris.all_shapes.get(i).sh_boxes.get(t).y;
             				//check horizontal and vertical matching
             				if(active_bottom == passive_top && active_x == passive_x) {
-            					active.set_shape_active(false);
+            					checkforshape.set_shape_active(false);
             				}
             				//check for just horizontal matching according to right
-            				if(right) {
+            				if(right || !checkforshape.active) {
             					if(active_right_end == passive_x && active_y+25 == passive_y) {
                 					right = false;
                 					col_right_exists = true;
-                				}
+            					}
             				}
             				//check for just horizontal matching according to left
-            				if(left) {
+            				if(left || !checkforshape.active) {
             					if(active_x == passive_right_end && active_y+25 == passive_y) {
                 					left = false;
                 					col_left_exists = true;
@@ -267,7 +267,7 @@ public class genericVariables {
     		}
     	}
     	//System.out.println("col_left_exists , col_right_exists , active.active  : " +col_left_exists + col_right_exists + active.active);
-    	if(!col_left_exists && !col_right_exists && active.active) return true;
+    	if(!col_left_exists && !col_right_exists && !checkforshape.active) return true;
     	else return false;
     			
     }
