@@ -29,7 +29,7 @@ public class genericVariables {
 	static gameComponents my_tetris = new gameComponents();
 	public static boolean left;
 	public static boolean right;
-	public int gameSpeed = 50; //lower value has more speed
+	public int gameSpeed = 80; //lower value has more speed // 80 gameSpeed draws 12 fps 
 	boolean pause = false;
 	public int pause_selection = 0;
 	public boolean pause_apply = false;
@@ -56,7 +56,31 @@ public class genericVariables {
     
     //check for exploding lines
     public static void check_exploding_line() {
-		System.out.println("================================");
+    	my_tetris.reset_explode_lines();
+		shape sh;
+		box bx;
+		int line_no;
+		for(int i = 0; i < my_tetris.all_shapes.size() ; i++) {
+			if(my_tetris.all_shapes.get(i) != null) {
+				sh = my_tetris.all_shapes.get(i);
+				for(int k = 0 ; k < 4 ; k++) {
+					if(sh.sh_boxes.get(k) != null) {
+						bx = sh.sh_boxes.get(k);
+						line_no = (bx.y / 25) - 3;
+						my_tetris.explode_lines[line_no]++;
+						System.out.println("line["+(line_no+3)+"] : " + my_tetris.explode_lines[line_no]);
+						if(my_tetris.explode_lines[line_no] == 19) {
+							explode_line(line_no);
+						}
+					}
+				}
+			}
+		}
+    	
+    	
+    	//old algorithm i didn't delete because, i may be return it, after tested carefully
+    	/*System.out.println("================================");
+		//my_tetris.reset_explode_lines();
     	int row_y;
     	shape sh;
     	box bx;
@@ -82,9 +106,9 @@ public class genericVariables {
 						
 				}
 			}
-		}
+		}*/
     }
-    
+    //explode lines after checked
     public static void explode_line(int line_number) {
     	System.out.println("Process : Delete Line " + (line_number+3));
     	int row_y = (line_number+3) * 25;
@@ -111,11 +135,57 @@ public class genericVariables {
     		
     	}
     	System.out.println("counter = " + counter);
-    	if(counter == 19) 
+    	if(counter == 19) {
     		my_tetris.explode_lines[line_number] = 0;
+    		drop_upper_boxes(line_number);
+    	}
+    		
+    }
+    //drops bottom-free boxes on upper lines after explosion
+    public static void drop_upper_boxes(int line_number) {
+    	int drop_y = (line_number+3)*25;
+    	shape sh;
+    	box bx;
+    	for(int n = 1 ; n < 25 ; n++) {
+    		for(int i = 0 ; i < my_tetris.all_shapes.size();i++) {
+        		if(my_tetris.all_shapes.get(i) != null) {
+        			sh = my_tetris.all_shapes.get(i);
+        			for(int k = 0; k < 4 ; k++) {
+        				if(sh.sh_boxes.get(k) != null) {
+        					bx = sh.sh_boxes.get(k);
+        					if(bx.y == drop_y-(n*25)) {
+        						 if(check_box_bottom_free(bx)) {
+        							 bx.set_box_y(bx.y+25);
+        							 k--;
+        						 }
+        					}
+        				}
+        			}
+        		}
+        	}
+    	}
     }
     
-    
+    public static boolean check_box_bottom_free(box checkboxbottomfree) {
+    	shape sh;
+    	box bx;
+    	for(int i = 0 ; i < my_tetris.all_shapes.size();i++) {
+    		if(my_tetris.all_shapes.get(i) != null) {
+    			sh = my_tetris.all_shapes.get(i);
+    			for(int k = 0; k < 4 ; k++) {
+    				if(sh.sh_boxes.get(k) != null) {
+    					bx = sh.sh_boxes.get(k);
+    					if(checkboxbottomfree.x == bx.x) {
+    						if(checkboxbottomfree.y+25 != bx.y && checkboxbottomfree.y+25 != my_tetris.bottom_border) {
+								return true;
+    						}
+    					}
+    				}
+    			}
+    		}
+		}
+    	return false;
+    }
     
     
 	public static void generate_a_new_shape() {

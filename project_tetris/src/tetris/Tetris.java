@@ -1,6 +1,6 @@
 package tetris;
 /*
- * Version No : 0.10
+ * Version No : 0.11
  * Version Notes : 
  *  @Author : Taner Esmeroğlu
  */
@@ -96,7 +96,7 @@ final public class Tetris extends genericVariables
     	    			left = false;
     	    		}
             		if(key == KeyEvent.VK_DOWN) {
-            			gameSpeed = 250;
+            			gameSpeed = 80;
             		}
             		if(key == KeyEvent.VK_SPACE && !rotate_available) {
             			rotate_available = true;
@@ -170,7 +170,7 @@ final public class Tetris extends genericVariables
 			e.printStackTrace();
 		}
     	//this block to configure window settings 
-        frame = new JFrame("Tetris v0.10");
+        frame = new JFrame("Tetris v0.11");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.addKeyListener(new ActionListener());
         drawPanel = new DrawPanel();
@@ -339,7 +339,9 @@ final public class Tetris extends genericVariables
             	
             	
             	//select active shape
-        		shape sh_last_index = my_tetris.all_shapes.lastElement();
+            	shape sh_last_index = null;
+            	if(my_tetris.all_shapes.size() > 0 )
+            		sh_last_index = my_tetris.all_shapes.lastElement();
         		//Draw active shape boxes informations
         		g.drawString("ACTIVE SHAPE  SHAPE NO --> "+ size, x, y);
         		y+=25;

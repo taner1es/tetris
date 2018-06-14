@@ -10,7 +10,13 @@ public class gameComponents extends genericVariables{
 	public final int right_border = 21*25;
 	public final int bottom_border = 28*25;
 	public int[] explode_lines = new int[25];
+	//constructor
 	gameComponents() {
+		for(int i = 0 ; i < 25 ; i++) {
+			explode_lines[i] = 0;
+		}
+	}
+	public void reset_explode_lines() {
 		for(int i = 0 ; i < 25 ; i++) {
 			explode_lines[i] = 0;
 		}
