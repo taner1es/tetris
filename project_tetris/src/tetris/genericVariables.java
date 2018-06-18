@@ -324,7 +324,6 @@ public class genericVariables {
             				//check horizontal and vertical matching
             				if(active_bottom == passive_y && active_x == passive_x) {
                     			col_bot_exists = true;
-                				break;
             				}
             				//check for just horizontal matching according to right
             				if(right || !checkforshape.active) {
