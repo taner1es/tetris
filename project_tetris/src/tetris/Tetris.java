@@ -66,14 +66,16 @@ final public class Tetris extends genericVariables
             			rotate_available = false;
             		}
             		if(key == KeyEvent.VK_DOWN) {
-            			gameSpeed = 50;
+            			gameSpeed = 1;
             		}
             		//move shape
                 	if(key == KeyEvent.VK_RIGHT) {
+                		frameCounter_right++;
                 		left = false;
                 		right = true;
                 	}
                 	else if(key == KeyEvent.VK_LEFT) {
+                		frameCounter_left++;
                 		right = false;
                 		left = true;
                 	}
@@ -90,13 +92,15 @@ final public class Tetris extends genericVariables
     		if(started) {
     			if(!pause) {
     	    		if(key == KeyEvent.VK_RIGHT && right) {
+    	    			frameCounter_right = 0;
     	    			right = false;
     	    		}
     	    		else if(key == KeyEvent.VK_LEFT && left) {
+    	    			frameCounter_left = 0;
     	    			left = false;
     	    		}
             		if(key == KeyEvent.VK_DOWN) {
-            			gameSpeed = 80;
+            			gameSpeed = 16;
             		}
             		if(key == KeyEvent.VK_SPACE && !rotate_available) {
             			rotate_available = true;
@@ -137,18 +141,52 @@ final public class Tetris extends genericVariables
 		shape active = my_tetris.all_shapes.lastElement();
 
 		checkcollisions(active);
+		
+		if(col_left_exists || col_right_exists) {
+			frameCounter_collision++;
+		}else {
+			frameCounter_collision = 0;
+		}
     	//left event
     	if(left && active.active) {
-    		active.go_left();
+    		if(frameCounter_left == 1 ) {
+        		active.go_left();
+        		frameCounter_left++;
+    		}else if(frameCounter_left >= 4) {
+    			active.go_left();
+    			frameCounter_left = 2;
+    		}
     	}
     	//right event
     	if(right && active.active) {
-    		active.go_right();
+    		if(frameCounter_right == 1 ) {
+        		active.go_right();
+        		frameCounter_right++;
+    		}else if(frameCounter_right >= 4) {
+    			active.go_right();
+    			frameCounter_right = 2;
+    		}
+    		
     	}
     	//down event
-    	if(active.active) {
-    		active.go_down();
-    	}
+    	if(active.active && frameCounter >= 30) {
+    		if(col_bot_exists)
+    		{
+    			if(frameCounter_collision_bot >= 60) {
+    				checkcollisions(active);
+    				if(col_bot_exists){
+    					active.set_shape_active(false);
+    				}else{
+    	    			frameCounter = 0;
+    	        		active.go_down();
+    				}
+    			}	
+    		}else {
+    			frameCounter = 0;
+        		active.go_down();
+    		}
+    			
+		}
     	//generate new shape
     	if(!active.active && top) {
     		generate_a_new_shape();
@@ -159,6 +197,8 @@ final public class Tetris extends genericVariables
     		JOptionPane.showConfirmDialog(null, "You LOST .. :(");
     		System.exit(1);
     	}
+
+		frameCounter++;
 	}
 	public void go()
     {

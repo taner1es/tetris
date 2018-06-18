@@ -29,15 +29,24 @@ public class genericVariables {
 	static gameComponents my_tetris = new gameComponents();
 	public static boolean left;
 	public static boolean right;
-	public int gameSpeed = 80; //lower value has more speed // 80 gameSpeed draws 12 fps 
+	public int gameSpeed = 16; //lower value has more speed // 16 gameSpeed draws 60 fps 
 	boolean pause = false;
 	public int pause_selection = 0;
 	public boolean pause_apply = false;
 	boolean started = false; //record game started or not
+	public int frameCounter = 0;
+	public int frameCounter_left = 0;
+	public int frameCounter_right = 0;
+	public int frameCounter_collision = 0;
+	public static int frameCounter_collision_bot = 0;
 
 	static boolean top = true;
 	static boolean rotate_available = true;
 	boolean go_right = false;
+	
+	static boolean col_right_exists = false;
+	static boolean col_left_exists = false;
+	static boolean col_bot_exists = false;
 	
     //Key Events
     String key_pressed = null;
@@ -240,8 +249,9 @@ public class genericVariables {
 	
 	public static boolean checkcollisions(shape checkforshape) {
 		top = true;
-		boolean col_right_exists = false;
-		boolean col_left_exists = false;
+		col_right_exists = false;
+		col_left_exists = false;
+		col_bot_exists = false;
     	int active_bottom;
 		int active_x;
 		int active_y;
@@ -251,8 +261,10 @@ public class genericVariables {
     	//checks for bottom border.
     	for(int i = 0 ; i < 4 ; i++) {
     		if(checkforshape.sh_boxes.get(i).bottom_end >= my_tetris.bottom_border) {
-    			if(checkforshape.active)
-    				checkforshape.set_shape_active(false);
+    			if(checkforshape.active) {
+        			col_bot_exists = true;
+    				break;
+    			}
     			else
     				return false;
     		}
@@ -305,30 +317,45 @@ public class genericVariables {
         			//this loop checking selected active shape box with boxes of all passive shapes
         			for(int t = 0 ; t < 4 ; t++) { 
         				if(my_tetris.all_shapes.get(i).sh_boxes.get(t) != null) {
-        					int passive_top = my_tetris.all_shapes.get(i).sh_boxes.get(t).y;
             				int passive_x = my_tetris.all_shapes.get(i).sh_boxes.get(t).x;
             				int passive_right_end = my_tetris.all_shapes.get(i).sh_boxes.get(t).right_end;
             				int passive_y = my_tetris.all_shapes.get(i).sh_boxes.get(t).y;
+            				int passive_bottom = my_tetris.all_shapes.get(i).sh_boxes.get(t).bottom_end;
             				//check horizontal and vertical matching
-            				if(active_bottom == passive_top && active_x == passive_x) {
-            					checkforshape.set_shape_active(false);
+            				if(active_bottom == passive_y && active_x == passive_x) {
+                    			col_bot_exists = true;
+                				break;
             				}
             				//check for just horizontal matching according to right
             				if(right || !checkforshape.active) {
-            					if(active_right_end == passive_x && active_y+25 == passive_y) {
-                					right = false;
-                					col_right_exists = true;
+            					if(active_y == passive_y) {
+            						if(active_right_end == passive_x) {
+            							right = false;
+                    					col_right_exists = true;
+            						}
+            					}else if(active_bottom == passive_y) {
+            						if(active_right_end == passive_y) {
+            							right = false;
+                    					col_right_exists = true;
+            						}
             					}
             				}
             				//check for just horizontal matching according to left
             				if(left || !checkforshape.active) {
-            					if(active_x == passive_right_end && active_y+25 == passive_y) {
-                					left = false;
-                					col_left_exists = true;
-                				}
+            					if(active_y == passive_y) {
+            						if(active_x == passive_right_end) {
+            							left = false;
+                    					col_left_exists = true;
+            						}
+            					}else if(active_bottom == passive_y) {
+            						if(active_x == passive_right_end) {
+            							left = false;
+                    					col_left_exists = true;
+            						}
+            					}
             				}
             				//check if there no place for new shape and finish the game
-            				if(active_bottom > passive_top && active_bottom < 4*25) {
+            				if(active_bottom > passive_y && active_bottom < 4*25) {
             					top = false;
             				}
         				}
@@ -336,6 +363,10 @@ public class genericVariables {
         		}
     		}
     	}
+
+    	if(col_bot_exists) frameCounter_collision_bot++;
+    	else frameCounter_collision_bot = 0;
+
     	//System.out.println("col_left_exists , col_right_exists , active.active  : " +col_left_exists + col_right_exists + active.active);
     	if(!col_left_exists && !col_right_exists && !checkforshape.active) return true;
     	else return false;
