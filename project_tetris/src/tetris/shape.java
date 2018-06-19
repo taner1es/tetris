@@ -53,32 +53,28 @@ public class shape extends genericVariables{
 	public void go_down() {
 		loc_y+=25;
 		for(int i= 0 ; i< 4 ; i++) {
-			sh_boxes.get(i).y +=25;
-			sh_boxes.get(i).bottom_end+=25;
+			sh_boxes.get(i).set_box_y(sh_boxes.get(i).get_box_y()+25);
 		}
 	}
 	//go up
 	public void go_up() {
 		loc_y-=25;
 		for(int i= 0 ; i< 4 ; i++) {
-			sh_boxes.get(i).y -=25;
-			sh_boxes.get(i).bottom_end-=25;
+			sh_boxes.get(i).set_box_y(sh_boxes.get(i).get_box_y()-25);
 		}
 	}
 	//go left
 	public void go_left() {
 		loc_x-=25;
 		for(int i= 0 ; i< 4 ; i++) {
-			sh_boxes.get(i).x -=25;
-			sh_boxes.get(i).right_end -= 25;
+			sh_boxes.get(i).set_box_x(sh_boxes.get(i).get_box_x()-25);
 		}
 	}
 	//go right
 	public void go_right() {
 		loc_x += 25;
 		for(int i= 0 ; i< 4 ; i++) {
-			sh_boxes.get(i).x +=25;
-			sh_boxes.get(i).right_end += 25;
+			sh_boxes.get(i).set_box_x(sh_boxes.get(i).get_box_x()+25);
 		}
 	}
 	//calculate shape start location and end location to clarify collision checker
@@ -87,17 +83,17 @@ public class shape extends genericVariables{
 		box fetch;
 		for(int i = 0 ; i < 4 ; i++) {
 			fetch = this.sh_boxes.get(i);
-			if(fetch.x < min_x) { //find start loc x
-				min_x = fetch.x;
+			if(fetch.get_box_x() < min_x) { //find start loc x
+				min_x = fetch.get_box_x();
 			}
-			if(fetch.y < min_y) { //find start loc y
-				min_y = fetch.y;
+			if(fetch.get_box_y() < min_y) { //find start loc y
+				min_y = fetch.get_box_y();
 			}
-			if(fetch.x > max_x) { //find end loc x
-				max_x = fetch.x;
+			if(fetch.get_box_x() > max_x) { //find end loc x
+				max_x = fetch.get_box_x();
 			}
-			if(fetch.y > max_y) { //find end loc y
-				max_y = fetch.y;
+			if(fetch.get_box_y() > max_y) { //find end loc y
+				max_y = fetch.get_box_y();
 			}
 		}
 		

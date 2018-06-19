@@ -75,7 +75,7 @@ public class genericVariables {
 				for(int k = 0 ; k < 4 ; k++) {
 					if(sh.sh_boxes.get(k) != null) {
 						bx = sh.sh_boxes.get(k);
-						line_no = (bx.y / 25) - 3;
+						line_no = (bx.get_box_y() / 25) - 3;
 						my_tetris.explode_lines[line_no]++;
 						System.out.println("line["+(line_no+3)+"] : " + my_tetris.explode_lines[line_no]);
 						if(my_tetris.explode_lines[line_no] == 19) {
@@ -134,7 +134,7 @@ public class genericVariables {
         			if(sh.sh_boxes.get(k) != null)
         			{
         				bx = sh.sh_boxes.get(k);
-            			if(row_y == bx.y) {
+            			if(row_y == bx.get_box_y()) {
             				sh.sh_boxes.setElementAt(null, k);
             				counter++;
             			}
@@ -162,9 +162,9 @@ public class genericVariables {
         			for(int k = 0; k < 4 ; k++) {
         				if(sh.sh_boxes.get(k) != null) {
         					bx = sh.sh_boxes.get(k);
-        					if(bx.y == drop_y-(n*25)) {
+        					if(bx.get_box_y() == drop_y-(n*25)) {
         						 if(check_box_bottom_free(bx)) {
-        							 bx.set_box_y(bx.y+25);
+        							 bx.set_box_y(bx.get_box_y()+25);
         							 k--;
         						 }
         					}
@@ -184,8 +184,8 @@ public class genericVariables {
     			for(int k = 0; k < 4 ; k++) {
     				if(sh.sh_boxes.get(k) != null) {
     					bx = sh.sh_boxes.get(k);
-    					if(checkboxbottomfree.x == bx.x) {
-    						if(checkboxbottomfree.y+25 != bx.y && checkboxbottomfree.y+25 != my_tetris.bottom_border) {
+    					if(checkboxbottomfree.get_box_x() == bx.get_box_x()) {
+    						if(checkboxbottomfree.get_box_y()+25 != bx.get_box_y() && checkboxbottomfree.get_box_y()+25 != my_tetris.bottom_border) {
 								return true;
     						}
     					}
@@ -260,7 +260,7 @@ public class genericVariables {
     	//shape active = my_tetris.all_shapes.lastElement();
     	//checks for bottom border.
     	for(int i = 0 ; i < 4 ; i++) {
-    		if(checkforshape.sh_boxes.get(i).bottom_end >= my_tetris.bottom_border) {
+    		if(checkforshape.sh_boxes.get(i).get_box_bottom_end() >= my_tetris.bottom_border) {
     			if(checkforshape.active) {
         			col_bot_exists = true;
     				break;
@@ -272,7 +272,7 @@ public class genericVariables {
     	
     	//checks for top border
     	for(int i = 0 ; i < 4 ; i++) {
-    		if(checkforshape.sh_boxes.get(i).y < my_tetris.top_border) {
+    		if(checkforshape.sh_boxes.get(i).get_box_y() < my_tetris.top_border) {
     			top = false;
     		}
     	}
@@ -281,12 +281,12 @@ public class genericVariables {
     	if(checkforshape.active) {
     		for(int i = 0 ; i < 4 ; i++) {
         		//check for just horizontal matching according to left
-            	active_x = checkforshape.sh_boxes.get(i).x;
+            	active_x = checkforshape.sh_boxes.get(i).get_box_x();
         		if(active_x == my_tetris.left_border+25) {
         			left = false;
         		}
         		//check for just horizontal matching according to right
-        		active_right_end = checkforshape.sh_boxes.get(i).right_end;
+        		active_right_end = checkforshape.sh_boxes.get(i).get_box_right_end();
         		if(active_right_end == my_tetris.right_border) {
         			right = false;
         		}
@@ -309,18 +309,18 @@ public class genericVariables {
     		if(my_tetris.all_shapes.get(i) != null) {
 
         		for(int k = 0 ; k < 4 ; k++) {//this loop selects active shape boxes
-        			active_bottom = checkforshape.sh_boxes.get(k).bottom_end;
-        			active_x = checkforshape.sh_boxes.get(k).x;
-        			active_y = checkforshape.sh_boxes.get(k).y;
-        			active_right_end = checkforshape.sh_boxes.get(k).right_end;
+        			active_bottom = checkforshape.sh_boxes.get(k).get_box_bottom_end();
+        			active_x = checkforshape.sh_boxes.get(k).get_box_x();
+        			active_y = checkforshape.sh_boxes.get(k).get_box_y();
+        			active_right_end = checkforshape.sh_boxes.get(k).get_box_right_end();
         			
         			//this loop checking selected active shape box with boxes of all passive shapes
         			for(int t = 0 ; t < 4 ; t++) { 
         				if(my_tetris.all_shapes.get(i).sh_boxes.get(t) != null) {
-            				int passive_x = my_tetris.all_shapes.get(i).sh_boxes.get(t).x;
-            				int passive_right_end = my_tetris.all_shapes.get(i).sh_boxes.get(t).right_end;
-            				int passive_y = my_tetris.all_shapes.get(i).sh_boxes.get(t).y;
-            				int passive_bottom = my_tetris.all_shapes.get(i).sh_boxes.get(t).bottom_end;
+            				int passive_x = my_tetris.all_shapes.get(i).sh_boxes.get(t).get_box_x();
+            				int passive_right_end = my_tetris.all_shapes.get(i).sh_boxes.get(t).get_box_right_end();
+            				int passive_y = my_tetris.all_shapes.get(i).sh_boxes.get(t).get_box_y();
+            				int passive_bottom = my_tetris.all_shapes.get(i).sh_boxes.get(t).get_box_bottom_end();
             				//check horizontal and vertical matching
             				if(active_bottom == passive_y && active_x == passive_x) {
                     			col_bot_exists = true;

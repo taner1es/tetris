@@ -320,8 +320,8 @@ final public class Tetris extends genericVariables
             			for(int i = 0 ; i < 4 ; i++) {
             				if(my_shapes.get(k).sh_boxes.get(i) != null)
             				{
-            					draw_x = my_shapes.get(k).sh_boxes.get(i).x;
-                    			draw_y = my_shapes.get(k).sh_boxes.get(i).y;
+            					draw_x = my_shapes.get(k).sh_boxes.get(i).get_box_x();
+                    			draw_y = my_shapes.get(k).sh_boxes.get(i).get_box_y();
                     			switch(my_shapes.get(k).shape_type) {
                     				case "I": g.setColor(Color.GREEN);break;
         	            				case "L":g.setColor(Color.RED);break;
@@ -411,9 +411,9 @@ final public class Tetris extends genericVariables
             				if(my_tetris.all_shapes.get(k).sh_boxes.get(i) != null)
             				{
                 				g.drawString("shape["+k+"]box["+i+"].(x,y) : (" +
-                						Integer.toString(my_tetris.all_shapes.get(k).sh_boxes.get(i).x)
+                						Integer.toString(my_tetris.all_shapes.get(k).sh_boxes.get(i).get_box_x())
                 						+","+
-                						Integer.toString(my_tetris.all_shapes.get(k).sh_boxes.get(i).y)
+                						Integer.toString(my_tetris.all_shapes.get(k).sh_boxes.get(i).get_box_y())
                 						+")", 
                 						x, y);
                 				y+=25;
