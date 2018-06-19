@@ -23,6 +23,7 @@ import javax.swing.JPanel;
 
 
 
+
 final public class Tetris extends genericVariables
 {
 	static BufferedImage image;
@@ -138,7 +139,7 @@ final public class Tetris extends genericVariables
 		}
     }
 	private void run_gameLoop() {
-		shape active = my_tetris.all_shapes.lastElement();
+    	shape active = my_tetris.all_shapes.lastElement();
 
 		checkcollisions(active);
 		
@@ -148,7 +149,7 @@ final public class Tetris extends genericVariables
 			frameCounter_collision = 0;
 		}
     	//left event
-    	if(left && active.active) {
+    	if(left && active.get_shape_active()) {
     		if(frameCounter_left == 1 ) {
         		active.go_left();
         		frameCounter_left++;
@@ -158,7 +159,7 @@ final public class Tetris extends genericVariables
     		}
     	}
     	//right event
-    	if(right && active.active) {
+    	if(right && active.get_shape_active()) {
     		if(frameCounter_right == 1 ) {
         		active.go_right();
         		frameCounter_right++;
@@ -169,7 +170,7 @@ final public class Tetris extends genericVariables
     		
     	}
     	//down event
-    	if(active.active && frameCounter >= 30) {
+    	if(active.get_shape_active() && frameCounter >= 30) {
     		if(col_bot_exists)
     		{
     			if(frameCounter_collision_bot >= 60) {
@@ -188,7 +189,7 @@ final public class Tetris extends genericVariables
     			
 		}
     	//generate new shape
-    	if(!active.active && top) {
+    	if(!active.get_shape_active() && top) {
     		generate_a_new_shape();
     	}
     	//check game has finished or not
@@ -322,7 +323,7 @@ final public class Tetris extends genericVariables
             				{
             					draw_x = my_shapes.get(k).sh_boxes.get(i).get_box_x();
                     			draw_y = my_shapes.get(k).sh_boxes.get(i).get_box_y();
-                    			switch(my_shapes.get(k).shape_type) {
+                    			switch(my_shapes.get(k).get_shape_type()) {
                     				case "I": g.setColor(Color.GREEN);break;
         	            				case "L":g.setColor(Color.RED);break;
         		            				case "J":g.setColor(Color.GRAY);break;
@@ -386,14 +387,14 @@ final public class Tetris extends genericVariables
         		g.drawString("ACTIVE SHAPE  SHAPE NO --> "+ size, x, y);
         		y+=25;
         		//Draw active shape type
-        		g.drawString("ACTIVE SHAPE  SHAPE TYPE --> "+ sh_last_index.shape_type, x, y);
+        		g.drawString("ACTIVE SHAPE  SHAPE TYPE --> "+ sh_last_index.get_shape_type(), x, y);
         		y+=25;
         		
         		for(int i = 0 ; i< 4 ; i++) {
         			g.drawString("shape["+size+"].(x,y) : (" +
-        						Integer.toString(sh_last_index.loc_x)
+        						Integer.toString(sh_last_index.get_shape_loc_X())
         						+","+
-        						Integer.toString(sh_last_index.loc_y)+")", x, y);
+        						Integer.toString(sh_last_index.get_shape_loc_Y())+")", x, y);
         			y+=25;
         		}
         		//Draw passive boxes locations on right bar

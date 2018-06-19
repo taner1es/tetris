@@ -36,12 +36,12 @@ public class gameComponents extends genericVariables{
 	}
 	public void rotate_shape() {
 		int last_index = all_shapes.size()-1;
-		int actual_x = all_shapes.lastElement().start_loc_x+100;		//all_shapes.lastElement().loc_x+75;
-		int actual_y = all_shapes.lastElement().start_loc_y;		//all_shapes.lastElement().loc_y-50;
-		String type = all_shapes.lastElement().shape_type;
+		int actual_x = all_shapes.lastElement().get_shape_start_loc_X()+100;		//all_shapes.lastElement().loc_x+75;
+		int actual_y = all_shapes.lastElement().get_shape_start_loc_Y();		//all_shapes.lastElement().loc_y-50;
+		String type = all_shapes.lastElement().get_shape_type();
 		
-		int type_no = all_shapes.lastElement().shape_type_no; //shape_codes array first dimension number
-		int rot_no = all_shapes.lastElement().shape_rotation_no; // shape_codes array second dimension number
+		int type_no = all_shapes.lastElement().get_shape_type_no(); //shape_codes array first dimension number
+		int rot_no = all_shapes.lastElement().get_shape_rotation_no(); // shape_codes array second dimension number
 		String code = null;
 		if(type_no != 3 ) {
 			 // will be taken from array list with new rotation no
@@ -55,9 +55,9 @@ public class gameComponents extends genericVariables{
 			}
 			shape rotatedshape;
 			rotatedshape = stringtoShape(code,type,type_no,rot_no,actual_x,actual_y);
-			rotatedshape.active = false;
+			rotatedshape.set_shape_active(false);
 			if(checkcollisions(rotatedshape)) {
-				rotatedshape.active = true;
+				rotatedshape.set_shape_active(true);
 				all_shapes.setElementAt(rotatedshape, last_index);
 			}
 				

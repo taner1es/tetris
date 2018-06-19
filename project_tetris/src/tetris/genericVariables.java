@@ -96,7 +96,7 @@ public class genericVariables {
     	//int size = my_tetris.all_shapes.size();
 		//select shape
 		sh = my_tetris.all_shapes.lastElement();
-		//System.out.println("active " + sh.active);
+		//System.out.println("active " + sh.get_shape_active());
 		//System.out.println("selected shape.type,orderno : " + sh.shape_type + "," + size);
 		for(int k = 0 ; k < 4 ;k++) {
 			//select box
@@ -261,7 +261,7 @@ public class genericVariables {
     	//checks for bottom border.
     	for(int i = 0 ; i < 4 ; i++) {
     		if(checkforshape.sh_boxes.get(i).get_box_bottom_end() >= my_tetris.bottom_border) {
-    			if(checkforshape.active) {
+    			if(checkforshape.get_shape_active()) {
         			col_bot_exists = true;
     				break;
     			}
@@ -278,7 +278,7 @@ public class genericVariables {
     	}
 
     	//check right and main border with each boxes
-    	if(checkforshape.active) {
+    	if(checkforshape.get_shape_active()) {
     		for(int i = 0 ; i < 4 ; i++) {
         		//check for just horizontal matching according to left
             	active_x = checkforshape.sh_boxes.get(i).get_box_x();
@@ -294,13 +294,13 @@ public class genericVariables {
     	}
     	
     	
-    	//System.out.println("active.active  : " + active.active );
+    	//System.out.println("active.get_shape_active()  : " + active.get_shape_active() );
     	//check right and left main borders with shape start & end locations for rotatable or not
 		checkforshape.calc_shape_start_end_loc();
-		if(checkforshape.start_loc_x <= my_tetris.left_border) {
+		if(checkforshape.get_shape_start_loc_X() <= my_tetris.left_border) {
 			col_left_exists = true;
 		}
-		if(checkforshape.end_loc_x >= my_tetris.right_border) {
+		if(checkforshape.get_shape_end_loc_X() >= my_tetris.right_border) {
 			col_right_exists = true;
 		}
     	
@@ -326,7 +326,7 @@ public class genericVariables {
                     			col_bot_exists = true;
             				}
             				//check for just horizontal matching according to right
-            				if(right || !checkforshape.active) {
+            				if(right || !checkforshape.get_shape_active()) {
             					if(active_y == passive_y) {
             						if(active_right_end == passive_x) {
             							right = false;
@@ -340,7 +340,7 @@ public class genericVariables {
             					}
             				}
             				//check for just horizontal matching according to left
-            				if(left || !checkforshape.active) {
+            				if(left || !checkforshape.get_shape_active()) {
             					if(active_y == passive_y) {
             						if(active_x == passive_right_end) {
             							left = false;
@@ -366,8 +366,8 @@ public class genericVariables {
     	if(col_bot_exists) frameCounter_collision_bot++;
     	else frameCounter_collision_bot = 0;
 
-    	//System.out.println("col_left_exists , col_right_exists , active.active  : " +col_left_exists + col_right_exists + active.active);
-    	if(!col_left_exists && !col_right_exists && !checkforshape.active) return true;
+    	//System.out.println("col_left_exists , col_right_exists , active.get_shape_active()  : " +col_left_exists + col_right_exists + active.get_shape_active());
+    	if(!col_left_exists && !col_right_exists && !checkforshape.get_shape_active()) return true;
     	else return false;
     			
     }
