@@ -3,7 +3,7 @@ package tetris;
 import java.util.Vector;
 import tetris.box;
 
-public class shape extends genericVariables{
+class shape extends genericVariables{
 	Vector<box> sh_boxes = new Vector<box>(4);
 	private String shape_type;
 	private int shape_type_no;
@@ -12,16 +12,16 @@ public class shape extends genericVariables{
 	private long shape_id;
 	private boolean active;
 	private int loc_x; //trace with initial location data
-	private int loc_y; //initial location data
-	private int start_loc_x; //trace derived location data
-	private int start_loc_y; //trace derived location data
+	private int loc_y; //trace with initial location data
+	private int start_loc_x; //trace with derived location data
+	private int start_loc_y; //trace with derived location data
 	private int end_loc_x; //trace with derived location data
-	private int end_loc_y; //trace derived location data
+	private int end_loc_y; //trace with derived location data
 	
 	
 	//constructor
 	protected shape(int x , int y ,String type,int type_no,int rot_no, String code) {
-		this.shape_id = shape_cnt;
+		this.shape_id = genericVariables.get_shape_cnt();
 		this.shape_type = type;
 		this.shape_type_no = type_no;
 		this.shape_rotation_no = rot_no;
@@ -29,7 +29,6 @@ public class shape extends genericVariables{
 		this.active = true;
 		this.loc_x = x;
 		this.loc_y = y;
-		gameLog.addElement("shape constructed");
 	}
 	protected void add_box(box newbox) {
 		sh_boxes.addElement(newbox);

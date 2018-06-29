@@ -1,6 +1,6 @@
 package tetris;
 
-public class box{
+class box{
 	private int x;
 	private int y;
 	private int bottom_end;

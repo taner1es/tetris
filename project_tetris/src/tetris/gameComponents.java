@@ -3,7 +3,7 @@ package tetris;
 import java.util.Vector;
 
 //this class is the most important class.
-public class gameComponents extends genericVariables{ 
+class gameComponents extends genericVariables{ 
 	//declare borders
 	public final int top_border = 1*25;
 	public final int left_border = 1*25;
@@ -28,8 +28,7 @@ public class gameComponents extends genericVariables{
 	//this method has really really critical role in the program it gets the new shape data and adding to all shapes list (vector) and goes on for everything.
 	public void newShape(shape new_shape) {
 		all_shapes.addElement(new_shape);
-		shape_cnt++;
-		gameLog.addElement("New Shape Added to Array list.");
+		genericVariables.set_shape_cnt(genericVariables.get_shape_cnt()+1);
 	}
 	public void set_call_new_shape (boolean b) {
 		call_new_shape = b;
@@ -46,17 +45,17 @@ public class gameComponents extends genericVariables{
 		if(type_no != 3 ) {
 			 // will be taken from array list with new rotation no
 			System.out.println("type_no & rot_no : " + type_no + rot_no );
-			if(shape_codes[type_no].length-1 == rot_no) {
+			if(genericVariables.get_shape_codes()[type_no].length-1 == rot_no) {
 				rot_no = 0;
-				code = shape_codes[type_no][rot_no];
+				code = genericVariables.get_shape_codes()[type_no][rot_no];
 			}else {
 				rot_no++;
-				code = shape_codes[type_no][rot_no];
+				code = genericVariables.get_shape_codes()[type_no][rot_no];
 			}
 			shape rotatedshape;
-			rotatedshape = stringtoShape(code,type,type_no,rot_no,actual_x,actual_y);
+			rotatedshape = genericVariables.stringtoShape(code,type,type_no,rot_no,actual_x,actual_y);
 			rotatedshape.set_shape_active(false);
-			if(checkcollisions(rotatedshape)) {
+			if(genericVariables.checkcollisions(rotatedshape)) {
 				rotatedshape.set_shape_active(true);
 				all_shapes.setElementAt(rotatedshape, last_index);
 			}

@@ -3,7 +3,6 @@ package tetris;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.util.Random;
-import java.util.Vector;
 
 import javax.swing.JFrame;
 
@@ -11,48 +10,45 @@ import javax.swing.JFrame;
 import tetris.Tetris.DrawPanel;
 
 
-public class genericVariables {
-	JFrame frame;
-    DrawPanel drawPanel;
-    GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-    
+class genericVariables {
+	//variables
     /*
      * s_ : screen original width or height value.
      * gw_ : game window assigned by myself.
      */
-    final int s_WIDTH = gd.getDisplayMode().getWidth();
-    final int s_HEIGHT = gd.getDisplayMode().getHeight();
-    final int gw_WIDTH = 900; 
-    final int gw_HEIGHT = 800;
-	static int shape_cnt = 0;
-	static Vector<String> gameLog = new Vector<String>(0);
-	static gameComponents my_tetris = new gameComponents();
-	public static boolean left;
-	public static boolean right;
-	public int gameSpeed = 16; //lower value has more speed // 16 gameSpeed draws 60 fps 
-	boolean pause = false;
-	public int pause_selection = 0;
-	public boolean pause_apply = false;
-	boolean started = false; //record game started or not
-	public int frameCounter = 0;
-	public int frameCounter_left = 0;
-	public int frameCounter_right = 0;
-	public int frameCounter_collision = 0;
-	public static int frameCounter_collision_bot = 0;
-
-	static boolean top = true;
-	static boolean rotate_available = true;
-	boolean go_right = false;
+	private static JFrame frame;
+    private static DrawPanel drawPanel;
+    private static GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+    
+	private static gameComponents my_tetris = new gameComponents();
 	
-	static boolean col_right_exists = false;
-	static boolean col_left_exists = false;
-	static boolean col_bot_exists = false;
+    private static final  int s_WIDTH = gd.getDisplayMode().getWidth();
+    private static final  int s_HEIGHT = gd.getDisplayMode().getHeight();
+    private static final  int gw_WIDTH = 900; 
+    private static final  int gw_HEIGHT = 800;
+    
+	private static int shape_cnt = 0;
+	private static int frameCounter_left = 0;
+	private static int frameCounter_right = 0;
+	private static int frameCounter_collision = 0;
+	private static int frameCounter_collision_bot = 0;
+	private static int gameSpeed = 16; //lower value has more speed // 16 gameSpeed draws 60 fps
+	private static int frameCounter = 0;
+	private static int pause_selection = 0;
 	
-    //Key Events
-    String key_pressed = null;
+	private static boolean left;
+	private static boolean right; 
+	private static boolean pause = false;
+	private static boolean pause_apply = false;
+	private static boolean started = false; //record game started or not
+	private static boolean top = true;
+	private static boolean rotate_available = true;
+	private static boolean go_right = false;
+	private static boolean col_right_exists = false;
+	private static boolean col_left_exists = false;
+	private static boolean col_bot_exists = false;
 	
-    //shapes
-    static String[][] shape_codes = 
+    private static String[][] shape_codes = 
 		{
 			/* 0. --> I*/		{"AXXXAXXXAXXXAXXX","AAAAXXXXXXXXXXXX"},  
 			/* 1. --> L*/		{"AXXXAXXXAAXXXXXX","AAAXAXXXXXXXXXXX","AAXXXAXXXAXXXXXX","XXAXAAAXXXXXXXXX"},
@@ -62,9 +58,67 @@ public class genericVariables {
 			/* 5. --> S*/		{"XAAXAAXXXXXXXXXX","AXXXAAXXXAXXXXXX"},
 			/* 6. --> Z*/		{"AAXXXAAXXXXXXXXX","XAXXAAXXAXXXXXXX"}
 		};
+	
+	//getter methods
+	protected static JFrame get_frame() { return frame;}
+	protected static DrawPanel get_drawPanel() { return drawPanel;}
+	protected static gameComponents get_my_tetris() { return my_tetris;}
+	
+	protected static final int get_s_WIDTH() { return s_WIDTH;}
+	protected static final int get_s_HEIGHT() { return s_HEIGHT;}
+	protected static final int get_gw_WIDTH() { return gw_WIDTH;}
+	protected static final int get_gw_HEIGHT() { return gw_HEIGHT;}
+	
+	protected static int get_shape_cnt() { return shape_cnt;}
+	protected static int get_frameCounter() { return frameCounter;}
+	protected static int get_frameCounter_left() { return frameCounter_left;}
+	protected static int get_frameCounter_right() { return frameCounter_right;}
+	protected static int get_frameCounter_collision() { return frameCounter_collision;}
+	protected static int get_frameCounter_collision_bot() { return frameCounter_collision_bot;}
+	protected static int get_gameSpeed() { return gameSpeed;}
+	protected static int get_pause_selection() { return pause_selection;}
+	
+	protected static boolean get_left() { return left;}
+	protected static boolean get_right() { return right;}
+	protected static boolean get_pause() { return pause;}
+	protected static boolean get_pause_apply() { return pause_apply;}
+	protected static boolean get_started() { return started;}
+	protected static boolean get_top() { return top;}
+	protected static boolean get_rotate_available() { return rotate_available;}
+	protected static boolean get_go_right() { return go_right;}
+	protected static boolean get_col_right_exists() { return col_right_exists;}
+	protected static boolean get_col_left_exists() { return col_left_exists;}
+	protected static boolean get_col_bot_exists() { return col_bot_exists;}
+	
+	protected static String[][] get_shape_codes() { return shape_codes;}
+	
+	
+	//setter methods
+	protected static void set_frame(JFrame p_frame) { frame = p_frame;}
+	protected static void set_drawPanel(DrawPanel p_drawPanel) { drawPanel = p_drawPanel;}
+	
+	protected static void set_shape_cnt(int p_shape_cnt) {shape_cnt = p_shape_cnt;}
+	protected static void set_gameSpeed(int p_gameSpeed) { gameSpeed = p_gameSpeed;}
+	protected static void set_pause_selection(int p_pause_selection) { pause_selection = p_pause_selection;}
+	protected static void set_frameCounter(int p_frameCounter) { frameCounter = p_frameCounter;}
+	protected static void set_frameCounter_left(int p_frameCounter_left) { frameCounter_left = p_frameCounter_left;}
+	protected static void set_frameCounter_right(int p_frameCounter_right) { frameCounter_right = p_frameCounter_right;}
+	protected static void set_frameCounter_collision(int p_frameCounter_collision) { frameCounter_collision = p_frameCounter_collision;}
+	protected static void set_frameCounter_collision_bot(int p_frameCounter_collision_bot) { frameCounter_collision_bot = p_frameCounter_collision_bot;}
+	
+	protected static void set_left(boolean p_left) { left = p_left;}
+	protected static void set_right(boolean p_right) { right = p_right;}
+	protected static void set_pause(boolean p_pause) { pause = p_pause;}
+	protected static void set_pause_apply(boolean p_pause_apply) { pause_apply = p_pause_apply;}
+	protected static void set_started(boolean p_started) { started = p_started;}
+	protected static void set_rotate_available(boolean p_rotate_available) { rotate_available = p_rotate_available;}
+	protected static void set_col_right_exists(boolean p_col_right_exists) { col_right_exists = p_col_right_exists;}
+	protected static void set_col_left_exists(boolean p_col_left_exists) { col_left_exists = p_col_left_exists;}
+	protected static void set_col_bot_exists(boolean p_col_bot_exists) { col_bot_exists = p_col_bot_exists;}
+	
     
     //check for exploding lines
-    public static void check_exploding_line() {
+    private static void check_exploding_line() {
     	my_tetris.reset_explode_lines();
 		shape sh;
 		box bx;
@@ -85,40 +139,10 @@ public class genericVariables {
 				}
 			}
 		}
-    	
-    	
-    	//old algorithm i didn't delete because, i may be return it, after tested carefully
-    	/*System.out.println("================================");
-		//my_tetris.reset_explode_lines();
-    	int row_y;
-    	shape sh;
-    	box bx;
-    	//int size = my_tetris.all_shapes.size();
-		//select shape
-		sh = my_tetris.all_shapes.lastElement();
-		//System.out.println("active " + sh.get_shape_active());
-		//System.out.println("selected shape.type,orderno : " + sh.shape_type + "," + size);
-		for(int k = 0 ; k < 4 ;k++) {
-			//select box
-			bx = sh.sh_boxes.get(k);
-			//System.out.println("\tselected box.y : " + bx.y);
-			for(int t = 0 ; t < my_tetris.explode_lines.length ; t++) {
-				row_y = (t+3) * 25;
-				if(row_y == bx.y) {
-					my_tetris.explode_lines[t]++;
-					//System.out.println("upadate : explode_lines["+t+"] : " + 
-					//my_tetris.explode_lines[t]);
-					if(my_tetris.explode_lines[t] == 19) 
-						explode_line(t);
-					else
-						System.out.println("line " + (t+3) +" : not filled : " + my_tetris.explode_lines[t]);
-						
-				}
-			}
-		}*/
     }
+    
     //explode lines after checked
-    public static void explode_line(int line_number) {
+    private static void explode_line(int line_number) {
     	System.out.println("Process : Delete Line " + (line_number+3));
     	int row_y = (line_number+3) * 25;
 		shape sh;
@@ -151,7 +175,7 @@ public class genericVariables {
     		
     }
     //drops bottom-free boxes on upper lines after explosion
-    public static void drop_upper_boxes(int line_number) {
+    private static void drop_upper_boxes(int line_number) {
     	int drop_y = (line_number+3)*25;
     	shape sh;
     	box bx;
@@ -175,7 +199,7 @@ public class genericVariables {
     	}
     }
     
-    public static boolean check_box_bottom_free(box checkboxbottomfree) {
+    private static boolean check_box_bottom_free(box checkboxbottomfree) {
     	shape sh;
     	box bx;
     	for(int i = 0 ; i < my_tetris.all_shapes.size();i++) {
@@ -197,7 +221,7 @@ public class genericVariables {
     }
     
     
-	public static void generate_a_new_shape() {
+	protected static void generate_a_new_shape() {
 		//this block written to generate a shape and add it to vector<shape> all_shapes
 		if(my_tetris.all_shapes.size() > 0)check_exploding_line();
 		String code = null;
@@ -224,7 +248,7 @@ public class genericVariables {
     	
     }
 	
-	public static shape stringtoShape(String code,String s_type,int s_type_no,int rot_no,int x,int y) {
+	protected static shape stringtoShape(String code,String s_type,int s_type_no,int rot_no,int x,int y) {
 		int draw_x = x; //initialvalue : 15*25;
     	int draw_y = y;	//initialvalue : 0;
     	
@@ -247,7 +271,7 @@ public class genericVariables {
 	}
 	
 	
-	public static boolean checkcollisions(shape checkforshape) {
+	protected static boolean checkcollisions(shape checkforshape) {
 		top = true;
 		col_right_exists = false;
 		col_left_exists = false;
@@ -257,7 +281,6 @@ public class genericVariables {
 		int active_y;
 		int active_right_end;
 		
-    	//shape active = my_tetris.all_shapes.lastElement();
     	//checks for bottom border.
     	for(int i = 0 ; i < 4 ; i++) {
     		if(checkforshape.sh_boxes.get(i).get_box_bottom_end() >= my_tetris.bottom_border) {
@@ -294,7 +317,6 @@ public class genericVariables {
     	}
     	
     	
-    	//System.out.println("active.get_shape_active()  : " + active.get_shape_active() );
     	//check right and left main borders with shape start & end locations for rotatable or not
 		checkforshape.calc_shape_start_end_loc();
 		if(checkforshape.get_shape_start_loc_X() <= my_tetris.left_border) {
@@ -304,8 +326,7 @@ public class genericVariables {
 			col_right_exists = true;
 		}
     	
-		//System.out.println("size " + my_tetris.all_shapes.size());
-    	for(int i = 0 ; i < my_tetris.all_shapes.size()-1 ; i++) {
+		for(int i = 0 ; i < my_tetris.all_shapes.size()-1 ; i++) {
     		if(my_tetris.all_shapes.get(i) != null) {
 
         		for(int k = 0 ; k < 4 ; k++) {//this loop selects active shape boxes
@@ -320,7 +341,8 @@ public class genericVariables {
             				int passive_x = my_tetris.all_shapes.get(i).sh_boxes.get(t).get_box_x();
             				int passive_right_end = my_tetris.all_shapes.get(i).sh_boxes.get(t).get_box_right_end();
             				int passive_y = my_tetris.all_shapes.get(i).sh_boxes.get(t).get_box_y();
-            				int passive_bottom = my_tetris.all_shapes.get(i).sh_boxes.get(t).get_box_bottom_end();
+            				@SuppressWarnings("unused")
+							int passive_bottom = my_tetris.all_shapes.get(i).sh_boxes.get(t).get_box_bottom_end();
             				//check horizontal and vertical matching
             				if(active_bottom == passive_y && active_x == passive_x) {
                     			col_bot_exists = true;
@@ -366,7 +388,6 @@ public class genericVariables {
     	if(col_bot_exists) frameCounter_collision_bot++;
     	else frameCounter_collision_bot = 0;
 
-    	//System.out.println("col_left_exists , col_right_exists , active.get_shape_active()  : " +col_left_exists + col_right_exists + active.get_shape_active());
     	if(!col_left_exists && !col_right_exists && !checkforshape.get_shape_active()) return true;
     	else return false;
     			
