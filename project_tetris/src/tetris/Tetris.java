@@ -139,7 +139,7 @@ class Tetris extends genericVariables
 		}
     }
 	private void run_gameLoop() {
-    	shape active = genericVariables.get_my_tetris().all_shapes.lastElement();
+    	shape active = genericVariables.get_my_tetris().get_all_shapes().lastElement();
 
 		genericVariables.checkcollisions(active);
 		
@@ -265,7 +265,7 @@ class Tetris extends genericVariables
             	int draw_y;
             	int size = 25;
             	
-            	Vector<shape>my_shapes = genericVariables.get_my_tetris().all_shapes;
+            	Vector<shape>my_shapes = genericVariables.get_my_tetris().get_all_shapes();
             	//draw each boxes.
             	for(int k = 0 ; k < my_shapes.size();k++) {
             		if(my_shapes.get(k) != null) {
@@ -318,7 +318,7 @@ class Tetris extends genericVariables
             	g.setColor(Color.BLACK);
             	int x = 23*25+3;
             	int y = 19;
-            	int size = genericVariables.get_my_tetris().all_shapes.size()-1;
+            	int size = genericVariables.get_my_tetris().get_all_shapes().size()-1;
         		g.setFont(new Font("Tahoma", Font.BOLD, 15));
         		
         		
@@ -331,8 +331,8 @@ class Tetris extends genericVariables
             	
             	//select active shape
             	shape sh_last_index = null;
-            	if(genericVariables.get_my_tetris().all_shapes.size() > 0 )
-            		sh_last_index = genericVariables.get_my_tetris().all_shapes.lastElement();
+            	if(genericVariables.get_my_tetris().get_all_shapes().size() > 0 )
+            		sh_last_index = genericVariables.get_my_tetris().get_all_shapes().lastElement();
         		//Draw active shape boxes informations
         		g.drawString("ACTIVE SHAPE  SHAPE NO --> "+ size, x, y);
         		y+=25;
@@ -350,21 +350,21 @@ class Tetris extends genericVariables
         		//Draw passive boxes locations on right bar
         		g.drawString("PASSIVE SHAPE LIST ~ TOTAL --> "+ size, x, y);
         		int k;
-        		if(genericVariables.get_my_tetris().all_shapes.size() >= 5 )
-        			k = genericVariables.get_my_tetris().all_shapes.size()-5;
+        		if(genericVariables.get_my_tetris().get_all_shapes().size() >= 5 )
+        			k = genericVariables.get_my_tetris().get_all_shapes().size()-5;
         		else 
         			k = 0;
-        		for(; k< genericVariables.get_my_tetris().all_shapes.size() ; k++) {
+        		for(; k< genericVariables.get_my_tetris().get_all_shapes().size() ; k++) {
         			y+=25;
-        			if(genericVariables.get_my_tetris().all_shapes.get(k) != null)
+        			if(genericVariables.get_my_tetris().get_all_shapes().get(k) != null)
         			{
             			for(int i = 0 ; i< 4 ; i++) {
-            				if(genericVariables.get_my_tetris().all_shapes.get(k).sh_boxes.get(i) != null)
+            				if(genericVariables.get_my_tetris().get_all_shapes().get(k).sh_boxes.get(i) != null)
             				{
                 				g.drawString("shape["+k+"]box["+i+"].(x,y) : (" +
-                						Integer.toString(genericVariables.get_my_tetris().all_shapes.get(k).sh_boxes.get(i).get_box_x())
+                						Integer.toString(genericVariables.get_my_tetris().get_all_shapes().get(k).sh_boxes.get(i).get_box_x())
                 						+","+
-                						Integer.toString(genericVariables.get_my_tetris().all_shapes.get(k).sh_boxes.get(i).get_box_y())
+                						Integer.toString(genericVariables.get_my_tetris().get_all_shapes().get(k).sh_boxes.get(i).get_box_y())
                 						+")", 
                 						x, y);
                 				y+=25;

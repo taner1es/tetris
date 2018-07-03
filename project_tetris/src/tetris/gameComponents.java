@@ -4,39 +4,45 @@ import java.util.Vector;
 
 //this class is the most important class.
 class gameComponents extends genericVariables{ 
-	//declare borders
-	public final int top_border = 1*25;
-	public final int left_border = 1*25;
-	public final int right_border = 21*25;
-	public final int bottom_border = 28*25;
-	public int[] explode_lines = new int[25];
+	
+	private Vector<shape>  all_shapes = new Vector<>(0); //this vector keeps the information of the all shapes has drawed and also returning to draw function to draw it for all game time.
+	private static final int TOP_BORDER = 1*25;
+	private static final int LEFT_BORDER = 1*25;
+	private static final int RIGHT_BORDER = 21*25;
+	private static final int BOTTOM_BORDER = 28*25;
+	private int[] explode_lines = new int[25];
+	private boolean call_new_shape = true;
+	
+	
+	//getter methods
+	protected Vector<shape> get_all_shapes() { return this.all_shapes;}
+	protected final int get_top_border() { return gameComponents.TOP_BORDER;}
+	protected final int get_left_border() { return gameComponents.LEFT_BORDER;}
+	protected final int get_right_border() { return gameComponents.RIGHT_BORDER;}
+	protected final int get_bottom_border() { return gameComponents.BOTTOM_BORDER;}
+	protected int[] get_explode_lines() { return this.explode_lines;}
+	protected boolean get_call_new_shape() { return this.call_new_shape;}
+	
+	
 	//constructor
 	gameComponents() {
 		for(int i = 0 ; i < 25 ; i++) {
 			explode_lines[i] = 0;
 		}
 	}
-	public void reset_explode_lines() {
-		for(int i = 0 ; i < 25 ; i++) {
-			explode_lines[i] = 0;
-		}
-	}
-	//Game info states
-	Vector<shape> all_shapes = new Vector<shape>(0); //this vector keeps the information of the all shapes has drawed and also returning to draw function to draw it for all game time.
-	public boolean call_new_shape = true;
-	public String game_state = "running"; //game state created to understand for game stopped or running 
+	
 	//this method has really really critical role in the program it gets the new shape data and adding to all shapes list (vector) and goes on for everything.
-	public void newShape(shape new_shape) {
+	protected void newShape(shape new_shape) {
 		all_shapes.addElement(new_shape);
 		genericVariables.set_shape_cnt(genericVariables.get_shape_cnt()+1);
 	}
-	public void set_call_new_shape (boolean b) {
+	protected void set_call_new_shape (boolean b) {
 		call_new_shape = b;
 	}
-	public void rotate_shape() {
+	protected void rotate_shape() {
 		int last_index = all_shapes.size()-1;
-		int actual_x = all_shapes.lastElement().get_shape_start_loc_X()+100;		//all_shapes.lastElement().loc_x+75;
-		int actual_y = all_shapes.lastElement().get_shape_start_loc_Y();		//all_shapes.lastElement().loc_y-50;
+		int actual_x = all_shapes.lastElement().get_shape_start_loc_X()+100;		
+		int actual_y = all_shapes.lastElement().get_shape_start_loc_Y();		
 		String type = all_shapes.lastElement().get_shape_type();
 		
 		int type_no = all_shapes.lastElement().get_shape_type_no(); //shape_codes array first dimension number
@@ -60,11 +66,17 @@ class gameComponents extends genericVariables{
 				all_shapes.setElementAt(rotatedshape, last_index);
 			}
 				
-			else System.out.println("Collision exists while rotating.");
+			else System.err.println("Collision exists while rotating.");
 		}
 		else {
-			System.out.println("no rotation for this shape.");
+			System.err.println("no rotation for this shape.");
 		}
 		
+	}
+
+	protected void reset_explode_lines() {
+		for(int i = 0 ; i < 25 ; i++) {
+			explode_lines[i] = 0;
+		}
 	}
 }

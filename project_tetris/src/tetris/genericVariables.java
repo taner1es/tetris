@@ -123,16 +123,16 @@ class genericVariables {
 		shape sh;
 		box bx;
 		int line_no;
-		for(int i = 0; i < my_tetris.all_shapes.size() ; i++) {
-			if(my_tetris.all_shapes.get(i) != null) {
-				sh = my_tetris.all_shapes.get(i);
+		for(int i = 0; i < my_tetris.get_all_shapes().size() ; i++) {
+			if(my_tetris.get_all_shapes().get(i) != null) {
+				sh = my_tetris.get_all_shapes().get(i);
 				for(int k = 0 ; k < 4 ; k++) {
 					if(sh.sh_boxes.get(k) != null) {
 						bx = sh.sh_boxes.get(k);
 						line_no = (bx.get_box_y() / 25) - 3;
-						my_tetris.explode_lines[line_no]++;
-						System.out.println("line["+(line_no+3)+"] : " + my_tetris.explode_lines[line_no]);
-						if(my_tetris.explode_lines[line_no] == 19) {
+						my_tetris.get_explode_lines()[line_no]++;
+						System.out.println("line["+(line_no+3)+"] : " + my_tetris.get_explode_lines()[line_no]);
+						if(my_tetris.get_explode_lines()[line_no] == 19) {
 							explode_line(line_no);
 						}
 					}
@@ -147,13 +147,13 @@ class genericVariables {
     	int row_y = (line_number+3) * 25;
 		shape sh;
     	box bx;
-    	int size = my_tetris.all_shapes.size();
+    	int size = my_tetris.get_all_shapes().size();
     	
     	int counter = 0;
     	for(int i = 0 ; i < size ; i++) {
-    		if(my_tetris.all_shapes.get(i) != null)
+    		if(my_tetris.get_all_shapes().get(i) != null)
     		{
-    			sh = my_tetris.all_shapes.get(i);
+    			sh = my_tetris.get_all_shapes().get(i);
         		for(int k = 0 ; k < 4 ; k++) {
         			if(sh.sh_boxes.get(k) != null)
         			{
@@ -169,7 +169,7 @@ class genericVariables {
     	}
     	System.out.println("counter = " + counter);
     	if(counter == 19) {
-    		my_tetris.explode_lines[line_number] = 0;
+    		my_tetris.get_explode_lines()[line_number] = 0;
     		drop_upper_boxes(line_number);
     	}
     		
@@ -180,9 +180,9 @@ class genericVariables {
     	shape sh;
     	box bx;
     	for(int n = 1 ; n < 25 ; n++) {
-    		for(int i = 0 ; i < my_tetris.all_shapes.size();i++) {
-        		if(my_tetris.all_shapes.get(i) != null) {
-        			sh = my_tetris.all_shapes.get(i);
+    		for(int i = 0 ; i < my_tetris.get_all_shapes().size();i++) {
+        		if(my_tetris.get_all_shapes().get(i) != null) {
+        			sh = my_tetris.get_all_shapes().get(i);
         			for(int k = 0; k < 4 ; k++) {
         				if(sh.sh_boxes.get(k) != null) {
         					bx = sh.sh_boxes.get(k);
@@ -202,14 +202,14 @@ class genericVariables {
     private static boolean check_box_bottom_free(box checkboxbottomfree) {
     	shape sh;
     	box bx;
-    	for(int i = 0 ; i < my_tetris.all_shapes.size();i++) {
-    		if(my_tetris.all_shapes.get(i) != null) {
-    			sh = my_tetris.all_shapes.get(i);
+    	for(int i = 0 ; i < my_tetris.get_all_shapes().size();i++) {
+    		if(my_tetris.get_all_shapes().get(i) != null) {
+    			sh = my_tetris.get_all_shapes().get(i);
     			for(int k = 0; k < 4 ; k++) {
     				if(sh.sh_boxes.get(k) != null) {
     					bx = sh.sh_boxes.get(k);
     					if(checkboxbottomfree.get_box_x() == bx.get_box_x()) {
-    						if(checkboxbottomfree.get_box_y()+25 != bx.get_box_y() && checkboxbottomfree.get_box_y()+25 != my_tetris.bottom_border) {
+    						if(checkboxbottomfree.get_box_y()+25 != bx.get_box_y() && checkboxbottomfree.get_box_y()+25 != my_tetris.get_bottom_border()) {
 								return true;
     						}
     					}
@@ -223,7 +223,7 @@ class genericVariables {
     
 	protected static void generate_a_new_shape() {
 		//this block written to generate a shape and add it to vector<shape> all_shapes
-		if(my_tetris.all_shapes.size() > 0)check_exploding_line();
+		if(my_tetris.get_all_shapes().size() > 0)check_exploding_line();
 		String code = null;
 		String s_type = null;
 		int s_type_no;
@@ -283,7 +283,7 @@ class genericVariables {
 		
     	//checks for bottom border.
     	for(int i = 0 ; i < 4 ; i++) {
-    		if(checkforshape.sh_boxes.get(i).get_box_bottom_end() >= my_tetris.bottom_border) {
+    		if(checkforshape.sh_boxes.get(i).get_box_bottom_end() >= my_tetris.get_bottom_border()) {
     			if(checkforshape.get_shape_active()) {
         			col_bot_exists = true;
     				break;
@@ -295,7 +295,7 @@ class genericVariables {
     	
     	//checks for top border
     	for(int i = 0 ; i < 4 ; i++) {
-    		if(checkforshape.sh_boxes.get(i).get_box_y() < my_tetris.top_border) {
+    		if(checkforshape.sh_boxes.get(i).get_box_y() < my_tetris.get_top_border()) {
     			top = false;
     		}
     	}
@@ -305,12 +305,12 @@ class genericVariables {
     		for(int i = 0 ; i < 4 ; i++) {
         		//check for just horizontal matching according to left
             	active_x = checkforshape.sh_boxes.get(i).get_box_x();
-        		if(active_x == my_tetris.left_border+25) {
+        		if(active_x == my_tetris.get_left_border()+25) {
         			left = false;
         		}
         		//check for just horizontal matching according to right
         		active_right_end = checkforshape.sh_boxes.get(i).get_box_right_end();
-        		if(active_right_end == my_tetris.right_border) {
+        		if(active_right_end == my_tetris.get_right_border()) {
         			right = false;
         		}
         	}
@@ -319,15 +319,15 @@ class genericVariables {
     	
     	//check right and left main borders with shape start & end locations for rotatable or not
 		checkforshape.calc_shape_start_end_loc();
-		if(checkforshape.get_shape_start_loc_X() <= my_tetris.left_border) {
+		if(checkforshape.get_shape_start_loc_X() <= my_tetris.get_left_border()) {
 			col_left_exists = true;
 		}
-		if(checkforshape.get_shape_end_loc_X() >= my_tetris.right_border) {
+		if(checkforshape.get_shape_end_loc_X() >= my_tetris.get_right_border()) {
 			col_right_exists = true;
 		}
     	
-		for(int i = 0 ; i < my_tetris.all_shapes.size()-1 ; i++) {
-    		if(my_tetris.all_shapes.get(i) != null) {
+		for(int i = 0 ; i < my_tetris.get_all_shapes().size()-1 ; i++) {
+    		if(my_tetris.get_all_shapes().get(i) != null) {
 
         		for(int k = 0 ; k < 4 ; k++) {//this loop selects active shape boxes
         			active_bottom = checkforshape.sh_boxes.get(k).get_box_bottom_end();
@@ -337,12 +337,12 @@ class genericVariables {
         			
         			//this loop checking selected active shape box with boxes of all passive shapes
         			for(int t = 0 ; t < 4 ; t++) { 
-        				if(my_tetris.all_shapes.get(i).sh_boxes.get(t) != null) {
-            				int passive_x = my_tetris.all_shapes.get(i).sh_boxes.get(t).get_box_x();
-            				int passive_right_end = my_tetris.all_shapes.get(i).sh_boxes.get(t).get_box_right_end();
-            				int passive_y = my_tetris.all_shapes.get(i).sh_boxes.get(t).get_box_y();
+        				if(my_tetris.get_all_shapes().get(i).sh_boxes.get(t) != null) {
+            				int passive_x = my_tetris.get_all_shapes().get(i).sh_boxes.get(t).get_box_x();
+            				int passive_right_end = my_tetris.get_all_shapes().get(i).sh_boxes.get(t).get_box_right_end();
+            				int passive_y = my_tetris.get_all_shapes().get(i).sh_boxes.get(t).get_box_y();
             				@SuppressWarnings("unused")
-							int passive_bottom = my_tetris.all_shapes.get(i).sh_boxes.get(t).get_box_bottom_end();
+							int passive_bottom = my_tetris.get_all_shapes().get(i).sh_boxes.get(t).get_box_bottom_end();
             				//check horizontal and vertical matching
             				if(active_bottom == passive_y && active_x == passive_x) {
                     			col_bot_exists = true;
@@ -392,5 +392,4 @@ class genericVariables {
     	else return false;
     			
     }
-	
 }
