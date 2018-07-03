@@ -2,6 +2,8 @@ package tetris;
 
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.Random;
 
 import javax.swing.JFrame;
@@ -48,6 +50,7 @@ class genericVariables {
 	private static boolean col_left_exists = false;
 	private static boolean col_bot_exists = false;
 	
+	private static final String font_type = "Tahoma";
     private static String[][] shape_codes = 
 		{
 			/* 0. --> I*/		{"AXXXAXXXAXXXAXXX","AAAAXXXXXXXXXXXX"},  
@@ -90,6 +93,7 @@ class genericVariables {
 	protected static boolean get_col_left_exists() { return col_left_exists;}
 	protected static boolean get_col_bot_exists() { return col_bot_exists;}
 	
+	protected static String get_font_type() { return font_type;}
 	protected static String[][] get_shape_codes() { return shape_codes;}
 	
 	
@@ -391,5 +395,83 @@ class genericVariables {
     	if(!col_left_exists && !col_right_exists && !checkforshape.get_shape_active()) return true;
     	else return false;
     			
+    }
+	
+	//gets keyboard input
+    class ActionListener extends KeyAdapter{
+    	
+        
+    	public void keyPressed(KeyEvent e){
+    		int key = e.getKeyCode();
+    		
+    		if(!genericVariables.get_started()) {
+    			if(key == KeyEvent.VK_ENTER)
+    				genericVariables.set_started(true);
+    		}
+    		
+    		if(genericVariables.get_pause()) {
+    			if(key == KeyEvent.VK_DOWN || key == KeyEvent.VK_UP) {
+        			if(genericVariables.get_pause_selection() == 0) genericVariables.set_pause_selection(genericVariables.get_pause_selection()+1);
+        			else genericVariables.set_pause_selection(genericVariables.get_pause_selection()-1);
+        		}
+    			if(key == KeyEvent.VK_ENTER)
+    				genericVariables.set_pause_apply(true);
+    		}
+    		//started and continues game input
+    		if(genericVariables.get_started()) {
+    			if(!genericVariables.get_pause()) {
+    				//pause game
+            		if(key == KeyEvent.VK_P) {
+            			if(genericVariables.get_pause()) genericVariables.set_pause(false);
+            			else genericVariables.set_pause(true);
+            		}
+            		//rotate shape
+            		if(key == KeyEvent.VK_SPACE && genericVariables.get_rotate_available()) {
+            			genericVariables.get_my_tetris().rotate_shape();
+            			genericVariables.set_rotate_available(false);
+            		}
+            		if(key == KeyEvent.VK_DOWN) {
+            			genericVariables.set_gameSpeed(1);
+            		}
+            		//move shape
+                	if(key == KeyEvent.VK_RIGHT) {
+                		genericVariables.set_frameCounter_right(genericVariables.get_frameCounter_right()+1);
+                		genericVariables.set_left(false);
+                		genericVariables.set_right(true);
+                	}
+                	else if(key == KeyEvent.VK_LEFT) {
+                		genericVariables.set_frameCounter_left(genericVariables.get_frameCounter_left()+1);
+                		genericVariables.set_right(false);
+                		genericVariables.set_left(true);
+                	}
+                	else {
+                		genericVariables.set_right(false);
+                		genericVariables.set_left(false);
+                	}
+    			}
+    		}
+        }
+    	public void keyReleased(KeyEvent e){
+    		int key = e.getKeyCode();
+    		//started and continues game input
+    		if(genericVariables.get_started()) {
+    			if(!genericVariables.get_pause()) {
+    	    		if(key == KeyEvent.VK_RIGHT && genericVariables.get_right()) {
+    	    			genericVariables.set_frameCounter_right(0);
+                		genericVariables.set_right(false);
+    	    		}
+    	    		else if(key == KeyEvent.VK_LEFT && genericVariables.get_left()) {
+    	    			genericVariables.set_frameCounter_left(0);
+    	    			genericVariables.set_left(false);
+    	    		}
+            		if(key == KeyEvent.VK_DOWN) {
+            			genericVariables.set_gameSpeed(16);
+            		}
+            		if(key == KeyEvent.VK_SPACE && !genericVariables.get_rotate_available()) {
+            			genericVariables.set_rotate_available(true);
+            		}
+    			}
+    		}
+    	}
     }
 }

@@ -1,6 +1,6 @@
 package tetris;
 /*
- * Version No : 0.11
+ * Version No : 0.13
  * Version Notes : 
  *  @Author : Taner Esmeroğlu
  */
@@ -9,8 +9,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
@@ -26,92 +24,41 @@ import javax.swing.JPanel;
 
 class Tetris extends genericVariables
 {
-	static BufferedImage image;
+	BufferedImage image;
 	
     public static void main(String... args)
     {
         new Tetris().go();
     }
     
-    //gets keyboard input
-    class ActionListener extends KeyAdapter{
-    	
+    public void go()
+    {
+    	try {
+    		URL url_tetris_menu = Tetris.class.getResource("/images/tetris_menu.png"); //gets the folder/file from runnable jar file location
+    		image = ImageIO.read(url_tetris_menu);
+    	} catch (IOException e) {	
+			// TODO Auto-generated catch block
+    		System.out.println("image loading problem.");
+			e.printStackTrace();
+		}
+    	//this block to configure window settings 
+        genericVariables.set_frame(new JFrame("Tetris v0.13"));
+        genericVariables.get_frame().setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        genericVariables.get_frame().addKeyListener(new ActionListener());
+        genericVariables.set_drawPanel(new DrawPanel());
         
-    	public void keyPressed(KeyEvent e){
-    		int key = e.getKeyCode();
-    		
-    		if(!genericVariables.get_started()) {
-    			if(key == KeyEvent.VK_ENTER)
-    				genericVariables.set_started(true);
-    		}
-    		
-    		if(genericVariables.get_pause()) {
-    			if(key == KeyEvent.VK_DOWN || key == KeyEvent.VK_UP) {
-        			if(genericVariables.get_pause_selection() == 0) genericVariables.set_pause_selection(genericVariables.get_pause_selection()+1);
-        			else genericVariables.set_pause_selection(genericVariables.get_pause_selection()-1);
-        		}
-    			if(key == KeyEvent.VK_ENTER)
-    				genericVariables.set_pause_apply(true);
-    		}
-    		//started and continues game input
-    		if(genericVariables.get_started()) {
-    			if(!genericVariables.get_pause()) {
-    				//pause game
-            		if(key == KeyEvent.VK_P) {
-            			if(genericVariables.get_pause()) genericVariables.set_pause(false);
-            			else genericVariables.set_pause(true);
-            		}
-            		//rotate shape
-            		if(key == KeyEvent.VK_SPACE && genericVariables.get_rotate_available()) {
-            			genericVariables.get_my_tetris().rotate_shape();
-            			genericVariables.set_rotate_available(false);
-            		}
-            		if(key == KeyEvent.VK_DOWN) {
-            			genericVariables.set_gameSpeed(1);
-            		}
-            		//move shape
-                	if(key == KeyEvent.VK_RIGHT) {
-                		genericVariables.set_frameCounter_right(genericVariables.get_frameCounter_right()+1);
-                		genericVariables.set_left(false);
-                		genericVariables.set_right(true);
-                	}
-                	else if(key == KeyEvent.VK_LEFT) {
-                		genericVariables.set_frameCounter_left(genericVariables.get_frameCounter_left()+1);
-                		genericVariables.set_right(false);
-                		genericVariables.set_left(true);
-                	}
-                	else {
-                		genericVariables.set_right(false);
-                		genericVariables.set_left(false);
-                	}
-    			}
-    		}
-        }
-    	public void keyReleased(KeyEvent e){
-    		int key = e.getKeyCode();
-    		//started and continues game input
-    		if(genericVariables.get_started()) {
-    			if(!genericVariables.get_pause()) {
-    	    		if(key == KeyEvent.VK_RIGHT && genericVariables.get_right()) {
-    	    			genericVariables.set_frameCounter_right(0);
-                		genericVariables.set_right(false);
-    	    		}
-    	    		else if(key == KeyEvent.VK_LEFT && genericVariables.get_left()) {
-    	    			genericVariables.set_frameCounter_left(0);
-    	    			genericVariables.set_left(false);
-    	    		}
-            		if(key == KeyEvent.VK_DOWN) {
-            			genericVariables.set_gameSpeed(16);
-            		}
-            		if(key == KeyEvent.VK_SPACE && !genericVariables.get_rotate_available()) {
-            			genericVariables.set_rotate_available(true);
-            		}
-    			}
-    		}
-    	}
+
+        genericVariables.get_frame().getContentPane().add(BorderLayout.CENTER, genericVariables.get_drawPanel());
+
+        genericVariables.get_frame().setResizable(false);
+        genericVariables.get_frame().setUndecorated(false);
+        genericVariables.get_frame().setSize(genericVariables.get_gw_WIDTH(), genericVariables.get_gw_HEIGHT());
+        genericVariables.get_frame().setLocation(genericVariables.get_s_WIDTH()/ 4, 0);
+        genericVariables.get_frame().setVisible(true);
+        moveIt();
     }
     
-    public void moveIt(DrawPanel drawPanel)
+    public void moveIt()
     {
     	//start a game with generating a new shape
     	genericVariables.generate_a_new_shape();
@@ -123,10 +70,15 @@ class Tetris extends genericVariables
         		run_gameLoop();
                 
         	}else { //game paused state
-        		
+        		if(gameComponents.get_exit_game()) {
+        			break;
+        		}
         	}
         	sleep(genericVariables.get_gameSpeed());
         	genericVariables.get_frame().repaint();
+        }
+        if(gameComponents.get_exit_game()) {
+        	System.exit(0);
         }
     }
     
@@ -201,32 +153,7 @@ class Tetris extends genericVariables
 
 		genericVariables.set_frameCounter(genericVariables.get_frameCounter()+1);
 	}
-	public void go()
-    {
-    	try {
-    		URL url_tetris_menu = Tetris.class.getResource("/images/tetris_menu.png"); //gets the folder/file from runnable jar file location
-    		image = ImageIO.read(url_tetris_menu);
-    	} catch (IOException e) {	
-			// TODO Auto-generated catch block
-    		System.out.println("image loading problem.");
-			e.printStackTrace();
-		}
-    	//this block to configure window settings 
-        genericVariables.set_frame(new JFrame("Tetris v0.11"));
-        genericVariables.get_frame().setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        genericVariables.get_frame().addKeyListener(new ActionListener());
-        genericVariables.set_drawPanel(new DrawPanel());
-        
-
-        genericVariables.get_frame().getContentPane().add(BorderLayout.CENTER, genericVariables.get_drawPanel());
-
-        genericVariables.get_frame().setResizable(false);
-        genericVariables.get_frame().setUndecorated(false);
-        genericVariables.get_frame().setSize(genericVariables.get_gw_WIDTH(), genericVariables.get_gw_HEIGHT());
-        genericVariables.get_frame().setLocation(genericVariables.get_s_WIDTH()/ 4, 0);
-        genericVariables.get_frame().setVisible(true);
-        moveIt(genericVariables.get_drawPanel());
-    }
+	
 	
 
 	
@@ -298,7 +225,7 @@ class Tetris extends genericVariables
             	int x = 0;
             	int y = 0;
             	for(int i = 0; i < genericVariables.get_gw_HEIGHT()/25 ; i++) {
-            		g.setFont(new Font("Tahoma", Font.BOLD, 11));
+            		g.setFont(new Font(genericVariables.get_font_type(), Font.BOLD, 11));
             		//show line numbers
             		if(i <= 29)g.drawString(Integer.toString(i), 5, y+16);
             		if(i != 0 && i <= 29)g.drawString(Integer.toString(i), 22*25+5, y+16);
@@ -319,8 +246,7 @@ class Tetris extends genericVariables
             	int x = 23*25+3;
             	int y = 19;
             	int size = genericVariables.get_my_tetris().get_all_shapes().size()-1;
-        		g.setFont(new Font("Tahoma", Font.BOLD, 15));
-        		
+        		g.setFont(new Font(genericVariables.get_font_type(), Font.BOLD, 15));
         		
 
             	//temporary section
@@ -385,7 +311,7 @@ class Tetris extends genericVariables
         		
         		g.setColor(Color.GRAY);
         		g.fill3DRect(pause_x, pause_y, 250, 300, false);
-        		g.setFont(new Font("Tahoma", Font.BOLD, 25));
+        		g.setFont(new Font(genericVariables.get_font_type(), Font.BOLD, 25));
         		
         		
         		g.setColor(Color.WHITE);
@@ -423,8 +349,10 @@ class Tetris extends genericVariables
         					genericVariables.set_pause_apply(false);
         					break;
         				case 1:
-        					System.exit(0);
+        					gameComponents.set_exit_game(true);
         					break;
+    					default:
+    						System.err.println("pause menu selection apply problem.");
         			}
         		}
         	}

@@ -12,6 +12,7 @@ class gameComponents extends genericVariables{
 	private static final int BOTTOM_BORDER = 28*25;
 	private int[] explode_lines = new int[25];
 	private boolean call_new_shape = true;
+	private static boolean exit_game = false;
 	
 	
 	//getter methods
@@ -22,6 +23,10 @@ class gameComponents extends genericVariables{
 	protected final int get_bottom_border() { return gameComponents.BOTTOM_BORDER;}
 	protected int[] get_explode_lines() { return this.explode_lines;}
 	protected boolean get_call_new_shape() { return this.call_new_shape;}
+	protected static boolean get_exit_game() { return gameComponents.exit_game;}
+	
+	//setter methods
+	protected static void set_exit_game(boolean exit_game) { gameComponents.exit_game = exit_game;}
 	
 	
 	//constructor
