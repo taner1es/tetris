@@ -9,7 +9,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Vector;
@@ -24,19 +23,17 @@ import javax.swing.JPanel;
 
 class Tetris extends genericVariables
 {
-	BufferedImage image;
 	
     public static void main(String... args)
     {
         new Tetris().go();
     }
     
-    public void go()
+    private void go()
     {
     	try {
     		URL url_tetris_menu = Tetris.class.getResource("tetris_menu.png"); //gets the folder/file from runnable jar file location
-    		System.out.println("url : " + url_tetris_menu);
-    		image = ImageIO.read(url_tetris_menu);
+    		genericVariables.set_view_welcome_image(ImageIO.read(url_tetris_menu));
     	} catch (IOException e) {	
 			// TODO Auto-generated catch block
     		System.out.println("image loading problem.");
@@ -59,7 +56,7 @@ class Tetris extends genericVariables
         moveIt();
     }
     
-    public void moveIt()
+    private void moveIt()
     {
     	//start a game with generating a new shape
     	genericVariables.generate_a_new_shape();
@@ -155,17 +152,12 @@ class Tetris extends genericVariables
 		genericVariables.set_frameCounter(genericVariables.get_frameCounter()+1);
 	}
 	
-	
-
-	
-	
-	
     @SuppressWarnings("serial")
-	public class DrawPanel extends JPanel 
+	protected class DrawPanel extends JPanel 
     {
         	@SuppressWarnings("null")
         	@Override
-			public void paintComponent(Graphics g)
+			protected void paintComponent(Graphics g)
             {
             	//Left side block
                 g.setColor(Color.DARK_GRAY);
@@ -183,7 +175,7 @@ class Tetris extends genericVariables
             	draw_GameInfo(g);
             	draw_Shapes(g);
         		if(genericVariables.get_started() && genericVariables.get_pause())pause_gameLoop(g);
-        		if(!genericVariables.get_started())g.drawImage(image, 0, 0, genericVariables.get_gw_WIDTH()-325, genericVariables.get_gw_HEIGHT()-25, Color.WHITE, null);
+        		if(!genericVariables.get_started())g.drawImage(genericVariables.get_view_welcome_image(), 0, 0, genericVariables.get_gw_WIDTH()-325, genericVariables.get_gw_HEIGHT()-25, Color.WHITE, null);
             }
             
             private void draw_Shapes(Graphics g) {

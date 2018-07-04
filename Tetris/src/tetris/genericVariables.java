@@ -4,6 +4,7 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 import java.util.Random;
 
 import javax.swing.JFrame;
@@ -61,6 +62,8 @@ class genericVariables {
 			/* 5. --> S*/		{"XAAXAAXXXXXXXXXX","AXXXAAXXXAXXXXXX"},
 			/* 6. --> Z*/		{"AAXXXAAXXXXXXXXX","XAXXAAXXAXXXXXXX"}
 		};
+
+	static BufferedImage view_welcome_image;
 	
 	//getter methods
 	protected static JFrame get_frame() { return frame;}
@@ -96,6 +99,8 @@ class genericVariables {
 	protected static String get_font_type() { return font_type;}
 	protected static String[][] get_shape_codes() { return shape_codes;}
 	
+	protected static BufferedImage get_view_welcome_image() { return view_welcome_image;}
+	
 	
 	//setter methods
 	protected static void set_frame(JFrame p_frame) { frame = p_frame;}
@@ -120,7 +125,8 @@ class genericVariables {
 	protected static void set_col_left_exists(boolean p_col_left_exists) { col_left_exists = p_col_left_exists;}
 	protected static void set_col_bot_exists(boolean p_col_bot_exists) { col_bot_exists = p_col_bot_exists;}
 	
-    
+    protected static void set_view_welcome_image(BufferedImage p_image) { view_welcome_image = p_image;}
+	
     //check for exploding lines
     private static void check_exploding_line() {
     	my_tetris.reset_explode_lines();
