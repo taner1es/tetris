@@ -38,13 +38,13 @@ class genericVariables extends KeyInput{
 	private static int pause_selection = 0;
 	
 	private static boolean left;
-	private static boolean right; 
+	private static boolean right;
+	private static boolean down;
 	private static boolean pause = false;
 	private static boolean pause_apply = false;
 	private static boolean started = false; //record game started or not
 	private static boolean top = true;
 	private static boolean rotate_available = true;
-	private static boolean go_right = false;
 	private static boolean col_right_exists = false;
 	private static boolean col_left_exists = false;
 	private static boolean col_bot_exists = false;
@@ -85,12 +85,12 @@ class genericVariables extends KeyInput{
 	
 	protected static boolean get_left() { return left;}
 	protected static boolean get_right() { return right;}
+	protected static boolean get_down() { return down;}
 	protected static boolean get_pause() { return pause;}
 	protected static boolean get_pause_apply() { return pause_apply;}
 	protected static boolean get_started() { return started;}
 	protected static boolean get_top() { return top;}
 	protected static boolean get_rotate_available() { return rotate_available;}
-	protected static boolean get_go_right() { return go_right;}
 	protected static boolean get_col_right_exists() { return col_right_exists;}
 	protected static boolean get_col_left_exists() { return col_left_exists;}
 	protected static boolean get_col_bot_exists() { return col_bot_exists;}
@@ -117,6 +117,7 @@ class genericVariables extends KeyInput{
 	
 	protected static void set_left(boolean p_left) { left = p_left;}
 	protected static void set_right(boolean p_right) { right = p_right;}
+	protected static void set_down(boolean p_down) { down = p_down;}
 	protected static void set_pause(boolean p_pause) { pause = p_pause;}
 	protected static void set_pause_apply(boolean p_pause_apply) { pause_apply = p_pause_apply;}
 	protected static void set_started(boolean p_started) { started = p_started;}

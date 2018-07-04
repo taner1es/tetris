@@ -39,23 +39,22 @@ public class KeyInput {
 	            			genericVariables.set_rotate_available(false);
 	            		}
 	            		if(key == KeyEvent.VK_DOWN) {
+	            			genericVariables.set_down(true);
 	            			genericVariables.set_gameSpeed(1);
 	            		}
 	            		//move shape
 	                	if(key == KeyEvent.VK_RIGHT) {
-	                		genericVariables.set_frameCounter_right(genericVariables.get_frameCounter_right()+1);
 	                		genericVariables.set_left(false);
 	                		genericVariables.set_right(true);
 	                	}
 	                	else if(key == KeyEvent.VK_LEFT) {
-	                		genericVariables.set_frameCounter_left(genericVariables.get_frameCounter_left()+1);
 	                		genericVariables.set_right(false);
 	                		genericVariables.set_left(true);
 	                	}
-	                	else {
+	                	/*else {
 	                		genericVariables.set_right(false);
 	                		genericVariables.set_left(false);
-	                	}
+	                	}*/
     				break;
     			default :
     				System.err.println("!! ERROR : GAME STATE ");
@@ -84,6 +83,7 @@ public class KeyInput {
     	    		}
             		if(key == KeyEvent.VK_DOWN) {
             			genericVariables.set_gameSpeed(16);
+            			genericVariables.set_down(false);
             		}
             		if(key == KeyEvent.VK_SPACE && !genericVariables.get_rotate_available()) {
             			genericVariables.set_rotate_available(true);

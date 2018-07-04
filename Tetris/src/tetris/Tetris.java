@@ -98,46 +98,10 @@ class Tetris extends genericVariables
 		}else {
 			genericVariables.set_frameCounter_collision(0);
 		}
-    	//left event
-    	if(genericVariables.get_left() && active.get_shape_active()) {
-    		if(genericVariables.get_frameCounter_left() == 1 ) {
-        		active.go_left();
-        		genericVariables.set_frameCounter_left(genericVariables.get_frameCounter_left()+1);
-    		}else if(genericVariables.get_frameCounter_left() >= 4) {
-    			active.go_left();
-    			genericVariables.set_frameCounter_left(2);
-    		}
-    	}
-    	//right event
-    	if(genericVariables.get_right() && active.get_shape_active()) {
-    		if(genericVariables.get_frameCounter_right() == 1 ) {
-        		active.go_right();
-        		genericVariables.set_frameCounter_right(genericVariables.get_frameCounter_right()+1);
-    		}else if(genericVariables.get_frameCounter_right() >= 4) {
-    			active.go_right();
-    			genericVariables.set_frameCounter_right(2);
-    		}
-    		
-    	}
-    	//down event
-    	if(active.get_shape_active() && genericVariables.get_frameCounter() >= 30) {
-    		if(genericVariables.get_col_bot_exists())
-    		{
-    			if(genericVariables.get_frameCounter_collision_bot() >= 60) {
-    				genericVariables.checkcollisions(active);
-    				if(genericVariables.get_col_bot_exists()){
-    					active.set_shape_active(false);
-    				}else{
-    	    			genericVariables.set_frameCounter(0);
-    	        		active.go_down();
-    				}
-    			}	
-    		}else {
-    			genericVariables.set_frameCounter(0);
-        		active.go_down();
-    		}
-    			
-		}
+    	gameComponents.left_event();
+    	gameComponents.right_event();
+    	gameComponents.down_event();
+    	
     	//generate new shape
     	if(!active.get_shape_active() && genericVariables.get_top()) {
     		genericVariables.generate_a_new_shape();
@@ -238,18 +202,26 @@ class Tetris extends genericVariables
             	g.setColor(Color.BLACK);
             	int x = 23*25+3;
             	int y = 19;
-            	int size = genericVariables.get_my_tetris().get_all_shapes().size()-1;
+            	//int size = genericVariables.get_my_tetris().get_all_shapes().size()-1;
         		g.setFont(new Font(genericVariables.get_font_type(), Font.BOLD, 15));
         		
 
             	//temporary section
-            	g.drawString("left : "+ genericVariables.get_left(), 51, 47);
-            	g.drawString("right : "+ genericVariables.get_right(), 51, 67);
-        		
+            	g.drawString("left : "+ genericVariables.get_left(), x, y);
+            	g.drawString("right : "+ genericVariables.get_right(), x, y+=25);
+            	g.drawString("down : "+ genericVariables.get_down(), x, y+=25);
+            	g.drawString("rotate_available : " + genericVariables.get_rotate_available(), x, y+=25);
+        		g.drawString("shape_active : " + gameComponents.get_my_tetris().get_all_shapes().lastElement().get_shape_active(), x, y+=25);
+        		g.drawString("shape_type : " + gameComponents.get_my_tetris().get_all_shapes().lastElement().get_shape_type(), x, y+=25);
+        		g.drawString("shape_type : " + gameComponents.get_my_tetris().get_all_shapes().lastElement().get_shape_type(), x, y+=25);
+        		g.drawString("all_shape_cnt : " + genericVariables.get_shape_cnt(), x, y+=25);
+        		g.drawString("shape_id : " + gameComponents.get_my_tetris().get_all_shapes().lastElement().get_shape_id(), x, y+=25);
+        		g.drawString("frameCounter : " + genericVariables.get_frameCounter(), x, y+=25);
+        		g.drawString("frameCounter_Left : " + genericVariables.get_frameCounter_left(), x, y+=25);
             	
             	
             	//select active shape
-            	shape sh_last_index = null;
+            	/*shape sh_last_index = null;
             	if(genericVariables.get_my_tetris().get_all_shapes().size() > 0 )
             		sh_last_index = genericVariables.get_my_tetris().get_all_shapes().lastElement();
         		//Draw active shape boxes informations
@@ -265,9 +237,9 @@ class Tetris extends genericVariables
         						+","+
         						Integer.toString(sh_last_index.get_shape_loc_Y())+")", x, y);
         			y+=25;
-        		}
+        		}*/
         		//Draw passive boxes locations on right bar
-        		g.drawString("PASSIVE SHAPE LIST ~ TOTAL --> "+ size, x, y);
+        		/*g.drawString("PASSIVE SHAPE LIST ~ TOTAL --> "+ size, x, y);
         		int k;
         		if(genericVariables.get_my_tetris().get_all_shapes().size() >= 5 )
         			k = genericVariables.get_my_tetris().get_all_shapes().size()-5;
@@ -292,7 +264,7 @@ class Tetris extends genericVariables
             			}
         				
         			}
-        		}
+        		}*/
         	}
             
             @SuppressWarnings("null")
@@ -305,7 +277,6 @@ class Tetris extends genericVariables
         		g.setColor(Color.GRAY);
         		g.fill3DRect(pause_x, pause_y, 250, 300, false);
         		g.setFont(new Font(genericVariables.get_font_type(), Font.BOLD, 25));
-        		
         		
         		g.setColor(Color.WHITE);
         		g.drawString("! GAME PAUSED !", pause_x+tab_space-10 , pause_y+line_space);
@@ -322,7 +293,6 @@ class Tetris extends genericVariables
         			g.drawString("RESUME", pause_x+tab_space+35 , pause_y+line_space*3);
         		}
         		
-        		
         		if(genericVariables.get_pause_selection() == 1) {
         			g.setColor(Color.YELLOW);
         			g.fill3DRect(pause_x+tab_space, pause_y+line_space*4-25 , 180, 35, true);
@@ -333,7 +303,6 @@ class Tetris extends genericVariables
         			g.setColor(Color.WHITE);
         			g.drawString("EXIT", pause_x+tab_space+55 , pause_y+line_space*4);
         		}
-        		
         		
         		if(genericVariables.get_pause_apply()) {
         			switch(genericVariables.get_pause_selection()) {
