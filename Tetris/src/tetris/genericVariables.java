@@ -3,7 +3,6 @@ package tetris;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.image.BufferedImage;
-import java.util.Random;
 
 import javax.swing.JFrame;
 
@@ -121,6 +120,7 @@ class genericVariables extends KeyInput{
 	protected static void set_pause(boolean p_pause) { pause = p_pause;}
 	protected static void set_pause_apply(boolean p_pause_apply) { pause_apply = p_pause_apply;}
 	protected static void set_started(boolean p_started) { started = p_started;}
+	protected static void set_top(boolean p_top) { top = p_top;}
 	protected static void set_rotate_available(boolean p_rotate_available) { rotate_available = p_rotate_available;}
 	protected static void set_col_right_exists(boolean p_col_right_exists) { col_right_exists = p_col_right_exists;}
 	protected static void set_col_left_exists(boolean p_col_left_exists) { col_left_exists = p_col_left_exists;}
@@ -130,266 +130,21 @@ class genericVariables extends KeyInput{
 	
     protected static void set_view_welcome_image(BufferedImage p_image) { view_welcome_image = p_image;}
 	
-    //check for exploding lines
-    private static void check_exploding_line() {
-    	my_tetris.reset_explode_lines();
-		shape sh;
-		box bx;
-		int line_no;
-		for(int i = 0; i < my_tetris.get_all_shapes().size() ; i++) {
-			if(my_tetris.get_all_shapes().get(i) != null) {
-				sh = my_tetris.get_all_shapes().get(i);
-				for(int k = 0 ; k < 4 ; k++) {
-					if(sh.sh_boxes.get(k) != null) {
-						bx = sh.sh_boxes.get(k);
-						line_no = (bx.get_box_y() / 25) - 3;
-						my_tetris.get_explode_lines()[line_no]++;
-						System.out.println("line["+(line_no+3)+"] : " + my_tetris.get_explode_lines()[line_no]);
-						if(my_tetris.get_explode_lines()[line_no] == 19) {
-							explode_line(line_no);
-						}
-					}
-				}
-			}
-		}
-    }
-    
-    //explode lines after checked
-    private static void explode_line(int line_number) {
-    	System.out.println("Process : Delete Line " + (line_number+3));
-    	int row_y = (line_number+3) * 25;
-		shape sh;
-    	box bx;
-    	int size = my_tetris.get_all_shapes().size();
-    	
-    	int counter = 0;
-    	for(int i = 0 ; i < size ; i++) {
-    		if(my_tetris.get_all_shapes().get(i) != null)
-    		{
-    			sh = my_tetris.get_all_shapes().get(i);
-        		for(int k = 0 ; k < 4 ; k++) {
-        			if(sh.sh_boxes.get(k) != null)
-        			{
-        				bx = sh.sh_boxes.get(k);
-            			if(row_y == bx.get_box_y()) {
-            				sh.sh_boxes.setElementAt(null, k);
-            				counter++;
-            			}
-        			}
-        		}
-    		}
-    		
-    	}
-    	System.out.println("counter = " + counter);
-    	if(counter == 19) {
-    		my_tetris.get_explode_lines()[line_number] = 0;
-    		drop_upper_boxes(line_number);
-    	}
-    		
-    }
-    //drops bottom-free boxes on upper lines after explosion
-    private static void drop_upper_boxes(int line_number) {
-    	int drop_y = (line_number+3)*25;
-    	shape sh;
-    	box bx;
-    	for(int n = 1 ; n < 25 ; n++) {
-    		for(int i = 0 ; i < my_tetris.get_all_shapes().size();i++) {
-        		if(my_tetris.get_all_shapes().get(i) != null) {
-        			sh = my_tetris.get_all_shapes().get(i);
-        			for(int k = 0; k < 4 ; k++) {
-        				if(sh.sh_boxes.get(k) != null) {
-        					bx = sh.sh_boxes.get(k);
-        					if(bx.get_box_y() == drop_y-(n*25) && check_box_bottom_free(bx)) {
-        							 bx.set_box_y(bx.get_box_y()+25);
-        							 k--;
-        					}
-        				}
-        			}
-        		}
-        	}
-    	}
-    }
-    
-    private static boolean check_box_bottom_free(box checkboxbottomfree) {
-    	shape sh;
-    	box bx;
-    	for(int i = 0 ; i < my_tetris.get_all_shapes().size();i++) {
-    		if(my_tetris.get_all_shapes().get(i) != null) {
-    			sh = my_tetris.get_all_shapes().get(i);
-    			for(int k = 0; k < 4 ; k++) {
-    				if(sh.sh_boxes.get(k) != null) {
-    					bx = sh.sh_boxes.get(k);
-    					if(checkboxbottomfree.get_box_x() == bx.get_box_x() && (checkboxbottomfree.get_box_y()+25 != bx.get_box_y() && checkboxbottomfree.get_box_y()+25 != my_tetris.get_bottom_border() )) {
-								return true;
-    					}
-    				}
-    			}
-    		}
-		}
-    	return false;
-    }
+    //increase methods
+    protected static void inc_frameCounter_collision_bot() { frameCounter_collision_bot++; }
     
     
-	protected static void generate_a_new_shape() {
-		//this block written to generate a shape and add it to vector<shape> all_shapes
-		if(!my_tetris.get_all_shapes().isEmpty())check_exploding_line();
-		String code = null;
-		String s_type = null;
-		int s_type_no;
-		int rot_no = 0; //rotation no , initially 0
-		Random rndm = new Random();
-		int rndm_no = rndm.nextInt(7);
-		s_type_no = rndm_no;
-		code = shape_codes[rndm_no][rot_no];
-		
-		if(rndm_no == 0) s_type = "I";
-			else if(rndm_no == 1) s_type = "L";
-			else if(rndm_no == 2) s_type = "J";
-			else if(rndm_no == 3) s_type = "O";
-			else if(rndm_no == 4) s_type = "T";
-			else if(rndm_no == 5) s_type = "S";
-			else if(rndm_no == 6) s_type = "Z";
-		else s_type = "X";
-		
-
-    	my_tetris.newShape(stringtoShape(code,s_type,s_type_no,rot_no,15*25,0));
-    	my_tetris.set_call_new_shape(false);
-    	
-    }
-	
-	protected static shape stringtoShape(String code,String s_type,int s_type_no,int rot_no,int x,int y) {
-		int draw_x = x; //initialvalue : 15*25;
-    	int draw_y = y;	//initialvalue : 0;
-    	
-    	shape new_generated_shape = new shape(draw_x,draw_y,s_type,s_type_no,rot_no,code);
-    	for(int i = 0 ; i < 16 ; i++) {
-    		char ch_at = code.charAt(i);
-    		if(i % 4 == 0) {
-    			draw_y += 25;
-    			draw_x -= 100;
-    		}
-    		if(ch_at == 'A') {
-    			new_generated_shape.add_box(new box(draw_x,draw_y,draw_y+25,draw_x+25));
-    			new_generated_shape.set_shape_loc_X(draw_x);
-    			new_generated_shape.set_shape_loc_Y(draw_y);
-			}
-    		draw_x += 25;
-    	}
-    	new_generated_shape.set_shape_active(true);
-    	return new_generated_shape;
-	}
+    
+    
+    
+    
+    
 	
 	
-	protected static boolean checkcollisions(shape checkforshape) {
-		top = true;
-		col_right_exists = false;
-		col_left_exists = false;
-		col_bot_exists = false;
-    	int active_bottom;
-		int active_x;
-		int active_y;
-		int active_right_end;
-		
-    	//checks for bottom border.
-    	for(int i = 0 ; i < 4 ; i++) {
-    		if(checkforshape.sh_boxes.get(i).get_box_bottom_end() >= my_tetris.get_bottom_border()) {
-    			if(checkforshape.get_shape_active()) {
-        			col_bot_exists = true;
-    				break;
-    			}
-    			else
-    				return false;
-    		}
-    	}
-    	
-    	//checks for top border
-    	for(int i = 0 ; i < 4 ; i++) {
-    		if(checkforshape.sh_boxes.get(i).get_box_y() < my_tetris.get_top_border()) {
-    			top = false;
-    		}
-    	}
-
-    	//check right and main border with each boxes
-    	if(checkforshape.get_shape_active()) {
-    		for(int i = 0 ; i < 4 ; i++) {
-        		//check for just horizontal matching according to left
-            	active_x = checkforshape.sh_boxes.get(i).get_box_x();
-        		if(active_x == my_tetris.get_left_border()+25) {
-        			left = false;
-        		}
-        		//check for just horizontal matching according to right
-        		active_right_end = checkforshape.sh_boxes.get(i).get_box_right_end();
-        		if(active_right_end == my_tetris.get_right_border()) {
-        			right = false;
-        		}
-        	}
-    	}
-    	
-    	
-    	//check right and left main borders with shape start & end locations for rotatable or not
-		checkforshape.calc_shape_start_end_loc();
-		if(checkforshape.get_shape_start_loc_X() <= my_tetris.get_left_border()) {
-			col_left_exists = true;
-		}
-		if(checkforshape.get_shape_end_loc_X() >= my_tetris.get_right_border()) {
-			col_right_exists = true;
-		}
-    	
-		for(int i = 0 ; i < my_tetris.get_all_shapes().size()-1 ; i++) {
-    		if(my_tetris.get_all_shapes().get(i) != null) {
-
-        		for(int k = 0 ; k < 4 ; k++) {//this loop selects active shape boxes
-        			active_bottom = checkforshape.sh_boxes.get(k).get_box_bottom_end();
-        			active_x = checkforshape.sh_boxes.get(k).get_box_x();
-        			active_y = checkforshape.sh_boxes.get(k).get_box_y();
-        			active_right_end = checkforshape.sh_boxes.get(k).get_box_right_end();
-        			
-        			//this loop checking selected active shape box with boxes of all passive shapes
-        			for(int t = 0 ; t < 4 ; t++) { 
-        				if(my_tetris.get_all_shapes().get(i).sh_boxes.get(t) != null) {
-            				int passive_x = my_tetris.get_all_shapes().get(i).sh_boxes.get(t).get_box_x();
-            				int passive_right_end = my_tetris.get_all_shapes().get(i).sh_boxes.get(t).get_box_right_end();
-            				int passive_y = my_tetris.get_all_shapes().get(i).sh_boxes.get(t).get_box_y();
-            				@SuppressWarnings("unused")
-							int passive_bottom = my_tetris.get_all_shapes().get(i).sh_boxes.get(t).get_box_bottom_end();
-            				//check horizontal and vertical matching
-            				if(active_bottom == passive_y && active_x == passive_x) {
-                    			col_bot_exists = true;
-            				}
-            				//check for just horizontal matching according to right
-            				if(right || !checkforshape.get_shape_active()) {
-            					if(active_y == passive_y) {
-            						if(active_right_end == passive_x) {
-            							right = false;
-                    					col_right_exists = true;
-            						}
-            					}else if(active_bottom == passive_y && active_right_end == passive_y) {
-            							right = false;
-                    					col_right_exists = true;
-            					}
-            				}
-            				//check for just horizontal matching according to left
-            				if( (left || !checkforshape.get_shape_active()) && (active_y == passive_y || active_bottom == passive_y) && active_x == passive_right_end) {
-            							left = false;
-                    					col_left_exists = true;
-            				}
-            				//check if there no place for new shape and finish the game
-            				if(active_bottom > passive_y && active_bottom < 4*25) {
-            					top = false;
-            				}
-        				}
-        			}
-        		}
-    		}
-    	}
-
-    	if(col_bot_exists) frameCounter_collision_bot++;
-    	else frameCounter_collision_bot = 0;
-
-    	if(!col_left_exists && !col_right_exists && !checkforshape.get_shape_active()) return true;
-    	else return false;
-    			
-    }
+	
+	
+	
+	
 	
 	
 }

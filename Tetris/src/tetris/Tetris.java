@@ -59,7 +59,7 @@ class Tetris extends genericVariables
     private void moveIt()
     {
     	//start a game with generating a new shape
-    	genericVariables.generate_a_new_shape();
+    	gameComponents.generate_a_new_shape();
     	
     	//endless loop for game running.
         while (true)
@@ -91,7 +91,7 @@ class Tetris extends genericVariables
 	private void run_gameLoop() {
     	shape active = genericVariables.get_my_tetris().get_all_shapes().lastElement();
 
-		genericVariables.checkcollisions(active);
+		gameComponents.checkcollisions(active);
 		
 		if(genericVariables.get_col_left_exists() || genericVariables.get_col_right_exists()) {
 			genericVariables.set_frameCounter_collision(genericVariables.get_frameCounter_collision()+1);
@@ -104,7 +104,7 @@ class Tetris extends genericVariables
     	
     	//generate new shape
     	if(!active.get_shape_active() && genericVariables.get_top()) {
-    		genericVariables.generate_a_new_shape();
+    		gameComponents.generate_a_new_shape();
     	}
     	//check game has finished or not
     	if(!genericVariables.get_top()) {
