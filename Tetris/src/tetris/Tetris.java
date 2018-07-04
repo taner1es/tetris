@@ -34,7 +34,8 @@ class Tetris extends genericVariables
     public void go()
     {
     	try {
-    		URL url_tetris_menu = Tetris.class.getResource("/images/tetris_menu.png"); //gets the folder/file from runnable jar file location
+    		URL url_tetris_menu = Tetris.class.getResource("tetris_menu.png"); //gets the folder/file from runnable jar file location
+    		System.out.println("url : " + url_tetris_menu);
     		image = ImageIO.read(url_tetris_menu);
     	} catch (IOException e) {	
 			// TODO Auto-generated catch block
@@ -163,6 +164,7 @@ class Tetris extends genericVariables
 	public class DrawPanel extends JPanel 
     {
         	@SuppressWarnings("null")
+        	@Override
 			public void paintComponent(Graphics g)
             {
             	//Left side block
@@ -180,8 +182,7 @@ class Tetris extends genericVariables
             	draw_Grid(g);
             	draw_GameInfo(g);
             	draw_Shapes(g);
-        		if(genericVariables.get_started())if(genericVariables.get_pause())pause_gameLoop(g);
-        		//System.out.println("started : " + started);
+        		if(genericVariables.get_started() && genericVariables.get_pause())pause_gameLoop(g);
         		if(!genericVariables.get_started())g.drawImage(image, 0, 0, genericVariables.get_gw_WIDTH()-325, genericVariables.get_gw_HEIGHT()-25, Color.WHITE, null);
             }
             

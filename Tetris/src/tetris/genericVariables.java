@@ -190,11 +190,9 @@ class genericVariables {
         			for(int k = 0; k < 4 ; k++) {
         				if(sh.sh_boxes.get(k) != null) {
         					bx = sh.sh_boxes.get(k);
-        					if(bx.get_box_y() == drop_y-(n*25)) {
-        						 if(check_box_bottom_free(bx)) {
+        					if(bx.get_box_y() == drop_y-(n*25) && check_box_bottom_free(bx)) {
         							 bx.set_box_y(bx.get_box_y()+25);
         							 k--;
-        						 }
         					}
         				}
         			}
@@ -212,10 +210,8 @@ class genericVariables {
     			for(int k = 0; k < 4 ; k++) {
     				if(sh.sh_boxes.get(k) != null) {
     					bx = sh.sh_boxes.get(k);
-    					if(checkboxbottomfree.get_box_x() == bx.get_box_x()) {
-    						if(checkboxbottomfree.get_box_y()+25 != bx.get_box_y() && checkboxbottomfree.get_box_y()+25 != my_tetris.get_bottom_border()) {
+    					if(checkboxbottomfree.get_box_x() == bx.get_box_x() && (checkboxbottomfree.get_box_y()+25 != bx.get_box_y() && checkboxbottomfree.get_box_y()+25 != my_tetris.get_bottom_border() )) {
 								return true;
-    						}
     					}
     				}
     			}
@@ -227,7 +223,7 @@ class genericVariables {
     
 	protected static void generate_a_new_shape() {
 		//this block written to generate a shape and add it to vector<shape> all_shapes
-		if(my_tetris.get_all_shapes().size() > 0)check_exploding_line();
+		if(!my_tetris.get_all_shapes().isEmpty())check_exploding_line();
 		String code = null;
 		String s_type = null;
 		int s_type_no;
@@ -358,26 +354,15 @@ class genericVariables {
             							right = false;
                     					col_right_exists = true;
             						}
-            					}else if(active_bottom == passive_y) {
-            						if(active_right_end == passive_y) {
+            					}else if(active_bottom == passive_y && active_right_end == passive_y) {
             							right = false;
                     					col_right_exists = true;
-            						}
             					}
             				}
             				//check for just horizontal matching according to left
-            				if(left || !checkforshape.get_shape_active()) {
-            					if(active_y == passive_y) {
-            						if(active_x == passive_right_end) {
+            				if( (left || !checkforshape.get_shape_active()) && (active_y == passive_y || active_bottom == passive_y) && active_x == passive_right_end) {
             							left = false;
                     					col_left_exists = true;
-            						}
-            					}else if(active_bottom == passive_y) {
-            						if(active_x == passive_right_end) {
-            							left = false;
-                    					col_left_exists = true;
-            						}
-            					}
             				}
             				//check if there no place for new shape and finish the game
             				if(active_bottom > passive_y && active_bottom < 4*25) {
@@ -400,7 +385,7 @@ class genericVariables {
 	//gets keyboard input
     class ActionListener extends KeyAdapter{
     	
-        
+        @Override
     	public void keyPressed(KeyEvent e){
     		int key = e.getKeyCode();
     		
@@ -418,8 +403,7 @@ class genericVariables {
     				genericVariables.set_pause_apply(true);
     		}
     		//started and continues game input
-    		if(genericVariables.get_started()) {
-    			if(!genericVariables.get_pause()) {
+    		if(genericVariables.get_started() && !genericVariables.get_pause()) {
     				//pause game
             		if(key == KeyEvent.VK_P) {
             			if(genericVariables.get_pause()) genericVariables.set_pause(false);
@@ -448,14 +432,13 @@ class genericVariables {
                 		genericVariables.set_right(false);
                 		genericVariables.set_left(false);
                 	}
-    			}
     		}
         }
+        @Override
     	public void keyReleased(KeyEvent e){
     		int key = e.getKeyCode();
     		//started and continues game input
-    		if(genericVariables.get_started()) {
-    			if(!genericVariables.get_pause()) {
+    		if(genericVariables.get_started() && !genericVariables.get_pause()) {
     	    		if(key == KeyEvent.VK_RIGHT && genericVariables.get_right()) {
     	    			genericVariables.set_frameCounter_right(0);
                 		genericVariables.set_right(false);
@@ -470,7 +453,6 @@ class genericVariables {
             		if(key == KeyEvent.VK_SPACE && !genericVariables.get_rotate_available()) {
             			genericVariables.set_rotate_available(true);
             		}
-    			}
     		}
     	}
     }
