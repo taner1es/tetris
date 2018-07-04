@@ -339,10 +339,12 @@ class Tetris extends genericVariables
         			switch(genericVariables.get_pause_selection()) {
         				case 0:
         					genericVariables.set_pause(false);
+        					genericVariables.set_game_state("running");
         					genericVariables.set_pause_apply(false);
         					break;
         				case 1:
         					gameComponents.set_exit_game(true);
+        					genericVariables.set_game_state("exit");
         					break;
     					default:
     						System.err.println("pause menu selection apply problem.");
