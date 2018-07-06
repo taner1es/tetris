@@ -398,22 +398,24 @@ class gameComponents extends genericVariables{
                     			genericVariables.set_col_bot_exists(true);
             				}
             				//check for just horizontal matching according to right
-            				if(genericVariables.get_right() || !checkforshape.get_shape_active()) {
+            				if( genericVariables.get_right() || !checkforshape.get_shape_active()) {
             					if(active_y == passive_y) {
             						if(active_right_end == passive_x) {
             							genericVariables.set_right(false);
                     					genericVariables.set_col_right_exists(true);
             						}
-            					}else if(active_bottom == passive_y && active_right_end == passive_y) {
-            							genericVariables.set_right(false);
-                    					genericVariables.set_col_right_exists(true);
             					}
             				}
             				//check for just horizontal matching according to left
-            				if( (genericVariables.get_left() || !checkforshape.get_shape_active()) && (active_y == passive_y || active_bottom == passive_y) && active_x == passive_right_end) {
+            				if( genericVariables.get_left() || !checkforshape.get_shape_active()) {
+            					if(active_y == passive_y) {
+            						if(active_x == passive_right_end) {
             							genericVariables.set_left(false);
                     					genericVariables.set_col_left_exists(true);
+            						}
+            					}
             				}
+            				
             				//check if there no place for new shape and finish the game
             				if(active_bottom > passive_y && active_bottom < 4*25) {
             					genericVariables.set_top(false);
