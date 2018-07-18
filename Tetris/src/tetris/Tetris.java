@@ -180,19 +180,20 @@ class Tetris extends genericVariables
             }
             
             private void draw_Buffer(Graphics g) {
-            	//buffer frame
+            	//buffer frame vertical edges
             	g.setColor(Color.MAGENTA);
-            	for(int i = 1 ; i <= 16 ; i++) {
+            	for(int i = 1 ; i <= 17 ; i++) {
             		g.fill3DRect(600, 50+(i*25), 25, 25,false);
             		g.fill3DRect(825, 50+(i*25), 25, 25,false);
             	}
+            	//buffer frame horizontal edges
             	for(int i = 1 ; i <= 8 ; i++) {
             		g.fill3DRect(600+(i*25), 75, 25, 25,false);
-            		g.fill3DRect(600+(i*25), 450, 25, 25,false);
+            		g.fill3DRect(600+(i*25), 475, 25, 25,false);
             	}
             	//buffer frame background
             	g.setColor(Color.DARK_GRAY);
-            	g.fill3DRect(625, 100, 200, 350,false);
+            	g.fill3DRect(625, 100, 200, 375,false);
             	/*g.fill3DRect(625, 50, 200, 25,false);
             	g.fill3DRect(825, 50, 25, 400,false);
             	g.fill3DRect(625, 425, 200, 25,false);
@@ -219,7 +220,7 @@ class Tetris extends genericVariables
         					            				case "S":g.setColor(Color.CYAN);break;
         						            				case "Z":g.setColor(Color.ORANGE);break;
                     			}
-                				g.fill3DRect((draw_x + 420), (draw_y + k*110 +100), size, size,false);
+                				g.fill3DRect((draw_x + 420), (draw_y + k*125 +100), size, size,false);
                 				//g.drawString(Integer.toString(i), draw_x+3, draw_y+17);
             				}
                 		}
