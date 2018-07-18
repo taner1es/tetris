@@ -7,6 +7,7 @@ import java.util.Vector;
 class gameComponents extends genericVariables{ 
 	
 	private Vector<shape>  all_shapes = new Vector<>(0); //this vector keeps the information of the all shapes has drawed and also returning to draw function to draw it for all game time.
+	private static Vector<shape>  buffered_shapes = new Vector<>(3); //this vector keeps the new generated buffer than sends the generated shapes to game area.
 	private static final int TOP_BORDER = 1*25;
 	private static final int LEFT_BORDER = 1*25;
 	private static final int RIGHT_BORDER = 21*25;
@@ -15,9 +16,9 @@ class gameComponents extends genericVariables{
 	private boolean call_new_shape = true;
 	private static boolean exit_game = false;
 	
-	
 	//getter methods
 	protected Vector<shape> get_all_shapes() { return this.all_shapes;}
+	protected static Vector<shape> get_buffered_shapes() { return buffered_shapes;}
 	protected final int get_top_border() { return gameComponents.TOP_BORDER;}
 	protected final int get_left_border() { return gameComponents.LEFT_BORDER;}
 	protected final int get_right_border() { return gameComponents.RIGHT_BORDER;}
@@ -271,8 +272,8 @@ class gameComponents extends genericVariables{
     	return false;
     }
     
-    protected static void generate_a_new_shape() {
-		//this block written to generate a shape and add it to vector<shape> all_shapes
+    protected static shape generate_a_new_shape() {
+		//this block written to generate a shape and add it to vector<shape> buffered_shapes
 		if(!genericVariables.get_my_tetris().get_all_shapes().isEmpty())
 			check_exploding_line();
 		String code = null;
@@ -293,10 +294,39 @@ class gameComponents extends genericVariables{
 			else if(rndm_no == 6) s_type = "Z";
 		else s_type = "X";
 		
+		return stringtoShape(code,s_type,s_type_no,rot_no,15*25,0);
+    }
 
-		genericVariables.get_my_tetris().newShape(stringtoShape(code,s_type,s_type_no,rot_no,15*25,0));
+	//fills shape buffer queue.
+    protected static void fill_buffer() {
+    	if(get_buffered_shapes().isEmpty()) {
+    		get_buffered_shapes().setSize(3);
+    		for(int i = 0 ; i < get_buffered_shapes().size() ; i++) {
+				get_buffered_shapes().setElementAt(generate_a_new_shape(), i);
+				System.out.println(get_buffered_shapes().elementAt(i).get_shape_type());
+			}
+		}else {
+			get_buffered_shapes().setElementAt(generate_a_new_shape(), 2);
+		}
+    }
+    
+    //swapping shapes priority at queue
+    protected static shape swap_buffered_shape_order() {
+    	shape shape_toSend;
+    	if(get_buffered_shapes().isEmpty()) {
+    		fill_buffer();
+    	}
+    	shape_toSend = get_buffered_shapes().elementAt(0);
+		get_buffered_shapes().setElementAt(get_buffered_shapes().get(1), 0);
+		get_buffered_shapes().setElementAt(get_buffered_shapes().get(2), 1);
+		get_buffered_shapes().setElementAt(generate_a_new_shape(), 2);
+		return shape_toSend;    	 
+    }
+    
+    //sends buffered shape to game
+    protected static void swap_buffered_shape_to_game() {
+    	genericVariables.get_my_tetris().newShape(swap_buffered_shape_order());
 		genericVariables.get_my_tetris().set_call_new_shape(false);
-    	
     }
     
     protected static shape stringtoShape(String code,String s_type,int s_type_no,int rot_no,int x,int y) {
