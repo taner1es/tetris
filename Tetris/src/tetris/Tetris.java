@@ -103,11 +103,11 @@ class Tetris extends genericVariables
     	gameComponents.down_event();
     	
     	//generate new shape
-    	if(!active.get_shape_active() && genericVariables.get_top()) {
+    	if(!active.get_shape_active() && !genericVariables.get_top()) {
     		gameComponents.swap_buffered_shape_to_game();
     	}
     	//check game has finished or not
-    	if(!genericVariables.get_top()) {
+    	if(genericVariables.get_top()) {
     		//temporary popup , i will change later
     		JOptionPane.showConfirmDialog(null, "You LOST .. :(");
     		System.exit(1);
@@ -213,7 +213,7 @@ class Tetris extends genericVariables
                     			draw_y = my_shapes.get(k).sh_boxes.get(i).get_box_y();
                     			switch(my_shapes.get(k).get_shape_type()) {
                     				case "I": g.setColor(Color.GREEN);break;
-        	            				case "L":g.setColor(Color.RED);break;
+        	            				case "L":g.setColor(Color.MAGENTA);break;
         		            				case "J":g.setColor(Color.GRAY);break;
         			            				case "O":g.setColor(Color.BLUE);break;
         				            				case "T":g.setColor(Color.YELLOW);break;
@@ -357,21 +357,7 @@ class Tetris extends genericVariables
         			g.drawString("EXIT", pause_x+tab_space+55 , pause_y+line_space*4);
         		}
         		
-        		if(genericVariables.get_pause_apply()) {
-        			switch(genericVariables.get_pause_selection()) {
-        				case 0:
-        					genericVariables.set_pause(false);
-        					genericVariables.set_game_state("running");
-        					genericVariables.set_pause_apply(false);
-        					break;
-        				case 1:
-        					gameComponents.set_exit_game(true);
-        					genericVariables.set_game_state("exit");
-        					break;
-    					default:
-    						System.err.println("pause menu selection apply problem.");
-        			}
-        		}
+        		gameComponents.pause_menu_select_func();
         	}
     }
 }

@@ -38,6 +38,27 @@ class gameComponents extends genericVariables{
 		}
 	}
 	
+	//let user select one of the options on the view during pause menu
+	protected static void pause_menu_select_func() {
+		if(genericVariables.get_pause_apply()) {
+			switch(genericVariables.get_pause_selection()) {
+				case 0:
+					genericVariables.set_pause(false);
+					genericVariables.set_game_state("running");
+					genericVariables.set_pause_apply(false);
+					break;
+				case 1:
+					gameComponents.set_exit_game(true);
+					genericVariables.set_game_state("exit");
+					break;
+				default:
+					System.err.println("pause menu selection apply problem.");
+			}
+		}
+	}
+	
+	
+	
 	//this method has really really critical role in the program it gets the new shape data and adding to all shapes list (vector) and goes on for everything.
 	protected void newShape(shape new_shape) {
 		all_shapes.addElement(new_shape);
@@ -352,7 +373,7 @@ class gameComponents extends genericVariables{
 	}
     
     protected static boolean checkcollisions(shape checkforshape) {
-		genericVariables.set_top(true);
+		genericVariables.set_top(false);
 		genericVariables.set_col_right_exists(false);
 		genericVariables.set_col_left_exists(false);
 		genericVariables.set_col_bot_exists(false);
@@ -373,7 +394,7 @@ class gameComponents extends genericVariables{
     		}
     	}
     	
-    	//checks for top border
+    	//checks for top limit border to understand the game finished or not
     	for(int i = 0 ; i < 4 ; i++) {
     		if(checkforshape.sh_boxes.get(i).get_box_y() < genericVariables.get_my_tetris().get_top_border()) {
     			genericVariables.set_top(false);

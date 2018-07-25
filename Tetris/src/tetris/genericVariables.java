@@ -42,7 +42,7 @@ class genericVariables extends KeyInput{
 	private static boolean pause = false;
 	private static boolean pause_apply = false;
 	private static boolean started = false; //record game started or not
-	private static boolean top = true;
+	private static boolean top = false;
 	private static boolean rotate_available = true;
 	private static boolean col_right_exists = false;
 	private static boolean col_left_exists = false;
@@ -127,7 +127,9 @@ class genericVariables extends KeyInput{
 	protected static void set_col_bot_exists(boolean p_col_bot_exists) { col_bot_exists = p_col_bot_exists;}
 	
 	protected static void set_game_state(String p_state) { game_state = p_state; }
-	
+	/**
+	 * Game States : welcome, running, paused
+	 */
     protected static void set_view_welcome_image(BufferedImage p_image) { view_welcome_image = p_image;}
 	
     //increase methods
