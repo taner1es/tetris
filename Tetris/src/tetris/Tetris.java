@@ -59,12 +59,14 @@ class Tetris extends genericVariables
     private void moveIt()
     {
     	//start a game with generating a new shape
+    	if(genericVariables.get_game_state() == "running" || genericVariables.get_game_state() == "welcome")
     	gameComponents.swap_buffered_shape_to_game();
     	
     	//endless loop for game running.
         while (true)
         {
-        	if(!genericVariables.get_pause() && genericVariables.get_started()) { //game running state
+        	//game running state
+        	if(!genericVariables.get_endGame() && !genericVariables.get_pause() && genericVariables.get_started()) { 
         		run_gameLoop();
                 
         	}else { //game paused state
@@ -73,6 +75,7 @@ class Tetris extends genericVariables
         		}
         	}
         	sleep(genericVariables.get_gameSpeed());
+        	
         	genericVariables.get_frame().repaint();
         }
         if(gameComponents.get_exit_game()) {
@@ -90,7 +93,6 @@ class Tetris extends genericVariables
     }
 	private void run_gameLoop() {
     	shape active = genericVariables.get_my_tetris().get_all_shapes().lastElement();
-
 		gameComponents.checkcollisions(active);
 		
 		if(genericVariables.get_col_left_exists() || genericVariables.get_col_right_exists()) {
@@ -103,16 +105,9 @@ class Tetris extends genericVariables
     	gameComponents.down_event();
     	
     	//generate new shape
-    	if(!active.get_shape_active() && !genericVariables.get_top()) {
+    	if(!active.get_shape_active() && !genericVariables.get_endGame()) {
     		gameComponents.swap_buffered_shape_to_game();
     	}
-    	//check game has finished or not
-    	if(genericVariables.get_top()) {
-    		//temporary popup , i will change later
-    		JOptionPane.showConfirmDialog(null, "You LOST .. :(");
-    		System.exit(1);
-    	}
-
 		genericVariables.set_frameCounter(genericVariables.get_frameCounter()+1);
 	}
 	
@@ -141,7 +136,7 @@ class Tetris extends genericVariables
             	//draw_GameInfo(g);
             	draw_Shapes(g);
             	draw_Buffer(g);
-        		if(genericVariables.get_started() && genericVariables.get_pause())pause_gameLoop(g);
+        		if(genericVariables.get_started() && (genericVariables.get_pause() || genericVariables.get_endGame()))pause_gameLoop(g);
         		if(!genericVariables.get_started())g.drawImage(genericVariables.get_view_welcome_image(), 0, 0, genericVariables.get_gw_WIDTH()-325, genericVariables.get_gw_HEIGHT()-25, Color.WHITE, null);
             }
             
@@ -237,8 +232,8 @@ class Tetris extends genericVariables
             	for(int i = 0; i < genericVariables.get_gw_HEIGHT()/25 ; i++) {
             		g.setFont(new Font(genericVariables.get_font_type(), Font.BOLD, 11));
             		//show line numbers
-            		if(i <= 29)g.drawString(Integer.toString(i), 5, y+16);
-            		if(i != 0 && i <= 29)g.drawString(Integer.toString(i), 22*25+5, y+16);
+            		if(i <= 29)g.drawString(Integer.toString(i), 5, y+90);
+            		if(i != 0 && i <= 29)g.drawString(Integer.toString(i), 22*25+5, y+90);
             		if(i != 0 && i < 23)g.drawString(Integer.toString(i), x+5, 16);
             		if(i != 0 && i < 22) g.drawString(Integer.toString(i), x+5, 29*25+16);
             		//draw grid horizontal lines
@@ -246,6 +241,7 @@ class Tetris extends genericVariables
                     //draw grid vertical lines
                     if(i < 21 && i >= 3) g.drawLine(x, 75,x ,genericVariables.get_gw_HEIGHT()-100);
                     //intervals
+                    
                     y+=25;
                     x+=25;
             	}
@@ -326,38 +322,83 @@ class Tetris extends genericVariables
         		int pause_y = 150;
         		int line_space = 50;
         		int tab_space = 30;
-        		
+        		String menu_title = null;
+
         		g.setColor(Color.GRAY);
         		g.fill3DRect(pause_x, pause_y, 250, 300, false);
         		g.setFont(new Font(genericVariables.get_font_type(), Font.BOLD, 25));
+
         		
-        		g.setColor(Color.WHITE);
-        		g.drawString("! GAME PAUSED !", pause_x+tab_space-10 , pause_y+line_space);
-        		g.fill3DRect(pause_x, pause_y+line_space*2-25, 250, 5, true);
-        		
-        		if(genericVariables.get_pause_selection() == 0){
+        		switch(genericVariables.get_game_state()) {
+        		case "paused" :
+
+            		g.setColor(Color.WHITE);
+        			g.drawString("! PAUSED !", pause_x+tab_space+25 , pause_y+line_space);
+            		
         			g.setColor(Color.YELLOW);
-        			g.fill3DRect(pause_x+tab_space, pause_y+line_space*3-25 , 180, 35, true);
-        			g.setColor(Color.BLACK);
-        			g.drawString("RESUME", pause_x+tab_space+35 , pause_y+line_space*3);
-        		}
-        		else {
-        			g.setColor(Color.WHITE);
-        			g.drawString("RESUME", pause_x+tab_space+35 , pause_y+line_space*3);
-        		}
-        		
-        		if(genericVariables.get_pause_selection() == 1) {
+            		g.fill3DRect(pause_x, pause_y+line_space*2-25, 250, 5, false);
+            		
+        			if(genericVariables.get_pause_selection() == 0){
+            			g.setColor(Color.YELLOW);
+            			g.fill3DRect(pause_x+tab_space, pause_y+line_space*3-25 , 180, 35, true);
+            			g.setColor(Color.BLACK);
+            			g.drawString("RESUME", pause_x+tab_space+35 , pause_y+line_space*3);
+            		}
+            		else {
+            			g.setColor(Color.WHITE);
+            			g.drawString("RESUME", pause_x+tab_space+35 , pause_y+line_space*3);
+            		}
+            		
+            		if(genericVariables.get_pause_selection() == 1) {
+            			g.setColor(Color.YELLOW);
+            			g.fill3DRect(pause_x+tab_space, pause_y+line_space*4-25 , 180, 35, true);
+            			g.setColor(Color.BLACK);
+            			g.drawString("EXIT", pause_x+tab_space+60 , pause_y+line_space*4);
+            		}
+            		else {
+            			g.setColor(Color.WHITE);
+            			g.drawString("EXIT", pause_x+tab_space+60 , pause_y+line_space*4);
+            		}
+            		
+            		gameComponents.pause_menu_select_func();
+            		break;
+            	
+        		case "end":
+            		g.setColor(Color.WHITE);
+        			g.drawString("! END !", pause_x+tab_space+50 , pause_y+line_space);
+            		
         			g.setColor(Color.YELLOW);
-        			g.fill3DRect(pause_x+tab_space, pause_y+line_space*4-25 , 180, 35, true);
-        			g.setColor(Color.BLACK);
-        			g.drawString("EXIT", pause_x+tab_space+55 , pause_y+line_space*4);
+            		g.fill3DRect(pause_x, pause_y+line_space*2-25, 250, 5, false);
+            		
+        			if(genericVariables.get_pause_selection() == 0){
+            			g.setColor(Color.YELLOW);
+            			g.fill3DRect(pause_x+tab_space, pause_y+line_space*3-25 , 180, 35, true);
+            			g.setColor(Color.BLACK);
+            			g.drawString("RESTART", pause_x+tab_space+35 , pause_y+line_space*3);
+            		}
+            		else {
+            			g.setColor(Color.WHITE);
+            			g.drawString("RESTART", pause_x+tab_space+35 , pause_y+line_space*3);
+            		}
+            		
+            		if(genericVariables.get_pause_selection() == 1) {
+            			g.setColor(Color.YELLOW);
+            			g.fill3DRect(pause_x+tab_space, pause_y+line_space*4-25 , 180, 35, true);
+            			g.setColor(Color.BLACK);
+            			g.drawString("EXIT", pause_x+tab_space+60 , pause_y+line_space*4);
+            		}
+            		else {
+            			g.setColor(Color.WHITE);
+            			g.drawString("EXIT", pause_x+tab_space+60 , pause_y+line_space*4);
+            		}
+            		
+            		gameComponents.pause_menu_select_func();
+        			break;
+        		default :
+        			System.err.println("ERROR : unkown game state");
+        			System.err.println("genericVariables.get_game_state() called : " + genericVariables.get_game_state());
+        			break;
         		}
-        		else {
-        			g.setColor(Color.WHITE);
-        			g.drawString("EXIT", pause_x+tab_space+55 , pause_y+line_space*4);
-        		}
-        		
-        		gameComponents.pause_menu_select_func();
         	}
     }
 }

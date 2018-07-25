@@ -40,20 +40,44 @@ class gameComponents extends genericVariables{
 	
 	//let user select one of the options on the view during pause menu
 	protected static void pause_menu_select_func() {
-		if(genericVariables.get_pause_apply()) {
-			switch(genericVariables.get_pause_selection()) {
-				case 0:
-					genericVariables.set_pause(false);
-					genericVariables.set_game_state("running");
-					genericVariables.set_pause_apply(false);
-					break;
-				case 1:
-					gameComponents.set_exit_game(true);
-					genericVariables.set_game_state("exit");
-					break;
-				default:
-					System.err.println("pause menu selection apply problem.");
-			}
+		switch(genericVariables.get_game_state()) {
+			case "paused" :
+				if(genericVariables.get_pause_apply()) {
+					switch(genericVariables.get_pause_selection()) {
+						case 0:
+							genericVariables.set_pause(false);
+							genericVariables.set_game_state("running");
+							genericVariables.set_pause_apply(false);
+							break;
+						case 1:
+							gameComponents.set_exit_game(true);
+							genericVariables.set_game_state("exit");
+							break;
+						default:
+							System.err.println("pause menu selection apply problem.");
+					}
+				}
+				break;
+			case "end" : 
+				if(genericVariables.get_pause_apply()) {
+					switch(genericVariables.get_pause_selection()) {
+						case 0:
+							genericVariables.set_pause(false);
+							genericVariables.set_game_state("welcome");
+							genericVariables.set_pause_apply(false);
+							break;
+						case 1:
+							gameComponents.set_exit_game(true);
+							genericVariables.set_game_state("exit");
+							break;
+						default:
+							System.err.println("pause menu selection apply problem.");
+					}
+				}
+				break;
+			default : 
+				
+				break;
 		}
 	}
 	
@@ -78,7 +102,6 @@ class gameComponents extends genericVariables{
 		String code = null;
 		if(type_no != 3 ) {
 			 // will be taken from array list with new rotation no
-			System.out.println("type_no & rot_no : " + type_no + rot_no );
 			if(genericVariables.get_shape_codes()[type_no].length-1 == rot_no) {
 				rot_no = 0;
 				code = genericVariables.get_shape_codes()[type_no][rot_no];
@@ -93,7 +116,6 @@ class gameComponents extends genericVariables{
 				rotatedshape.set_shape_active(true);
 				all_shapes.setElementAt(rotatedshape, last_index);
 				all_shapes.elementAt(last_index).set_shape_id(last_index);
-				System.out.println("rotated_shape_id " +rotatedshape.get_shape_id());
 			}
 				
 			else System.err.println("Collision exists while rotating.");
@@ -115,7 +137,6 @@ class gameComponents extends genericVariables{
 		shape active = get_my_tetris().get_all_shapes().lastElement();
     	if(genericVariables.get_left() && active.get_shape_active()) {
     		if(!genericVariables.get_down()) {
-				System.out.println("asd");
 				if(genericVariables.get_frameCounter_left() == 1 ) {
 	    			active.go_left();
 	        		genericVariables.set_frameCounter_left(genericVariables.get_frameCounter_left()+1);
@@ -145,7 +166,6 @@ class gameComponents extends genericVariables{
 		shape active = get_my_tetris().get_all_shapes().lastElement();
 		if(genericVariables.get_right() && active.get_shape_active()) {
 			if(!genericVariables.get_down()) {
-				System.out.println("asd");
 				if(genericVariables.get_frameCounter_right() == 1 ) {
 	    			active.go_right();
 	        		genericVariables.set_frameCounter_right(genericVariables.get_frameCounter_right()+1);
@@ -200,26 +220,40 @@ class gameComponents extends genericVariables{
 		box bx;
 		int line_no;
 		for(int i = 0; i < genericVariables.get_my_tetris().get_all_shapes().size() ; i++) {
-			if(genericVariables.get_my_tetris().get_all_shapes().get(i) != null) {
-				sh = genericVariables.get_my_tetris().get_all_shapes().get(i);
-				for(int k = 0 ; k < 4 ; k++) {
-					if(sh.sh_boxes.get(k) != null) {
-						bx = sh.sh_boxes.get(k);
-						line_no = (bx.get_box_y() / 25) - 3;
-						genericVariables.get_my_tetris().get_explode_lines()[line_no]++;
-						System.out.println("line["+(line_no+3)+"] : " + genericVariables.get_my_tetris().get_explode_lines()[line_no]);
-						if(genericVariables.get_my_tetris().get_explode_lines()[line_no] == 19) {
-							explode_line(line_no);
+			if(genericVariables.get_game_state() == "running") {
+				if(genericVariables.get_my_tetris().get_all_shapes().get(i) != null ) {
+					sh = genericVariables.get_my_tetris().get_all_shapes().get(i);
+					for(int k = 0 ; k < 4 ; k++) {
+						if(sh.sh_boxes.get(k) != null) {
+							bx = sh.sh_boxes.get(k);
+							line_no = (bx.get_box_y() / 25) - 3;
+							System.out.println("line no : " + line_no);
+							if(line_no <= 0) {
+								gameOver();
+							}else if(genericVariables.get_game_state() == "running") {
+								genericVariables.get_my_tetris().get_explode_lines()[line_no]++;
+								if(genericVariables.get_my_tetris().get_explode_lines()[line_no] == 19) {
+									explode_line(line_no);
+								}
+							}else {
+								break;
+							}
 						}
 					}
 				}
+			}else {
+				break;
 			}
+			
 		}
     }
     
-  //explode lines after checked
+    private static void gameOver(){
+    	genericVariables.set_endGame(true);
+		genericVariables.set_game_state("end");
+    }
+    //explode lines after checked
     private static void explode_line(int line_number) {
-    	System.out.println("Process : Delete Line " + (line_number+3));
     	int row_y = (line_number+3) * 25;
 		shape sh;
     	box bx;
@@ -243,7 +277,6 @@ class gameComponents extends genericVariables{
     		}
     		
     	}
-    	System.out.println("counter = " + counter);
     	if(counter == 19) {
     		genericVariables.get_my_tetris().get_explode_lines()[line_number] = 0;
     		drop_upper_boxes(line_number);
@@ -324,7 +357,6 @@ class gameComponents extends genericVariables{
     		get_buffered_shapes().setSize(3);
     		for(int i = 0 ; i < get_buffered_shapes().size() ; i++) {
 				get_buffered_shapes().setElementAt(generate_a_new_shape(), i);
-				System.out.println(get_buffered_shapes().elementAt(i).get_shape_type());
 			}
 		}else {
 			get_buffered_shapes().setElementAt(generate_a_new_shape(), 2);
@@ -346,8 +378,8 @@ class gameComponents extends genericVariables{
     
     //sends buffered shape to game
     protected static void swap_buffered_shape_to_game() {
-    	genericVariables.get_my_tetris().newShape(swap_buffered_shape_order());
-		genericVariables.get_my_tetris().set_call_new_shape(false);
+        	genericVariables.get_my_tetris().newShape(swap_buffered_shape_order());
+    		genericVariables.get_my_tetris().set_call_new_shape(false);
     }
     
     protected static shape stringtoShape(String code,String s_type,int s_type_no,int rot_no,int x,int y) {
@@ -373,7 +405,7 @@ class gameComponents extends genericVariables{
 	}
     
     protected static boolean checkcollisions(shape checkforshape) {
-		genericVariables.set_top(false);
+		genericVariables.set_endGame(false);
 		genericVariables.set_col_right_exists(false);
 		genericVariables.set_col_left_exists(false);
 		genericVariables.set_col_bot_exists(false);
@@ -391,13 +423,6 @@ class gameComponents extends genericVariables{
     			}
     			else
     				return false;
-    		}
-    	}
-    	
-    	//checks for top limit border to understand the game finished or not
-    	for(int i = 0 ; i < 4 ; i++) {
-    		if(checkforshape.sh_boxes.get(i).get_box_y() < genericVariables.get_my_tetris().get_top_border()) {
-    			genericVariables.set_top(false);
     		}
     	}
 
@@ -469,7 +494,7 @@ class gameComponents extends genericVariables{
             				
             				//check if there no place for new shape and finish the game
             				if(active_bottom > passive_y && active_bottom < 4*25) {
-            					genericVariables.set_top(false);
+            					genericVariables.set_endGame(false);
             				}
         				}
         			}

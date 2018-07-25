@@ -42,7 +42,7 @@ class genericVariables extends KeyInput{
 	private static boolean pause = false;
 	private static boolean pause_apply = false;
 	private static boolean started = false; //record game started or not
-	private static boolean top = false;
+	private static boolean endGame = false;
 	private static boolean rotate_available = true;
 	private static boolean col_right_exists = false;
 	private static boolean col_left_exists = false;
@@ -88,7 +88,7 @@ class genericVariables extends KeyInput{
 	protected static boolean get_pause() { return pause;}
 	protected static boolean get_pause_apply() { return pause_apply;}
 	protected static boolean get_started() { return started;}
-	protected static boolean get_top() { return top;}
+	protected static boolean get_endGame() { return endGame;}
 	protected static boolean get_rotate_available() { return rotate_available;}
 	protected static boolean get_col_right_exists() { return col_right_exists;}
 	protected static boolean get_col_left_exists() { return col_left_exists;}
@@ -120,7 +120,7 @@ class genericVariables extends KeyInput{
 	protected static void set_pause(boolean p_pause) { pause = p_pause;}
 	protected static void set_pause_apply(boolean p_pause_apply) { pause_apply = p_pause_apply;}
 	protected static void set_started(boolean p_started) { started = p_started;}
-	protected static void set_top(boolean p_top) { top = p_top;}
+	protected static void set_endGame(boolean p_endGame) { endGame = p_endGame;}
 	protected static void set_rotate_available(boolean p_rotate_available) { rotate_available = p_rotate_available;}
 	protected static void set_col_right_exists(boolean p_col_right_exists) { col_right_exists = p_col_right_exists;}
 	protected static void set_col_left_exists(boolean p_col_left_exists) { col_left_exists = p_col_left_exists;}
@@ -128,7 +128,7 @@ class genericVariables extends KeyInput{
 	
 	protected static void set_game_state(String p_state) { game_state = p_state; }
 	/**
-	 * Game States : welcome, running, paused
+	 * Game States : welcome, running, paused , end, exit
 	 */
     protected static void set_view_welcome_image(BufferedImage p_image) { view_welcome_image = p_image;}
 	

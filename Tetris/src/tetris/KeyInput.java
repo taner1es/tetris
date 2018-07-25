@@ -27,6 +27,14 @@ public class KeyInput {
         			if(key == KeyEvent.VK_ENTER)
         				genericVariables.set_pause_apply(true);
     				break;
+    			case "end":
+    				if(key == KeyEvent.VK_DOWN || key == KeyEvent.VK_UP) {
+            			if(genericVariables.get_pause_selection() == 0) genericVariables.set_pause_selection(genericVariables.get_pause_selection()+1);
+            			else genericVariables.set_pause_selection(genericVariables.get_pause_selection()-1);
+            		}
+        			if(key == KeyEvent.VK_ENTER)
+        				genericVariables.set_pause_apply(true);
+    				break;
     			case "running":
 	    				//pause game
 	            		if(key == KeyEvent.VK_P) {
@@ -57,7 +65,7 @@ public class KeyInput {
 	                	}*/
     				break;
     			default :
-    				System.err.println("!! ERROR : GAME STATE ");
+    				System.err.println("!! ERROR : GAME STATE @KeyInput.KeyPressed");
     				break;
     		}
         }
@@ -70,6 +78,9 @@ public class KeyInput {
     				
     				break;
     			case "paused":
+    				
+    				break;
+    			case "end":
     				
     				break;
     			case "running":
@@ -90,7 +101,7 @@ public class KeyInput {
             		}
     				break;   
     			default:
-    				System.err.println("!! ERROR : GAME STATE ");
+    				System.err.println("!! ERROR : GAME STATE @KeyInput.KeyReleased");
     				break;
     		}
     	}
