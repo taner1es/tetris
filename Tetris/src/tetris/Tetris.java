@@ -232,10 +232,10 @@ class Tetris extends genericVariables
             	for(int i = 0; i < genericVariables.get_gw_HEIGHT()/25 ; i++) {
             		g.setFont(new Font(genericVariables.get_font_type(), Font.BOLD, 11));
             		//show line numbers
-            		if(i <= 29)g.drawString(Integer.toString(i), 5, y+90);
-            		if(i != 0 && i <= 29)g.drawString(Integer.toString(i), 22*25+5, y+90);
-            		if(i != 0 && i < 23)g.drawString(Integer.toString(i), x+5, 16);
-            		if(i != 0 && i < 22) g.drawString(Integer.toString(i), x+5, 29*25+16);
+            		if(i <= 25) {
+            			g.drawString(Integer.toString(i), 5, y+90);
+            			g.drawString(Integer.toString(i), 22*25+5, y+90);
+            		}
             		//draw grid horizontal lines
                     if(i < 28 && i >= 4 ) g.drawLine(50, y,genericVariables.get_gw_WIDTH() -375,y);
                     //draw grid vertical lines
