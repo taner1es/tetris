@@ -23,14 +23,13 @@ import javax.swing.JPanel;
 
 class Tetris extends genericVariables
 {
-	
     public static void main(String... args)
     {
-        new Tetris().go();
+    	new Tetris().go();
     }
-    
     private void go()
     {
+    	//loading images before start game
     	try {
     		URL url_tetris_menu = Tetris.class.getResource("tetris_menu.png"); //gets the folder/file from runnable jar file location
     		genericVariables.set_view_welcome_image(ImageIO.read(url_tetris_menu));
@@ -342,22 +341,33 @@ class Tetris extends genericVariables
             			g.setColor(Color.YELLOW);
             			g.fill3DRect(pause_x+tab_space, pause_y+line_space*3-25 , 180, 35, true);
             			g.setColor(Color.BLACK);
-            			g.drawString("RESUME", pause_x+tab_space+35 , pause_y+line_space*3);
+            			g.drawString("RESUME", pause_x+tab_space+40 , pause_y+line_space*3);
             		}
             		else {
             			g.setColor(Color.WHITE);
-            			g.drawString("RESUME", pause_x+tab_space+35 , pause_y+line_space*3);
+            			g.drawString("RESUME", pause_x+tab_space+40 , pause_y+line_space*3);
             		}
-            		
-            		if(genericVariables.get_pause_selection() == 1) {
+        			
+        			if(genericVariables.get_pause_selection() == 1) {
             			g.setColor(Color.YELLOW);
             			g.fill3DRect(pause_x+tab_space, pause_y+line_space*4-25 , 180, 35, true);
             			g.setColor(Color.BLACK);
-            			g.drawString("EXIT", pause_x+tab_space+60 , pause_y+line_space*4);
+            			g.drawString("RESTART", pause_x+tab_space+35 , pause_y+line_space*4);
             		}
             		else {
             			g.setColor(Color.WHITE);
-            			g.drawString("EXIT", pause_x+tab_space+60 , pause_y+line_space*4);
+            			g.drawString("RESTART", pause_x+tab_space+35 , pause_y+line_space*4);
+            		}
+            		
+        			if(genericVariables.get_pause_selection() == 2) {
+            			g.setColor(Color.YELLOW);
+            			g.fill3DRect(pause_x+tab_space, pause_y+line_space*5-25 , 180, 35, true);
+            			g.setColor(Color.BLACK);
+            			g.drawString("EXIT", pause_x+tab_space+60 , pause_y+line_space*5);
+            		}
+            		else {
+            			g.setColor(Color.WHITE);
+            			g.drawString("EXIT", pause_x+tab_space+60 , pause_y+line_space*5);
             		}
             		
             		gameComponents.pause_menu_select_func();

@@ -20,9 +20,16 @@ public class KeyInput {
         				
     				break;
     			case "paused":
-    				if(key == KeyEvent.VK_DOWN || key == KeyEvent.VK_UP) {
-            			if(genericVariables.get_pause_selection() == 0) genericVariables.set_pause_selection(genericVariables.get_pause_selection()+1);
-            			else genericVariables.set_pause_selection(genericVariables.get_pause_selection()-1);
+    				if(key == KeyEvent.VK_DOWN) {
+    					if(genericVariables.get_pause_selection()+1 < 3)
+    						genericVariables.set_pause_selection(genericVariables.get_pause_selection()+1);
+    					else
+    						genericVariables.set_pause_selection(0);
+            		}else if(key == KeyEvent.VK_UP) {
+            			if(genericVariables.get_pause_selection() > 0)
+    						genericVariables.set_pause_selection(genericVariables.get_pause_selection()-1);
+    					else
+    						genericVariables.set_pause_selection(2);
             		}
         			if(key == KeyEvent.VK_ENTER)
         				genericVariables.set_pause_apply(true);

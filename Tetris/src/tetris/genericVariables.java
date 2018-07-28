@@ -104,6 +104,7 @@ class genericVariables extends KeyInput{
 	//setter methods
 	protected static void set_frame(JFrame p_frame) { frame = p_frame;}
 	protected static void set_drawPanel(DrawPanel p_drawPanel) { drawPanel = p_drawPanel;}
+	protected static void set_my_tetris(gameComponents p_gameComponents) { my_tetris = p_gameComponents;}
 	
 	protected static void set_shape_cnt(int p_shape_cnt) {shape_cnt = p_shape_cnt;}
 	protected static void set_gameSpeed(int p_gameSpeed) { gameSpeed = p_gameSpeed;}
