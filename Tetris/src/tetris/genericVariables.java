@@ -2,7 +2,8 @@ package tetris;
 
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
-import java.awt.image.BufferedImage;
+import java.awt.Image;
+import java.util.GregorianCalendar;
 
 import javax.swing.JFrame;
 
@@ -63,7 +64,10 @@ class genericVariables extends KeyInput{
 			/* 6. --> Z*/		{"AAXXXAAXXXXXXXXX","XAXXAAXXAXXXXXXX"}
 		};
 
-	static BufferedImage view_welcome_image;
+	static Image view_welcome_image;
+	static Image view_intro_image;
+	
+	static GregorianCalendar game_startedTimeStamp = new GregorianCalendar();
 	
 	//getter methods
 	protected static JFrame get_frame() { return frame;}
@@ -103,9 +107,10 @@ class genericVariables extends KeyInput{
 	protected static String get_game_state() { return game_state;}
 	protected static String[][] get_shape_codes() { return shape_codes;}
 	
-	protected static BufferedImage get_view_welcome_image() { return view_welcome_image;}
+	protected static Image get_view_welcome_image() { return view_welcome_image;}
+	protected static Image get_view_intro_image() { return view_intro_image;}
 	
-	
+	protected static GregorianCalendar get_game_startedTimeStamp() { return game_startedTimeStamp;}
 	//setter methods
 	protected static void set_frame(JFrame p_frame) { frame = p_frame;}
 	protected static void set_drawPanel(DrawPanel p_drawPanel) { drawPanel = p_drawPanel;}
@@ -138,7 +143,10 @@ class genericVariables extends KeyInput{
 	/**
 	 * Game States : welcome, running, paused , end, exit
 	 */
-    protected static void set_view_welcome_image(BufferedImage p_image) { view_welcome_image = p_image;}
+    protected static void set_view_welcome_image(Image p_image) { view_welcome_image = p_image;}
+    protected static void set_view_intro_image(Image p_image) { view_intro_image = p_image;}
+    
+    protected static void set_game_startedTimeStamp(GregorianCalendar p_Date) { game_startedTimeStamp = p_Date;}
 	
     //increase methods
     protected static void inc_frameCounter_collision_bot() { frameCounter_collision_bot++; }

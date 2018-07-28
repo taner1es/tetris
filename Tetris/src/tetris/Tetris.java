@@ -9,13 +9,14 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.io.IOException;
 import java.net.URL;
+import java.util.GregorianCalendar;
 import java.util.Vector;
 
-import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
 
 
 
@@ -28,15 +29,15 @@ class Tetris extends genericVariables
     }
     private void go()
     {
-    	//loading images before start game
-    	try {
-    		URL url_tetris_menu = Tetris.class.getResource("tetris_menu.png"); //gets the folder/file from runnable jar file location
-    		genericVariables.set_view_welcome_image(ImageIO.read(url_tetris_menu));
-    	} catch (IOException e) {	
-			// TODO Auto-generated catch block
-    		System.out.println("image loading problem.");
-			e.printStackTrace();
-		}
+    	genericVariables.set_game_startedTimeStamp(new GregorianCalendar());
+    	URL url_tetris_menu = Tetris.class.getResource("tetris_menu.png"); //gets the folder/file from runnable jar file location
+
+		URL url_tetris_intro = Tetris.class.getResource("tetris_intro.gif"); 
+
+		genericVariables.set_view_welcome_image(new ImageIcon(url_tetris_menu).getImage());
+		genericVariables.set_view_intro_image(new ImageIcon(url_tetris_intro).getImage());
+		
+		
     	//this block to configure window settings 
         genericVariables.set_frame(new JFrame("Tetris v0.13"));
         genericVariables.get_frame().setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -62,10 +63,11 @@ class Tetris extends genericVariables
     	
     	//endless loop for game running.
         while (true)
-        {
+        {	//restarting
         	if(genericVariables.get_restartGame()){
         		genericVariables.set_my_tetris(new gameComponents());
         		genericVariables.reset();
+        		genericVariables.set_game_startedTimeStamp(new GregorianCalendar());
         		moveIt();
         	}else {
 
@@ -138,14 +140,26 @@ class Tetris extends genericVariables
                 }
                 g.setColor(Color.BLACK);
                 
-                //drawings for all frames.
+                //drawings for all frames.)
             	draw_Grid(g);
             	//draw_GameInfo(g);
             	draw_Shapes(g);
             	draw_Buffer(g);
             	draw_Score(g);
+
+    			
+            	
         		if(genericVariables.get_started() && (genericVariables.get_pause() || genericVariables.get_endGame()))pause_gameLoop(g);
-        		if(!genericVariables.get_started())g.drawImage(genericVariables.get_view_welcome_image(), 0, 0, genericVariables.get_gw_WIDTH()-325, genericVariables.get_gw_HEIGHT()-25, Color.WHITE, null);
+        		if(!genericVariables.get_started() && genericVariables.get_game_state() == "welcome"){
+        			GregorianCalendar introTimeStamp = new GregorianCalendar();
+        			long millisGameStarted = game_startedTimeStamp.getTimeInMillis();
+        			long millisIntro = introTimeStamp.getTimeInMillis();
+        			int timeInterval = (int) ((millisIntro - millisGameStarted)/1000);
+        			if(timeInterval < 2) 
+        				g.drawImage(genericVariables.view_intro_image, 0, 0, genericVariables.get_gw_WIDTH(), genericVariables.get_gw_HEIGHT(), null, null);
+        			else
+        				g.drawImage(genericVariables.get_view_welcome_image(), 0, 0, genericVariables.get_gw_WIDTH(), genericVariables.get_gw_HEIGHT(), Color.WHITE, null);
+    			}
             }
             
         	private void draw_Score(Graphics g) {
@@ -177,7 +191,7 @@ class Tetris extends genericVariables
             	int draw_x;
             	int draw_y;
             	int size = 25;
-            	
+
             	Vector<shape>my_shapes = genericVariables.get_my_tetris().get_all_shapes();
             	//draw each boxes.
             	for(int k = 0 ; k < my_shapes.size();k++) {
