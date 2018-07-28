@@ -15,7 +15,6 @@ import java.util.Vector;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 
@@ -64,18 +63,25 @@ class Tetris extends genericVariables
     	//endless loop for game running.
         while (true)
         {
-        	//game running state
-        	if(!genericVariables.get_endGame() && !genericVariables.get_pause() && genericVariables.get_started()) { 
-        		run_gameLoop();
-                
-        	}else { //game paused state
-        		if(gameComponents.get_exit_game()) {
-        			break;
-        		}
+        	if(genericVariables.get_restartGame()){
+        		genericVariables.set_my_tetris(new gameComponents());
+        		genericVariables.reset();
+        		moveIt();
+        	}else {
+
+            	//game running state
+            	if(!genericVariables.get_endGame() && !genericVariables.get_pause() && genericVariables.get_started()) { 
+            		run_gameLoop();
+                    
+            	}else { //game paused state
+            		if(gameComponents.get_exit_game()) {
+            			break;
+            		}
+            	}
+            	sleep(genericVariables.get_gameSpeed());
+            	
+            	genericVariables.get_frame().repaint();
         	}
-        	sleep(genericVariables.get_gameSpeed());
-        	
-        	genericVariables.get_frame().repaint();
         }
         if(gameComponents.get_exit_game()) {
         	System.exit(0);
@@ -91,23 +97,25 @@ class Tetris extends genericVariables
 		}
     }
 	private void run_gameLoop() {
-    	shape active = genericVariables.get_my_tetris().get_all_shapes().lastElement();
-		gameComponents.checkcollisions(active);
-		
-		if(genericVariables.get_col_left_exists() || genericVariables.get_col_right_exists()) {
-			genericVariables.set_frameCounter_collision(genericVariables.get_frameCounter_collision()+1);
-		}else {
-			genericVariables.set_frameCounter_collision(0);
+		if(genericVariables.get_my_tetris().get_all_shapes() != null) {
+			shape active = genericVariables.get_my_tetris().get_all_shapes().lastElement();
+			gameComponents.checkcollisions(active);
+			
+			if(genericVariables.get_col_left_exists() || genericVariables.get_col_right_exists()) {
+				genericVariables.set_frameCounter_collision(genericVariables.get_frameCounter_collision()+1);
+			}else {
+				genericVariables.set_frameCounter_collision(0);
+			}
+	    	gameComponents.left_event();
+	    	gameComponents.right_event();
+	    	gameComponents.down_event();
+	    	
+	    	//generate new shape
+	    	if(!active.get_shape_active() && !genericVariables.get_endGame()) {
+	    		gameComponents.swap_buffered_shape_to_game();
+	    	}
+			genericVariables.set_frameCounter(genericVariables.get_frameCounter()+1);
 		}
-    	gameComponents.left_event();
-    	gameComponents.right_event();
-    	gameComponents.down_event();
-    	
-    	//generate new shape
-    	if(!active.get_shape_active() && !genericVariables.get_endGame()) {
-    		gameComponents.swap_buffered_shape_to_game();
-    	}
-		genericVariables.set_frameCounter(genericVariables.get_frameCounter()+1);
 	}
 	
     @SuppressWarnings("serial")
@@ -245,7 +253,8 @@ class Tetris extends genericVariables
                     x+=25;
             	}
             }
-            private void draw_GameInfo(Graphics g) {
+            @SuppressWarnings("unused")
+			private void draw_GameInfo(Graphics g) {
             	//this block written to check game mechanics are working well or not by seeing all the values about.
             	g.setColor(Color.BLACK);
             	int x = 23*25+3;
@@ -321,7 +330,6 @@ class Tetris extends genericVariables
         		int pause_y = 150;
         		int line_space = 50;
         		int tab_space = 30;
-        		String menu_title = null;
 
         		g.setColor(Color.GRAY);
         		g.fill3DRect(pause_x, pause_y, 250, 300, false);

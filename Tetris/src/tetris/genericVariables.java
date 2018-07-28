@@ -43,6 +43,7 @@ class genericVariables extends KeyInput{
 	private static boolean pause_apply = false;
 	private static boolean started = false; //record game started or not
 	private static boolean endGame = false;
+	private static boolean restartGame = false;
 	private static boolean rotate_available = true;
 	private static boolean col_right_exists = false;
 	private static boolean col_left_exists = false;
@@ -89,6 +90,7 @@ class genericVariables extends KeyInput{
 	protected static boolean get_pause_apply() { return pause_apply;}
 	protected static boolean get_started() { return started;}
 	protected static boolean get_endGame() { return endGame;}
+	protected static boolean get_restartGame() { return restartGame;}
 	protected static boolean get_rotate_available() { return rotate_available;}
 	protected static boolean get_col_right_exists() { return col_right_exists;}
 	protected static boolean get_col_left_exists() { return col_left_exists;}
@@ -122,6 +124,7 @@ class genericVariables extends KeyInput{
 	protected static void set_pause_apply(boolean p_pause_apply) { pause_apply = p_pause_apply;}
 	protected static void set_started(boolean p_started) { started = p_started;}
 	protected static void set_endGame(boolean p_endGame) { endGame = p_endGame;}
+	protected static void set_restartGame(boolean p_restartGame) { restartGame = p_restartGame;}
 	protected static void set_rotate_available(boolean p_rotate_available) { rotate_available = p_rotate_available;}
 	protected static void set_col_right_exists(boolean p_col_right_exists) { col_right_exists = p_col_right_exists;}
 	protected static void set_col_left_exists(boolean p_col_left_exists) { col_left_exists = p_col_left_exists;}
@@ -137,6 +140,32 @@ class genericVariables extends KeyInput{
     protected static void inc_frameCounter_collision_bot() { frameCounter_collision_bot++; }
     
     
+    
+    protected static void reset() {
+    	shape_cnt = 0;
+    	frameCounter_left = 0;
+    	frameCounter_right = 0;
+    	frameCounter_collision = 0;
+    	frameCounter_collision_bot = 0;
+    	gameSpeed = 16; //lower value has more speed // 16 gameSpeed draws 60 fps
+    	frameCounter = 0;
+    	pause_selection = 0;
+    	
+    	left = false;
+    	right = false;
+    	down = false;
+    	pause = false;
+    	pause_apply = false;
+    	started = false;
+    	endGame = false;
+    	restartGame = false;
+    	rotate_available = true;
+    	col_right_exists = false;
+    	col_left_exists = false;
+    	col_bot_exists = false;
+
+    	game_state = "welcome";
+    }
     
     
     

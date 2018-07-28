@@ -37,7 +37,6 @@ class gameComponents extends genericVariables{
 			explode_lines[i] = 0;
 		}
 	}
-	
 	//let user select one of the options on the view during pause menu
 	protected static void pause_menu_select_func() {
 		switch(genericVariables.get_game_state()) {
@@ -45,20 +44,21 @@ class gameComponents extends genericVariables{
 				if(genericVariables.get_pause_apply()) {
 					switch(genericVariables.get_pause_selection()) {
 						case 0:
-							genericVariables.set_pause(false);
-							genericVariables.set_game_state("running");
-							genericVariables.set_pause_apply(false);
+								genericVariables.set_pause(false);
+								genericVariables.set_game_state("running");
+								genericVariables.set_pause_apply(false);
 							break;
 						case 1:
 							//TODO 
-
+								genericVariables.set_restartGame(true);
 							break;
 						case 2:
-							gameComponents.set_exit_game(true);
-							genericVariables.set_game_state("exit");
+								gameComponents.set_exit_game(true);
+								genericVariables.set_game_state("exit");
 							break;
 						default:
-							System.err.println("pause menu selection apply problem.");
+								System.err.println("pause menu selection apply problem.");
+							break;
 					}
 				}
 				break;
@@ -114,7 +114,7 @@ class gameComponents extends genericVariables{
 				code = genericVariables.get_shape_codes()[type_no][rot_no];
 			}
 			shape rotatedshape;
-			rotatedshape = stringtoShape(code,type,type_no,rot_no,actual_x,actual_y);
+			rotatedshape = stringtoShape(code,type,type_no,rot_no,actual_x,actual_y-25);
 			rotatedshape.set_shape_active(false);
 			if(checkcollisions(rotatedshape)) {
 				rotatedshape.set_shape_active(true);
@@ -231,7 +231,6 @@ class gameComponents extends genericVariables{
 						if(sh.sh_boxes.get(k) != null) {
 							bx = sh.sh_boxes.get(k);
 							line_no = (bx.get_box_y() / 25) - 3;
-							System.out.println("line no : " + line_no);
 							if(line_no <= 0) {
 								gameOver();
 							}else if(genericVariables.get_game_state() == "running") {

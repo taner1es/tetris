@@ -21,6 +21,8 @@ public class KeyInput {
     				break;
     			case "paused":
     				if(key == KeyEvent.VK_DOWN) {
+            			/*if(genericVariables.get_pause_selection() == 0) genericVariables.set_pause_selection(genericVariables.get_pause_selection()+1);
+            			else genericVariables.set_pause_selection(genericVariables.get_pause_selection()-1);*/
     					if(genericVariables.get_pause_selection()+1 < 3)
     						genericVariables.set_pause_selection(genericVariables.get_pause_selection()+1);
     					else
