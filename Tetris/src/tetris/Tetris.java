@@ -143,10 +143,34 @@ class Tetris extends genericVariables
             	//draw_GameInfo(g);
             	draw_Shapes(g);
             	draw_Buffer(g);
+            	draw_Score(g);
         		if(genericVariables.get_started() && (genericVariables.get_pause() || genericVariables.get_endGame()))pause_gameLoop(g);
         		if(!genericVariables.get_started())g.drawImage(genericVariables.get_view_welcome_image(), 0, 0, genericVariables.get_gw_WIDTH()-325, genericVariables.get_gw_HEIGHT()-25, Color.WHITE, null);
             }
             
+        	private void draw_Score(Graphics g) {
+        		//buffer frame vertical edges
+            	g.setColor(Color.MAGENTA);
+            	for(int i = 1 ; i <= 5 ; i++) {
+            		g.fill3DRect(600, 575+(i*25), 25, 25,false);
+            		g.fill3DRect(825, 575+(i*25), 25, 25,false);
+            	}
+            	//buffer frame horizontal edges
+            	for(int i = 1 ; i <= 8 ; i++) {
+            		g.fill3DRect(600+(i*25), 600, 25, 25,false);
+            		g.fill3DRect(600+(i*25), 700, 25, 25,false);
+            	}
+            	//buffer frame background
+            	g.setColor(Color.DARK_GRAY);
+            	g.fill3DRect(625, 625, 200, 75,false);
+            	
+            	//point
+            	String score = Integer.toString(genericVariables.get_score());
+            	g.setColor(Color.white);
+        		g.setFont(new Font(genericVariables.get_font_type(), Font.BOLD, 30));
+            	g.drawString(score, 675, 670);
+            	
+        	}
             private void draw_Shapes(Graphics g) {
             	//string are created with 16 characters for indexing think it 0-15 each 4 grouped character dedicated to a single line.think like 4x4 matrix compressed a string value to get it easier.
             	//drawing formula from string to graphic like : shape type "I": AXXX-AXXX-AXXX-AXXX
@@ -196,10 +220,6 @@ class Tetris extends genericVariables
             	//buffer frame background
             	g.setColor(Color.DARK_GRAY);
             	g.fill3DRect(625, 100, 200, 400,false);
-            	/*g.fill3DRect(625, 50, 200, 25,false);
-            	g.fill3DRect(825, 50, 25, 400,false);
-            	g.fill3DRect(625, 425, 200, 25,false);
-            	*/
             	int draw_x;
             	int draw_y;
             	int size = 25;

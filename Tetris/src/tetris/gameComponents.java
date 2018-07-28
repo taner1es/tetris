@@ -49,7 +49,6 @@ class gameComponents extends genericVariables{
 								genericVariables.set_pause_apply(false);
 							break;
 						case 1:
-							//TODO 
 								genericVariables.set_restartGame(true);
 							break;
 						case 2:
@@ -66,9 +65,7 @@ class gameComponents extends genericVariables{
 				if(genericVariables.get_pause_apply()) {
 					switch(genericVariables.get_pause_selection()) {
 						case 0:
-							genericVariables.set_pause(false);
-							genericVariables.set_game_state("welcome");
-							genericVariables.set_pause_apply(false);
+							genericVariables.set_restartGame(true);
 							break;
 						case 1:
 							gameComponents.set_exit_game(true);
@@ -283,6 +280,7 @@ class gameComponents extends genericVariables{
     	if(counter == 19) {
     		genericVariables.get_my_tetris().get_explode_lines()[line_number] = 0;
     		drop_upper_boxes(line_number);
+    		genericVariables.set_score(genericVariables.get_score()+250);
     	}
     		
     }

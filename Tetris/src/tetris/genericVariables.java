@@ -35,6 +35,7 @@ class genericVariables extends KeyInput{
 	private static int gameSpeed = 16; //lower value has more speed // 16 gameSpeed draws 60 fps
 	private static int frameCounter = 0;
 	private static int pause_selection = 0;
+	private static int score = 0;
 	
 	private static boolean left;
 	private static boolean right;
@@ -82,6 +83,8 @@ class genericVariables extends KeyInput{
 	protected static int get_frameCounter_collision_bot() { return frameCounter_collision_bot;}
 	protected static int get_gameSpeed() { return gameSpeed;}
 	protected static int get_pause_selection() { return pause_selection;}
+	protected static int get_score() { return score;}
+	
 	
 	protected static boolean get_left() { return left;}
 	protected static boolean get_right() { return right;}
@@ -116,6 +119,7 @@ class genericVariables extends KeyInput{
 	protected static void set_frameCounter_right(int p_frameCounter_right) { frameCounter_right = p_frameCounter_right;}
 	protected static void set_frameCounter_collision(int p_frameCounter_collision) { frameCounter_collision = p_frameCounter_collision;}
 	protected static void set_frameCounter_collision_bot(int p_frameCounter_collision_bot) { frameCounter_collision_bot = p_frameCounter_collision_bot;}
+	protected static void set_score(int p_score) { score = p_score;}
 	
 	protected static void set_left(boolean p_left) { left = p_left;}
 	protected static void set_right(boolean p_right) { right = p_right;}
@@ -165,6 +169,7 @@ class genericVariables extends KeyInput{
     	col_bot_exists = false;
 
     	game_state = "welcome";
+    	score = 0;
     }
     
     
