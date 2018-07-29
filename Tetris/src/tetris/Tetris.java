@@ -31,11 +31,12 @@ class Tetris extends genericVariables
     {
     	genericVariables.set_game_startedTimeStamp(new GregorianCalendar());
     	URL url_tetris_menu = Tetris.class.getResource("tetris_menu.png"); //gets the folder/file from runnable jar file location
-
 		URL url_tetris_intro = Tetris.class.getResource("tetris_intro.gif"); 
+		URL url_tetris_bg = Tetris.class.getResource("tetris_bg.png"); 
 
 		genericVariables.set_view_welcome_image(new ImageIcon(url_tetris_menu).getImage());
 		genericVariables.set_view_intro_image(new ImageIcon(url_tetris_intro).getImage());
+		genericVariables.set_view_bg_image(new ImageIcon(url_tetris_bg).getImage());
 		
 		
     	//this block to configure window settings 
@@ -48,7 +49,7 @@ class Tetris extends genericVariables
         genericVariables.get_frame().getContentPane().add(BorderLayout.CENTER, genericVariables.get_drawPanel());
 
         genericVariables.get_frame().setResizable(false);
-        genericVariables.get_frame().setUndecorated(false);
+        genericVariables.get_frame().setUndecorated(true);
         genericVariables.get_frame().setSize(genericVariables.get_gw_WIDTH(), genericVariables.get_gw_HEIGHT());
         genericVariables.get_frame().setLocation(genericVariables.get_s_WIDTH()/ 4, 0);
         genericVariables.get_frame().setVisible(true);
@@ -127,22 +128,11 @@ class Tetris extends genericVariables
         	@Override
 			protected void paintComponent(Graphics g)
             {
-        		//BORDER BLOCKS
-            	//Left & Right side blocks
-                g.setColor(Color.RED);
-                for(int i = 0 ; i < 26 ; i++) {
-                	g.fill3DRect(25, 3*25 + (i*25), 25, 25,false);
-                	g.fill3DRect(21*25, 3*25 + (i*25), 25, 25,false);
-                }
-                //bottom side block
-                for(int i = 0 ; i < 20 ; i++) {
-                	g.fill3DRect(2*25 + (i*25), 28*25, 25, 25,false);
-                }
-                g.setColor(Color.BLACK);
-                
+        		draw_Grid(g);
+        		draw_MainBorders(g);
+        		
                 //drawings for all frames.)
-            	draw_Grid(g);
-            	//draw_GameInfo(g);
+            	
             	draw_Shapes(g);
             	draw_Buffer(g);
             	draw_Score(g);
@@ -162,21 +152,96 @@ class Tetris extends genericVariables
     			}
             }
             
-        	private void draw_Score(Graphics g) {
-        		//buffer frame vertical edges
-            	g.setColor(Color.MAGENTA);
-            	for(int i = 1 ; i <= 5 ; i++) {
-            		g.fill3DRect(600, 575+(i*25), 25, 25,false);
-            		g.fill3DRect(825, 575+(i*25), 25, 25,false);
-            	}
-            	//buffer frame horizontal edges
-            	for(int i = 1 ; i <= 8 ; i++) {
-            		g.fill3DRect(600+(i*25), 600, 25, 25,false);
-            		g.fill3DRect(600+(i*25), 700, 25, 25,false);
-            	}
-            	//buffer frame background
+        	private void draw_MainBorders(Graphics g) {
+        		int size = 25;
+        		Color color_back = Color.BLACK;
+        		Color color_front = new Color(232, 104, 104);
+        		
+        		g.drawImage(genericVariables.get_view_bg_image(), 0, 0, genericVariables.get_gw_WIDTH(), genericVariables.get_gw_HEIGHT(), Color.WHITE, null);
+            	
+        		
+        		
+        		//draw container for score, buffer and game area
+            	g.setColor(new Color(104, 155, 232));
+            	g.fillRect(25-3, 3*25-3, 33*25+6, 26*25+6);
+            	
+            	//paint game area background
             	g.setColor(Color.DARK_GRAY);
-            	g.fill3DRect(625, 625, 200, 75,false);
+            	g.fillRect(50, 3*25, 19*25, 25*25);
+        		
+        		//BORDER BLOCKS
+                //Left & Right side blocks
+                for(int i = 0 ; i < 26 ; i++) {
+                	g.setColor(color_back);
+                	g.fillRect(size, 3*size + (i*size), size, size);
+                	g.fillRect(21*size, 3*size + (i*size), size, size);
+                	
+                	g.setColor(color_front);
+                	g.fill3DRect(size+1, 3*size + (i*size)+1, size-2, size-2,true);
+                	g.fill3DRect(21*size+1, 3*size + (i*size)+1, size-2, size-2,true);
+                	
+                	if(i < 20) {
+                		g.setColor(color_back);
+                		g.fillRect(2*size + (i*size), 28*size, size, size);
+                		g.setColor(color_front);
+                		g.fill3DRect(2*size + (i*size)+1, 28*size+1, size-2, size-2,true);
+                	}
+                }
+                //game screen border deactivated.
+               /* int size_small = 20;
+            	int right_end = genericVariables.get_gw_WIDTH();
+            	int bottom_end = genericVariables.get_gw_HEIGHT();
+                
+            	g.setColor(color_back);
+            	//verticals
+            	g.fillRect(0,0, size_small , bottom_end);
+            	g.fillRect(right_end-size_small,0,size_small,bottom_end);
+            	//horizontals
+            	g.fillRect(size_small, 0, right_end-size_small, size_small);
+            	g.fillRect(size_small, bottom_end-size_small, right_end-size_small, size_small);
+            	
+            	g.setColor(new Color(104, 232, 159));
+                for(int i = 0 ; i < right_end/size_small; i++) {
+                	//verticals
+                	if(i < bottom_end/size_small) {
+                		g.fill3DRect(0+1,(i*size_small)+1, size_small-2, size_small-2,true);
+                    	g.fill3DRect(right_end-size_small+1,(i*size_small)+1, size_small-2, size_small-2,true);
+                	}
+                	//horizontals
+                	g.fill3DRect((i*size_small)+1,0+1,size_small-2,size_small-2,true);
+                	g.fill3DRect((i*size_small)+1,bottom_end-size_small+1, size_small-2, size_small-2,true);
+        		}*/
+			}
+        	
+
+			private void draw_Score(Graphics g) {
+				int size = 25;
+				Color color_back = Color.black;
+				Color color_front = new Color(232, 232, 104);
+				
+            	for(int i = 1 ; i <= 8 ; i++) {
+            		//score frame vertical edges
+            		if(i <= 5) {
+                    	g.setColor(color_back);
+                    	g.fillRect(600, 575+(i*size), size, size);
+                    	g.fillRect(825, 575+(i*size), size, size);
+
+                    	g.setColor(color_front);
+                    	g.fill3DRect(600+1, 575+(i*size)+1, size-2, size-2,true);
+                    	g.fill3DRect(825+1, 575+(i*size)+1, size-2, size-2,true);
+            		}
+            		//score frame horizontal edges
+            		g.setColor(color_back);
+                	g.fillRect(600+(i*size), 600, size, size);
+                	g.fillRect(600+(i*size), 700, size, size);
+                	
+                	g.setColor(color_front);
+            		g.fill3DRect(600+(i*size)+1, 600+1, size-2, size-2,true);
+            		g.fill3DRect(600+(i*size)+1, 700+1, size-2, size-2,true);
+            	}
+            	//score frame background
+            	g.setColor(Color.DARK_GRAY);
+            	g.fillRect(625, 625, 200, 75);
             	
             	//point
             	String score = Integer.toString(genericVariables.get_score());
@@ -201,6 +266,8 @@ class Tetris extends genericVariables
             				{
             					draw_x = my_shapes.get(k).sh_boxes.get(i).get_box_x();
                     			draw_y = my_shapes.get(k).sh_boxes.get(i).get_box_y();
+                    			g.setColor(Color.BLACK);
+                    			g.fillRect(draw_x, draw_y, size, size);
                     			switch(my_shapes.get(k).get_shape_type()) {
                     				case "I": g.setColor(Color.GREEN);break;
         	            				case "L":g.setColor(Color.MAGENTA);break;
@@ -210,7 +277,8 @@ class Tetris extends genericVariables
         					            				case "S":g.setColor(Color.CYAN);break;
         						            				case "Z":g.setColor(Color.ORANGE);break;
                     			}
-                				g.fill3DRect(draw_x, draw_y, size, size,false);
+                    			g.fill3DRect(draw_x+1, draw_y+1, size-2, size-2,true);
+                    			//g.fillRect(draw_x+1, draw_y+1, size-2, size-2);
                 				//g.drawString(Integer.toString(i), draw_x+3, draw_y+17); //draws box numbers.
             				}
                 		}
@@ -220,23 +288,35 @@ class Tetris extends genericVariables
             }
             
             private void draw_Buffer(Graphics g) {
-            	//buffer frame vertical edges
-            	g.setColor(Color.MAGENTA);
+            	int size = 25;
+            	int draw_x;
+            	int draw_y;
+            	
+            	Color color_back = Color.black;
+            	Color color_front = new Color(115, 232, 104);
             	for(int i = 1 ; i <= 18 ; i++) {
-            		g.fill3DRect(600, 50+(i*25), 25, 25,false);
-            		g.fill3DRect(825, 50+(i*25), 25, 25,false);
-            	}
-            	//buffer frame horizontal edges
-            	for(int i = 1 ; i <= 8 ; i++) {
-            		g.fill3DRect(600+(i*25), 75, 25, 25,false);
-            		g.fill3DRect(600+(i*25), 500, 25, 25,false);
+                	//buffer frame horizontal edges
+            		if(i <= 8) {
+                    	g.setColor(color_back);
+                    	g.fillRect(600+(i*size), 75, size, size);
+                    	g.fillRect(600+(i*size), 500, size, size);
+
+                    	g.setColor(color_front);
+                    	g.fill3DRect(600+(i*size)+1, 75+1, size-2, size-2,true);
+                    	g.fill3DRect(600+(i*size)+1, 500+1, size-2, size-2,true);
+            		}
+                	//buffer frame vertical edges
+                	g.setColor(color_back);
+                	g.fillRect(600, 50+(i*size), size, size);
+                	g.fillRect(825, 50+(i*size), size, size);
+
+                	g.setColor(color_front);
+                	g.fill3DRect(600+1, 50+(i*size)+1, size-2, size-2,true);
+                	g.fill3DRect(825+1, 50+(i*size)+1, size-2, size-2,true);
             	}
             	//buffer frame background
             	g.setColor(Color.DARK_GRAY);
-            	g.fill3DRect(625, 100, 200, 400,false);
-            	int draw_x;
-            	int draw_y;
-            	int size = 25;
+            	g.fillRect(625, 100, 200, 400);
             	
             	Vector<shape>my_shapes = gameComponents.get_buffered_shapes();
             	//draw each boxes.
@@ -247,6 +327,8 @@ class Tetris extends genericVariables
             				{
             					draw_x = my_shapes.get(k).sh_boxes.get(i).get_box_x();
                     			draw_y = my_shapes.get(k).sh_boxes.get(i).get_box_y();
+                    			g.setColor(Color.BLACK);
+                    			g.fillRect((draw_x + 420), (draw_y + k*125 +100), size, size);
                     			switch(my_shapes.get(k).get_shape_type()) {
                     				case "I": g.setColor(Color.GREEN);break;
         	            				case "L":g.setColor(Color.MAGENTA);break;
@@ -256,7 +338,8 @@ class Tetris extends genericVariables
         					            				case "S":g.setColor(Color.CYAN);break;
         						            				case "Z":g.setColor(Color.ORANGE);break;
                     			}
-                				g.fill3DRect((draw_x + 420), (draw_y + k*125 +100), size, size,false);
+                    			g.fill3DRect((draw_x + 420)+1, (draw_y + k*125 +100)+1, size-2, size-2,true);
+                				//g.fill3DRect((draw_x + 420), (draw_y + k*125 +100), size, size,false);
                 				//g.drawString(Integer.toString(i), draw_x+3, draw_y+17);
             				}
                 		}
@@ -267,16 +350,19 @@ class Tetris extends genericVariables
             
             private void draw_Grid(Graphics g) {
             	//Draw Grid with 25x25 blocks and shows line numbers
-                g.setColor(Color.BLACK);
+            	
+                //paint grid lines
+            	g.setColor(Color.BLACK);
             	int x = 0;
             	int y = 0;
             	for(int i = 0; i < genericVariables.get_gw_HEIGHT()/25 ; i++) {
             		g.setFont(new Font(genericVariables.get_font_type(), Font.BOLD, 11));
             		//show line numbers
+            		/*
             		if(i <= 25) {
             			g.drawString(Integer.toString(i), 5, y+90);
             			g.drawString(Integer.toString(i), 22*25+5, y+90);
-            		}
+            		}*/
             		//draw grid horizontal lines
                     if(i < 28 && i >= 4 ) g.drawLine(50, y,genericVariables.get_gw_WIDTH() -375,y);
                     //draw grid vertical lines
@@ -287,100 +373,58 @@ class Tetris extends genericVariables
                     x+=25;
             	}
             }
-            @SuppressWarnings("unused")
-			private void draw_GameInfo(Graphics g) {
-            	//this block written to check game mechanics are working well or not by seeing all the values about.
-            	g.setColor(Color.BLACK);
-            	int x = 23*25+3;
-            	int y = 19;
-            	//int size = genericVariables.get_my_tetris().get_all_shapes().size()-1;
-        		g.setFont(new Font(genericVariables.get_font_type(), Font.BOLD, 15));
-        		
-
-            	//temporary section
-            	g.drawString("left : "+ genericVariables.get_left(), x, y);
-            	g.drawString("right : "+ genericVariables.get_right(), x, y+=25);
-            	g.drawString("down : "+ genericVariables.get_down(), x, y+=25);
-            	g.drawString("rotate_available : " + genericVariables.get_rotate_available(), x, y+=25);
-        		g.drawString("shape_active : " + gameComponents.get_my_tetris().get_all_shapes().lastElement().get_shape_active(), x, y+=25);
-        		g.drawString("shape_type : " + gameComponents.get_my_tetris().get_all_shapes().lastElement().get_shape_type(), x, y+=25);
-        		g.drawString("shape_type : " + gameComponents.get_my_tetris().get_all_shapes().lastElement().get_shape_type(), x, y+=25);
-        		g.drawString("all_shape_cnt : " + genericVariables.get_shape_cnt(), x, y+=25);
-        		g.drawString("shape_id : " + gameComponents.get_my_tetris().get_all_shapes().lastElement().get_shape_id(), x, y+=25);
-        		g.drawString("frameCounter : " + genericVariables.get_frameCounter(), x, y+=25);
-        		g.drawString("frameCounter_Left : " + genericVariables.get_frameCounter_left(), x, y+=25);
-            	
-            	
-            	//select active shape
-            	/*shape sh_last_index = null;
-            	if(genericVariables.get_my_tetris().get_all_shapes().size() > 0 )
-            		sh_last_index = genericVariables.get_my_tetris().get_all_shapes().lastElement();
-        		//Draw active shape boxes informations
-        		g.drawString("ACTIVE SHAPE  SHAPE NO --> "+ size, x, y);
-        		y+=25;
-        		//Draw active shape type
-        		g.drawString("ACTIVE SHAPE  SHAPE TYPE --> "+ sh_last_index.get_shape_type(), x, y);
-        		y+=25;
-        		
-        		for(int i = 0 ; i< 4 ; i++) {
-        			g.drawString("shape["+size+"].(x,y) : (" +
-        						Integer.toString(sh_last_index.get_shape_loc_X())
-        						+","+
-        						Integer.toString(sh_last_index.get_shape_loc_Y())+")", x, y);
-        			y+=25;
-        		}*/
-        		//Draw passive boxes locations on right bar
-        		/*g.drawString("PASSIVE SHAPE LIST ~ TOTAL --> "+ size, x, y);
-        		int k;
-        		if(genericVariables.get_my_tetris().get_all_shapes().size() >= 5 )
-        			k = genericVariables.get_my_tetris().get_all_shapes().size()-5;
-        		else 
-        			k = 0;
-        		for(; k< genericVariables.get_my_tetris().get_all_shapes().size() ; k++) {
-        			y+=25;
-        			if(genericVariables.get_my_tetris().get_all_shapes().get(k) != null)
-        			{
-            			for(int i = 0 ; i< 4 ; i++) {
-            				if(genericVariables.get_my_tetris().get_all_shapes().get(k).sh_boxes.get(i) != null)
-            				{
-                				g.drawString("shape["+k+"]box["+i+"].(x,y) : (" +
-                						Integer.toString(genericVariables.get_my_tetris().get_all_shapes().get(k).sh_boxes.get(i).get_box_x())
-                						+","+
-                						Integer.toString(genericVariables.get_my_tetris().get_all_shapes().get(k).sh_boxes.get(i).get_box_y())
-                						+")", 
-                						x, y);
-                				y+=25;
-            					
-            				}
-            			}
-        				
-        			}
-        		}*/
-        	}
             
             @SuppressWarnings("null")
         	private void pause_gameLoop(Graphics g) {
+            	Color color_back = Color.BLACK;
+            	Color color_front = new Color(104, 106, 232);
+            	Color color_selection = new Color(229, 232, 104);
+            	
+            	int size = 25;
         		int pause_x = 200;
         		int pause_y = 150;
-        		int line_space = 50;
-        		int tab_space = 30;
-
-        		g.setColor(Color.GRAY);
-        		g.fill3DRect(pause_x, pause_y, 250, 300, false);
+        		int line_space = 47;
+        		int tab_space = 47;
+        		
+        		g.setColor(new Color(163, 104, 232));
+        		g.fillRect(pause_x, pause_y, 250, 300);
         		g.setFont(new Font(genericVariables.get_font_type(), Font.BOLD, 25));
+        		
+        		//pause frame
+        		for(int i = 0 ; i <= 11 ; i++) {
+            		//pause frame horizontal edges
+            		if(i <= 8) {
+                    	g.setColor(color_back);
+                    	g.fillRect(pause_x+(size*i)+25, pause_y, size, size );
+                    	g.fillRect(pause_x+(size*i)+25, pause_y+275, size, size);
 
+                    	g.setColor(color_front);
+                    	g.fill3DRect(pause_x+(size*i)+1+25, pause_y+1, size-2, size-2 ,true);
+                    	g.fill3DRect(pause_x+(size*i)+25+1, pause_y+275+1, size-2, size-2,true);
+            		}
+
+                	//pause frame vertical edges
+                	g.setColor(color_back);
+                	g.fillRect(pause_x, pause_y+(size*i), size, size );
+                	g.fillRect(pause_x+250, pause_y+(size*i), size, size);
+
+                	g.setColor(color_front);
+                	g.fill3DRect(pause_x+1, pause_y+(size*i)+1, size-2, size-2,true);
+                	g.fill3DRect(pause_x+250+1, pause_y+(size*i)+1, size-2, size-2,true);
+        		}
+
+    			g.setColor(new Color(219, 232, 104));
+        		g.fillRect(pause_x+25, pause_y+line_space*2, 225, 5);
         		
         		switch(genericVariables.get_game_state()) {
         		case "paused" :
 
             		g.setColor(Color.WHITE);
-        			g.drawString("! PAUSED !", pause_x+tab_space+25 , pause_y+line_space);
+        			g.drawString("! PAUSED !", pause_x+tab_space+27 , pause_y+line_space+20);
             		
-        			g.setColor(Color.YELLOW);
-            		g.fill3DRect(pause_x, pause_y+line_space*2-25, 250, 5, false);
             		
         			if(genericVariables.get_pause_selection() == 0){
-            			g.setColor(Color.YELLOW);
+            			g.setColor(color_selection);
             			g.fill3DRect(pause_x+tab_space, pause_y+line_space*3-25 , 180, 35, true);
             			g.setColor(Color.BLACK);
             			g.drawString("RESUME", pause_x+tab_space+40 , pause_y+line_space*3);
@@ -391,7 +435,7 @@ class Tetris extends genericVariables
             		}
         			
         			if(genericVariables.get_pause_selection() == 1) {
-            			g.setColor(Color.YELLOW);
+            			g.setColor(color_selection);
             			g.fill3DRect(pause_x+tab_space, pause_y+line_space*4-25 , 180, 35, true);
             			g.setColor(Color.BLACK);
             			g.drawString("RESTART", pause_x+tab_space+35 , pause_y+line_space*4);
@@ -402,7 +446,7 @@ class Tetris extends genericVariables
             		}
             		
         			if(genericVariables.get_pause_selection() == 2) {
-            			g.setColor(Color.YELLOW);
+            			g.setColor(color_selection);
             			g.fill3DRect(pause_x+tab_space, pause_y+line_space*5-25 , 180, 35, true);
             			g.setColor(Color.BLACK);
             			g.drawString("EXIT", pause_x+tab_space+60 , pause_y+line_space*5);
@@ -417,13 +461,10 @@ class Tetris extends genericVariables
             	
         		case "end":
             		g.setColor(Color.WHITE);
-        			g.drawString("! END !", pause_x+tab_space+50 , pause_y+line_space);
-            		
-        			g.setColor(Color.YELLOW);
-            		g.fill3DRect(pause_x, pause_y+line_space*2-25, 250, 5, false);
+        			g.drawString("! END !", pause_x+tab_space+52 , pause_y+line_space+20);
             		
         			if(genericVariables.get_pause_selection() == 0){
-            			g.setColor(Color.YELLOW);
+            			g.setColor(color_selection);
             			g.fill3DRect(pause_x+tab_space, pause_y+line_space*3-25 , 180, 35, true);
             			g.setColor(Color.BLACK);
             			g.drawString("RESTART", pause_x+tab_space+35 , pause_y+line_space*3);
@@ -434,7 +475,7 @@ class Tetris extends genericVariables
             		}
             		
             		if(genericVariables.get_pause_selection() == 1) {
-            			g.setColor(Color.YELLOW);
+            			g.setColor(color_selection);
             			g.fill3DRect(pause_x+tab_space, pause_y+line_space*4-25 , 180, 35, true);
             			g.setColor(Color.BLACK);
             			g.drawString("EXIT", pause_x+tab_space+60 , pause_y+line_space*4);
