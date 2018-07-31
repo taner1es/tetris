@@ -217,6 +217,7 @@ class gameComponents extends genericVariables{
 	//check for exploding lines
     private static void check_exploding_line() {
     	genericVariables.get_my_tetris().reset_explode_lines();
+    	genericVariables.set_score_multiplier(0);
 		shape sh;
 		box bx;
 		int line_no;
@@ -234,6 +235,7 @@ class gameComponents extends genericVariables{
 								genericVariables.get_my_tetris().get_explode_lines()[line_no]++;
 								if(genericVariables.get_my_tetris().get_explode_lines()[line_no] == 19) {
 									explode_line(line_no);
+									genericVariables.set_score_multiplier(genericVariables.get_score_multiplier()+1);
 								}
 							}else {
 								break;
@@ -244,8 +246,8 @@ class gameComponents extends genericVariables{
 			}else {
 				break;
 			}
-			
 		}
+		genericVariables.set_score(genericVariables.get_score()+(250*genericVariables.get_score_multiplier()));
     }
     
     private static void gameOver(){
@@ -280,7 +282,6 @@ class gameComponents extends genericVariables{
     	if(counter == 19) {
     		genericVariables.get_my_tetris().get_explode_lines()[line_number] = 0;
     		drop_upper_boxes(line_number);
-    		genericVariables.set_score(genericVariables.get_score()+250);
     	}
     		
     }

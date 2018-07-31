@@ -1,6 +1,6 @@
 package tetris;
 /*
- * Version No : 0.13
+ * Version No : 0.16
  * Version Notes : 
  *  @Author : Taner Esmeroğlu
  */
@@ -40,7 +40,7 @@ class Tetris extends genericVariables
 		
 		
     	//this block to configure window settings 
-        genericVariables.set_frame(new JFrame("Tetris v0.13"));
+        genericVariables.set_frame(new JFrame("Tetris"));
         genericVariables.get_frame().setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         genericVariables.get_frame().addKeyListener(new ActionListener());
         genericVariables.set_drawPanel(new DrawPanel());
