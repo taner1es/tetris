@@ -21,8 +21,6 @@ public class KeyInput {
     				break;
     			case "paused":
     				if(key == KeyEvent.VK_DOWN) {
-            			/*if(genericVariables.get_pause_selection() == 0) genericVariables.set_pause_selection(genericVariables.get_pause_selection()+1);
-            			else genericVariables.set_pause_selection(genericVariables.get_pause_selection()-1);*/
     					if(genericVariables.get_pause_selection()+1 < 3)
     						genericVariables.set_pause_selection(genericVariables.get_pause_selection()+1);
     					else
@@ -57,7 +55,10 @@ public class KeyInput {
 	            		}
 	            		if(key == KeyEvent.VK_DOWN) {
 	            			genericVariables.set_down(true);
-	            			genericVariables.set_gameSpeed(1);
+		            		genericVariables.set_speed_down(genericVariables.get_speed_game()/10);
+
+		                	System.out.println("speed_game : " + genericVariables.get_speed_game());
+		                	System.out.println("speed_down : " + genericVariables.get_speed_down());
 	            		}
 	            		//move shape
 	                	if(key == KeyEvent.VK_RIGHT) {
@@ -102,8 +103,8 @@ public class KeyInput {
     	    			genericVariables.set_left(false);
     	    		}
             		if(key == KeyEvent.VK_DOWN) {
-            			genericVariables.set_gameSpeed(16);
             			genericVariables.set_down(false);
+            			genericVariables.set_speed_down(genericVariables.get_speed_game());
             		}
             		if(key == KeyEvent.VK_SPACE && !genericVariables.get_rotate_available()) {
             			genericVariables.set_rotate_available(true);

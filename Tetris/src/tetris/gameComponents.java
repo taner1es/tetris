@@ -142,7 +142,7 @@ class gameComponents extends genericVariables{
 				if(genericVariables.get_frameCounter_left() == 1 ) {
 	    			active.go_left();
 	        		genericVariables.set_frameCounter_left(genericVariables.get_frameCounter_left()+1);
-	    		}else if(genericVariables.get_frameCounter_left() >= 10) {
+	    		}else if(genericVariables.get_frameCounter_left() >= genericVariables.get_speed_game()/3) {
 	    			active.go_left();
 	    			genericVariables.set_frameCounter_left(2);
 	    		}else {
@@ -153,7 +153,7 @@ class gameComponents extends genericVariables{
 				if(genericVariables.get_frameCounter_left() == 1 ) {
 	    			active.go_left();
 	        		genericVariables.set_frameCounter_left(genericVariables.get_frameCounter_left()+1);
-	    		}else if(genericVariables.get_frameCounter_left() >= 30) {
+	    		}else if(genericVariables.get_frameCounter_left() >= genericVariables.get_speed_game()/7) {
 	    			active.go_left();
 	    			genericVariables.set_frameCounter_left(2);
 	    		}else {
@@ -171,7 +171,7 @@ class gameComponents extends genericVariables{
 				if(genericVariables.get_frameCounter_right() == 1 ) {
 	    			active.go_right();
 	        		genericVariables.set_frameCounter_right(genericVariables.get_frameCounter_right()+1);
-	    		}else if(genericVariables.get_frameCounter_right() >= 10) {
+	    		}else if(genericVariables.get_frameCounter_right() >= genericVariables.get_speed_game()/3) {
 	    			active.go_right();
 	    			genericVariables.set_frameCounter_right(2);
 	    		}else {
@@ -182,7 +182,7 @@ class gameComponents extends genericVariables{
 				if(genericVariables.get_frameCounter_right() == 1 ) {
 	    			active.go_right();
 	        		genericVariables.set_frameCounter_right(genericVariables.get_frameCounter_right()+1);
-	    		}else if(genericVariables.get_frameCounter_right() >= 50) {
+	    		}else if(genericVariables.get_frameCounter_right() >= genericVariables.get_speed_down()) {
 	    			active.go_right();
 	    			genericVariables.set_frameCounter_right(2);
 	    		}else {
@@ -195,7 +195,7 @@ class gameComponents extends genericVariables{
 	protected static void down_event() {
 		//down event
 		shape active = get_my_tetris().get_all_shapes().lastElement();
-    	if(active.get_shape_active() && genericVariables.get_frameCounter() >= 30) {
+    	if(active.get_shape_active() && genericVariables.get_frameCounter() >= genericVariables.get_speed_down()) {
     		if(genericVariables.get_col_bot_exists())
     		{
     			if(genericVariables.get_frameCounter_collision_bot() >= 60) {
@@ -213,6 +213,23 @@ class gameComponents extends genericVariables{
     		}
     			
 		}
+	}
+	
+	//manage gamespeed
+	protected static void manage_game_speed() {
+		int score = genericVariables.get_score() ;
+		if(score >= 0 && score < 1000)
+			genericVariables.set_speed_game(30);
+		else if(score >= 1000 && score < 2000)
+			genericVariables.set_speed_game(25);
+		else if(score >= 2000 && score < 3000)
+			genericVariables.set_speed_game(20);
+		else if(score >= 3000 && score < 4000)
+			genericVariables.set_speed_game(15);
+		else if(score >= 4000 && score < 5000)
+			genericVariables.set_speed_game(10);
+		else
+			genericVariables.set_speed_game(6);
 	}
 	
 	//check for exploding lines
@@ -253,6 +270,7 @@ class gameComponents extends genericVariables{
 		}
 		genericVariables.set_score_add(250*genericVariables.get_score_multiplier());
 		genericVariables.set_score(genericVariables.get_score()+genericVariables.get_score_add());
+		manage_game_speed();
     }
     
     private static void gameOver(){

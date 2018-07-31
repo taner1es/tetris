@@ -64,7 +64,8 @@ class Tetris extends genericVariables
     	
     	//endless loop for game running.
         while (true)
-        {	//restarting
+        {
+        	//restarting
         	if(genericVariables.get_restartGame()){
         		genericVariables.set_my_tetris(new gameComponents());
         		genericVariables.reset();
@@ -81,7 +82,7 @@ class Tetris extends genericVariables
             			break;
             		}
             	}
-            	sleep(genericVariables.get_gameSpeed());
+            	sleep(genericVariables.get_sleep_time());
             	
             	genericVariables.get_frame().repaint();
         	}

@@ -28,18 +28,21 @@ class genericVariables extends KeyInput{
     private static final  int s_HEIGHT = gd.getDisplayMode().getHeight();
     private static final  int gw_WIDTH = 900; 
     private static final  int gw_HEIGHT = 760;
+    private static final  int sleep_time = 16;
     
 	private static int shape_cnt = 0;
 	private static int frameCounter_left = 0;
 	private static int frameCounter_right = 0;
 	private static int frameCounter_collision = 0;
 	private static int frameCounter_collision_bot = 0;
-	private static int gameSpeed = 16; //lower value has more speed // 16 gameSpeed draws 60 fps
 	private static int frameCounter = 0;
 	private static int pause_selection = 0;
 	private static int score = 0;
 	private static int score_multiplier;
 	private static int score_add = 0;
+	private static int speed_game = 30; //lower value has more speed // 16 gameSpeed draws 60 fps
+	private static int speed_down = 30;
+	
 	
 	private static boolean left;
 	private static boolean right;
@@ -85,6 +88,7 @@ class genericVariables extends KeyInput{
 	protected static final int get_s_HEIGHT() { return s_HEIGHT;}
 	protected static final int get_gw_WIDTH() { return gw_WIDTH;}
 	protected static final int get_gw_HEIGHT() { return gw_HEIGHT;}
+	protected static final int get_sleep_time() { return sleep_time;}
 	
 	protected static int get_shape_cnt() { return shape_cnt;}
 	protected static int get_frameCounter() { return frameCounter;}
@@ -92,12 +96,12 @@ class genericVariables extends KeyInput{
 	protected static int get_frameCounter_right() { return frameCounter_right;}
 	protected static int get_frameCounter_collision() { return frameCounter_collision;}
 	protected static int get_frameCounter_collision_bot() { return frameCounter_collision_bot;}
-	protected static int get_gameSpeed() { return gameSpeed;}
 	protected static int get_pause_selection() { return pause_selection;}
 	protected static int get_score() { return score;}
 	protected static int get_score_multiplier() { return score_multiplier;}
 	protected static int get_score_add() { return score_add;}
-	
+	protected static int get_speed_down() { return speed_down;}
+	protected static int get_speed_game() { return speed_game;}
 	
 	protected static boolean get_left() { return left;}
 	protected static boolean get_right() { return right;}
@@ -130,7 +134,6 @@ class genericVariables extends KeyInput{
 	protected static void set_my_tetris(gameComponents p_gameComponents) { my_tetris = p_gameComponents;}
 	
 	protected static void set_shape_cnt(int p_shape_cnt) {shape_cnt = p_shape_cnt;}
-	protected static void set_gameSpeed(int p_gameSpeed) { gameSpeed = p_gameSpeed;}
 	protected static void set_pause_selection(int p_pause_selection) { pause_selection = p_pause_selection;}
 	protected static void set_frameCounter(int p_frameCounter) { frameCounter = p_frameCounter;}
 	protected static void set_frameCounter_left(int p_frameCounter_left) { frameCounter_left = p_frameCounter_left;}
@@ -140,6 +143,8 @@ class genericVariables extends KeyInput{
 	protected static void set_score(int p_score) { score = p_score;}
 	protected static void set_score_multiplier(int p_score_multiplier) { score_multiplier = p_score_multiplier;}
 	protected static void set_score_add(int p_score_add) { score_add = p_score_add;}
+	protected static void set_speed_game(int p_speed_game) { speed_game = p_speed_game;}
+	protected static void set_speed_down(int p_speed_down) { speed_down = p_speed_down;}
 	
 	protected static void set_left(boolean p_left) { left = p_left;}
 	protected static void set_right(boolean p_right) { right = p_right;}
@@ -176,7 +181,7 @@ class genericVariables extends KeyInput{
     	frameCounter_right = 0;
     	frameCounter_collision = 0;
     	frameCounter_collision_bot = 0;
-    	gameSpeed = 16; //lower value has more speed // 16 gameSpeed draws 60 fps
+    	speed_game = 60; //lower value has more speed // 16 gameSpeed draws 60 fps
     	frameCounter = 0;
     	pause_selection = 0;
     	
