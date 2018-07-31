@@ -1,5 +1,6 @@
 package tetris;
 
+import java.util.Calendar;
 import java.util.Random;
 import java.util.Vector;
 
@@ -218,6 +219,9 @@ class gameComponents extends genericVariables{
     private static void check_exploding_line() {
     	genericVariables.get_my_tetris().reset_explode_lines();
     	genericVariables.set_score_multiplier(0);
+    	genericVariables.set_score_add(0);
+    	System.out.println("asasd");
+		genericVariables.set_score_addTimeStamp(Calendar.getInstance());
 		shape sh;
 		box bx;
 		int line_no;
@@ -247,7 +251,8 @@ class gameComponents extends genericVariables{
 				break;
 			}
 		}
-		genericVariables.set_score(genericVariables.get_score()+(250*genericVariables.get_score_multiplier()));
+		genericVariables.set_score_add(250*genericVariables.get_score_multiplier());
+		genericVariables.set_score(genericVariables.get_score()+genericVariables.get_score_add());
     }
     
     private static void gameOver(){

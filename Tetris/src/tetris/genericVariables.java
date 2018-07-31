@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Image;
-import java.util.GregorianCalendar;
+import java.util.Calendar;
 
 import javax.swing.JFrame;
 
@@ -39,6 +39,7 @@ class genericVariables extends KeyInput{
 	private static int pause_selection = 0;
 	private static int score = 0;
 	private static int score_multiplier;
+	private static int score_add = 0;
 	
 	private static boolean left;
 	private static boolean right;
@@ -70,7 +71,8 @@ class genericVariables extends KeyInput{
 	static Image view_intro_image;
 	static Image view_bg_image;
 	
-	static GregorianCalendar game_startedTimeStamp = new GregorianCalendar();
+	static Calendar game_startedTimeStamp = Calendar.getInstance();
+	static Calendar score_addTimeStamp;
 	
 	static Color bg_color = new Color(190, 247, 236);
 	
@@ -94,6 +96,7 @@ class genericVariables extends KeyInput{
 	protected static int get_pause_selection() { return pause_selection;}
 	protected static int get_score() { return score;}
 	protected static int get_score_multiplier() { return score_multiplier;}
+	protected static int get_score_add() { return score_add;}
 	
 	
 	protected static boolean get_left() { return left;}
@@ -117,7 +120,8 @@ class genericVariables extends KeyInput{
 	protected static Image get_view_intro_image() { return view_intro_image;}
 	protected static Image get_view_bg_image() { return view_bg_image;}
 	
-	protected static GregorianCalendar get_game_startedTimeStamp() { return game_startedTimeStamp;}
+	protected static Calendar get_game_startedTimeStamp() { return game_startedTimeStamp;}
+	protected static Calendar get_score_addTimeStamp() { return score_addTimeStamp;}
 	
 	protected static Color get_bg_color() { return bg_color; }
 	//setter methods
@@ -135,6 +139,7 @@ class genericVariables extends KeyInput{
 	protected static void set_frameCounter_collision_bot(int p_frameCounter_collision_bot) { frameCounter_collision_bot = p_frameCounter_collision_bot;}
 	protected static void set_score(int p_score) { score = p_score;}
 	protected static void set_score_multiplier(int p_score_multiplier) { score_multiplier = p_score_multiplier;}
+	protected static void set_score_add(int p_score_add) { score_add = p_score_add;}
 	
 	protected static void set_left(boolean p_left) { left = p_left;}
 	protected static void set_right(boolean p_right) { right = p_right;}
@@ -157,7 +162,8 @@ class genericVariables extends KeyInput{
     protected static void set_view_intro_image(Image p_image) { view_intro_image = p_image;}
     protected static void set_view_bg_image(Image p_image) { view_bg_image = p_image;}
     
-    protected static void set_game_startedTimeStamp(GregorianCalendar p_Date) { game_startedTimeStamp = p_Date;}
+    protected static void set_game_startedTimeStamp(Calendar p_Date) { game_startedTimeStamp = p_Date;}
+    protected static void set_score_addTimeStamp(Calendar p_Date) { score_addTimeStamp = p_Date;}
 	
     //increase methods
     protected static void inc_frameCounter_collision_bot() { frameCounter_collision_bot++; }

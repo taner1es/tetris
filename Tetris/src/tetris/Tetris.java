@@ -10,7 +10,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.net.URL;
-import java.util.GregorianCalendar;
+import java.util.Calendar;
 import java.util.Vector;
 
 import javax.swing.ImageIcon;
@@ -29,7 +29,7 @@ class Tetris extends genericVariables
     }
     private void go()
     {
-    	genericVariables.set_game_startedTimeStamp(new GregorianCalendar());
+    	genericVariables.set_game_startedTimeStamp(Calendar.getInstance());
     	URL url_tetris_menu = Tetris.class.getResource("tetris_menu.png"); //gets the folder/file from runnable jar file location
 		URL url_tetris_intro = Tetris.class.getResource("tetris_intro.gif"); 
 		URL url_tetris_bg = Tetris.class.getResource("tetris_bg.png"); 
@@ -68,7 +68,7 @@ class Tetris extends genericVariables
         	if(genericVariables.get_restartGame()){
         		genericVariables.set_my_tetris(new gameComponents());
         		genericVariables.reset();
-        		genericVariables.set_game_startedTimeStamp(new GregorianCalendar());
+        		genericVariables.set_game_startedTimeStamp(Calendar.getInstance());
         		moveIt();
         	}else {
 
@@ -141,7 +141,7 @@ class Tetris extends genericVariables
             	
         		if(genericVariables.get_started() && (genericVariables.get_pause() || genericVariables.get_endGame()))pause_gameLoop(g);
         		if(!genericVariables.get_started() && genericVariables.get_game_state() == "welcome"){
-        			GregorianCalendar introTimeStamp = new GregorianCalendar();
+        			Calendar introTimeStamp = Calendar.getInstance();
         			long millisGameStarted = game_startedTimeStamp.getTimeInMillis();
         			long millisIntro = introTimeStamp.getTimeInMillis();
         			int timeInterval = (int) ((millisIntro - millisGameStarted)/1000);
@@ -213,12 +213,16 @@ class Tetris extends genericVariables
         		}*/
 			}
         	
-
+        	int font_size = 0;
+        	int max_font_size = 40;
 			private void draw_Score(Graphics g) {
 				int size = 25;
 				Color color_back = Color.black;
 				Color color_front = new Color(232, 232, 104);
 				
+    			g.setFont(new Font(genericVariables.get_font_type(), Font.BOLD, 30));
+    			
+    			
             	for(int i = 1 ; i <= 8 ; i++) {
             		//score frame vertical edges
             		if(i <= 5) {
@@ -246,8 +250,22 @@ class Tetris extends genericVariables
             	//point
             	String score = Integer.toString(genericVariables.get_score());
             	g.setColor(Color.white);
-        		g.setFont(new Font(genericVariables.get_font_type(), Font.BOLD, 30));
             	g.drawString(score, 675, 670);
+            	
+
+				g.setColor(Color.GREEN);
+            	g.setFont(new Font(genericVariables.get_font_type(),Font.BOLD,font_size));
+    			if(genericVariables.get_score_add() > 0) {
+    				Calendar addedScoreTimeStamp = Calendar.getInstance();
+        			int timeInterval = (int) ((addedScoreTimeStamp.getTimeInMillis() - genericVariables.get_score_addTimeStamp().getTimeInMillis())/1000);
+        			if(timeInterval < 2) {
+        				g.drawString("+" +Integer.toString(genericVariables.get_score_add()), 675, (670 - (font_size*2)));
+        				if(font_size < max_font_size) {
+        					font_size++;
+        				}
+        			}else
+        				font_size = 0;
+    			}
             	
         	}
             private void draw_Shapes(Graphics g) {
@@ -284,7 +302,7 @@ class Tetris extends genericVariables
                 		}
             		}
             		
-            	}
+            	}            	
             }
             
             private void draw_Buffer(Graphics g) {
