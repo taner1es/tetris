@@ -142,7 +142,7 @@ class gameComponents extends genericVariables{
 				if(genericVariables.get_frameCounter_left() == 1 ) {
 	    			active.go_left();
 	        		genericVariables.set_frameCounter_left(genericVariables.get_frameCounter_left()+1);
-	    		}else if(genericVariables.get_frameCounter_left() >= genericVariables.get_speed_game()/3) {
+	    		}else if(genericVariables.get_frameCounter_left() >= genericVariables.get_speed_game()/2) {
 	    			active.go_left();
 	    			genericVariables.set_frameCounter_left(2);
 	    		}else {
@@ -171,7 +171,7 @@ class gameComponents extends genericVariables{
 				if(genericVariables.get_frameCounter_right() == 1 ) {
 	    			active.go_right();
 	        		genericVariables.set_frameCounter_right(genericVariables.get_frameCounter_right()+1);
-	    		}else if(genericVariables.get_frameCounter_right() >= genericVariables.get_speed_game()/3) {
+	    		}else if(genericVariables.get_frameCounter_right() >= genericVariables.get_speed_game()/2) {
 	    			active.go_right();
 	    			genericVariables.set_frameCounter_right(2);
 	    		}else {
@@ -220,16 +220,24 @@ class gameComponents extends genericVariables{
 		int score = genericVariables.get_score() ;
 		if(score >= 0 && score < 1000)
 			genericVariables.set_speed_game(30);
-		else if(score >= 1000 && score < 2000)
-			genericVariables.set_speed_game(25);
-		else if(score >= 2000 && score < 3000)
+		else if(score >= 1000 && score < 3000)
 			genericVariables.set_speed_game(20);
-		else if(score >= 3000 && score < 4000)
-			genericVariables.set_speed_game(15);
-		else if(score >= 4000 && score < 5000)
+		else if(score >= 3000 && score < 5000)
 			genericVariables.set_speed_game(10);
-		else
-			genericVariables.set_speed_game(6);
+		else if(score >= 4000 && score < 5000)
+			genericVariables.set_speed_game(5);
+		else if(score >= 5000 && score < 6000)
+			genericVariables.set_speed_game(4);
+		else if(score >= 6000 && score < 7000)
+			genericVariables.set_speed_game(3);
+		else if(score >= 7000 && score < 8000)
+			genericVariables.set_speed_game(2);
+		else if(score >= 8000 && score < 9000)
+			genericVariables.set_speed_game(1);
+		else if(score >= 9000 && score < 10000)
+			genericVariables.set_speed_game(0);
+		else 
+			genericVariables.set_speed_game(-1);
 	}
 	
 	//check for exploding lines
@@ -242,6 +250,7 @@ class gameComponents extends genericVariables{
 		shape sh;
 		box bx;
 		int line_no;
+		int exp_line_counter = 0;
 		for(int i = 0; i < genericVariables.get_my_tetris().get_all_shapes().size() ; i++) {
 			if(genericVariables.get_game_state() == "running") {
 				if(genericVariables.get_my_tetris().get_all_shapes().get(i) != null ) {
@@ -256,7 +265,7 @@ class gameComponents extends genericVariables{
 								genericVariables.get_my_tetris().get_explode_lines()[line_no]++;
 								if(genericVariables.get_my_tetris().get_explode_lines()[line_no] == 19) {
 									explode_line(line_no);
-									genericVariables.set_score_multiplier(genericVariables.get_score_multiplier()+1);
+									exp_line_counter++;
 								}
 							}else {
 								break;
@@ -268,6 +277,18 @@ class gameComponents extends genericVariables{
 				break;
 			}
 		}
+		if(exp_line_counter == 0) {
+			genericVariables.set_score_multiplier(0);
+		}else if(exp_line_counter == 1) {
+			genericVariables.set_score_multiplier(1);
+		}else if(exp_line_counter == 2) {
+			genericVariables.set_score_multiplier(8);
+		}else if(exp_line_counter == 3) {
+			genericVariables.set_score_multiplier(12);
+		}else if(exp_line_counter == 4) {
+			genericVariables.set_score_multiplier(16);
+		}else System.err.println("ERROR : UNKOWN exp_line_counter Value @gameComponents.check_exploding_line()");
+		
 		genericVariables.set_score_add(250*genericVariables.get_score_multiplier());
 		genericVariables.set_score(genericVariables.get_score()+genericVariables.get_score_add());
 		manage_game_speed();

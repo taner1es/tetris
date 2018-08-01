@@ -181,7 +181,6 @@ class genericVariables extends KeyInput{
     	frameCounter_right = 0;
     	frameCounter_collision = 0;
     	frameCounter_collision_bot = 0;
-    	speed_game = 60; //lower value has more speed // 16 gameSpeed draws 60 fps
     	frameCounter = 0;
     	pause_selection = 0;
     	
@@ -200,6 +199,8 @@ class genericVariables extends KeyInput{
 
     	game_state = "welcome";
     	score = 0;
+    	speed_game = 30; //lower value has more speed // 16 gameSpeed draws 60 fps
+    	speed_down = 30;
     }
     
     
