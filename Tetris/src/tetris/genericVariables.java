@@ -58,7 +58,7 @@ class genericVariables extends KeyInput{
 	private static boolean col_bot_exists = false;
 	
 	private static final String font_type = "Tahoma";
-	private static String game_state = "welcome";
+	private static String game_state = "loading";
     private static String[][] shape_codes = 
 		{
 			/* 0. --> I*/		{"AXXXAXXXAXXXAXXX","AAAAXXXXXXXXXXXX"},  
@@ -161,7 +161,7 @@ class genericVariables extends KeyInput{
 	
 	protected static void set_game_state(String p_state) { game_state = p_state; }
 	/**
-	 * Game States : welcome, running, paused , end, exit
+	 * Game States : welcome, running, paused , end, exit , loading
 	 */
     protected static void set_view_welcome_image(Image p_image) { view_welcome_image = p_image;}
     protected static void set_view_intro_image(Image p_image) { view_intro_image = p_image;}
@@ -197,7 +197,7 @@ class genericVariables extends KeyInput{
     	col_left_exists = false;
     	col_bot_exists = false;
 
-    	game_state = "welcome";
+    	game_state = "loading";
     	score = 0;
     	speed_game = 30; //lower value has more speed // 16 gameSpeed draws 60 fps
     	speed_down = 30;

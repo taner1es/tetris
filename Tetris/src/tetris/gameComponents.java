@@ -199,7 +199,6 @@ class gameComponents extends genericVariables{
     		if(genericVariables.get_col_bot_exists())
     		{
     			if(genericVariables.get_frameCounter_collision_bot() >= 60) {
-    				checkcollisions(active);
     				if(genericVariables.get_col_bot_exists()){
     					active.set_shape_active(false);
     				}else{
@@ -210,8 +209,7 @@ class gameComponents extends genericVariables{
     		}else {
     			genericVariables.set_frameCounter(0);
         		active.go_down();
-    		}
-    			
+    		}	
 		}
 	}
 	
@@ -224,20 +222,10 @@ class gameComponents extends genericVariables{
 			genericVariables.set_speed_game(20);
 		else if(score >= 3000 && score < 5000)
 			genericVariables.set_speed_game(10);
-		else if(score >= 4000 && score < 5000)
-			genericVariables.set_speed_game(5);
-		else if(score >= 5000 && score < 6000)
-			genericVariables.set_speed_game(4);
-		else if(score >= 6000 && score < 7000)
-			genericVariables.set_speed_game(3);
-		else if(score >= 7000 && score < 8000)
-			genericVariables.set_speed_game(2);
-		else if(score >= 8000 && score < 9000)
-			genericVariables.set_speed_game(1);
-		else if(score >= 9000 && score < 10000)
-			genericVariables.set_speed_game(0);
 		else 
-			genericVariables.set_speed_game(-1);
+			genericVariables.set_speed_game(5);
+		
+		genericVariables.set_speed_down(genericVariables.get_speed_game());
 	}
 	
 	//check for exploding lines
@@ -478,12 +466,12 @@ class gameComponents extends genericVariables{
         		//check for just horizontal matching according to left
             	active_x = checkforshape.sh_boxes.get(i).get_box_x();
         		if(active_x == genericVariables.get_my_tetris().get_left_border()+25) {
-        			genericVariables.set_left(false);
+        			genericVariables.set_col_left_exists(true);;
         		}
         		//check for just horizontal matching according to right
         		active_right_end = checkforshape.sh_boxes.get(i).get_box_right_end();
         		if(active_right_end == genericVariables.get_my_tetris().get_right_border()) {
-        			genericVariables.set_right(false);
+        			genericVariables.set_col_right_exists(true);
         		}
         	}
     	}
@@ -515,30 +503,34 @@ class gameComponents extends genericVariables{
             				int passive_y = genericVariables.get_my_tetris().get_all_shapes().get(i).sh_boxes.get(t).get_box_y();
             				@SuppressWarnings("unused")
 							int passive_bottom = genericVariables.get_my_tetris().get_all_shapes().get(i).sh_boxes.get(t).get_box_bottom_end();
+            				
+            				
             				//check horizontal and vertical matching
             				if(active_bottom == passive_y && active_x == passive_x) {
-                    			genericVariables.set_col_bot_exists(true);
-            				}
-            				//check for just horizontal matching according to right
-            				if( genericVariables.get_right() || !checkforshape.get_shape_active()) {
-            					if(active_y == passive_y) {
-            						if(active_right_end == passive_x) {
-            							genericVariables.set_right(false);
-                    					genericVariables.set_col_right_exists(true);
-            						}
-            					}
-            				}
-            				//check for just horizontal matching according to left
-            				if( genericVariables.get_left() || !checkforshape.get_shape_active()) {
-            					if(active_y == passive_y) {
-            						if(active_x == passive_right_end) {
-            							genericVariables.set_left(false);
-                    					genericVariables.set_col_left_exists(true);
-            						}
-            					}
+            					if(checkforshape.get_shape_active())
+            						genericVariables.set_col_bot_exists(true);
+            					else
+            						return false;
             				}
             				
-            				//check if there no place for new shape and finish the game
+            				if(genericVariables.get_right() ) {
+            					if(active_y == passive_y && active_bottom == passive_bottom && active_right_end == passive_x) {
+                					if(checkforshape.get_shape_active())	
+                						genericVariables.set_col_right_exists(true);
+                					else 
+                						return false;
+                				}
+            				}
+        					
+        					if( genericVariables.get_left() ) {
+                				if(active_y == passive_y && active_bottom == passive_bottom && active_x == passive_right_end) {
+                					if(checkforshape.get_shape_active())	
+                						genericVariables.set_col_left_exists(true);
+                					else 
+                						return false;
+                				}
+        					}
+        					
             				if(active_bottom > passive_y && active_bottom < 4*25) {
             					genericVariables.set_endGame(false);
             				}
@@ -551,7 +543,7 @@ class gameComponents extends genericVariables{
     	if(genericVariables.get_col_bot_exists()) genericVariables.inc_frameCounter_collision_bot();
     	else genericVariables.set_frameCounter_collision_bot(0);
 
-    	if(!genericVariables.get_col_left_exists() && !genericVariables.get_col_right_exists() && !checkforshape.get_shape_active()) return true;
+    	if(!genericVariables.get_col_left_exists() && !genericVariables.get_col_right_exists() && !genericVariables.get_col_bot_exists() && !checkforshape.get_shape_active()) return true;
     	else return false;
     			
     }

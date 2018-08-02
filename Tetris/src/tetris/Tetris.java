@@ -50,8 +50,8 @@ class Tetris extends genericVariables
 
         genericVariables.get_frame().setResizable(false);
         genericVariables.get_frame().setUndecorated(true);
-        genericVariables.get_frame().setSize(genericVariables.get_gw_WIDTH(), genericVariables.get_gw_HEIGHT());
-        genericVariables.get_frame().setLocation(genericVariables.get_s_WIDTH()/ 4, 0);
+        genericVariables.get_frame().setSize(400, 200);
+        genericVariables.get_frame().setLocation(genericVariables.get_s_WIDTH()/ 3, genericVariables.get_s_HEIGHT()/3-50);
         genericVariables.get_frame().setVisible(true);
         moveIt();
     }
@@ -59,7 +59,7 @@ class Tetris extends genericVariables
     private void moveIt()
     {
     	//start a game with generating a new shape
-    	if(genericVariables.get_game_state() == "running" || genericVariables.get_game_state() == "welcome")
+    	if(genericVariables.get_game_state() == "running" || genericVariables.get_game_state() == "loading")
     	gameComponents.swap_buffered_shape_to_game();
     	
     	//endless loop for game running.
@@ -102,17 +102,27 @@ class Tetris extends genericVariables
     }
 	private void run_gameLoop() {
 		if(genericVariables.get_my_tetris().get_all_shapes() != null) {
+			if(genericVariables.get_down()) {
+				genericVariables.set_speed_down(genericVariables.get_speed_game()/10);
+			}
+			
 			shape active = genericVariables.get_my_tetris().get_all_shapes().lastElement();
-			gameComponents.checkcollisions(active);
 			
 			if(genericVariables.get_col_left_exists() || genericVariables.get_col_right_exists()) {
 				genericVariables.set_frameCounter_collision(genericVariables.get_frameCounter_collision()+1);
 			}else {
 				genericVariables.set_frameCounter_collision(0);
 			}
-	    	gameComponents.left_event();
-	    	gameComponents.right_event();
-	    	gameComponents.down_event();
+
+			if(active.get_shape_active()) {
+				gameComponents.checkcollisions(active);
+				if(!genericVariables.get_col_left_exists())gameComponents.left_event();
+		    	if(!genericVariables.get_col_right_exists())gameComponents.right_event();
+
+				gameComponents.checkcollisions(active);
+				gameComponents.down_event();
+		    		
+			}
 	    	
 	    	//generate new shape
 	    	if(!active.get_shape_active() && !genericVariables.get_endGame()) {
@@ -141,16 +151,25 @@ class Tetris extends genericVariables
     			
             	
         		if(genericVariables.get_started() && (genericVariables.get_pause() || genericVariables.get_endGame()))pause_gameLoop(g);
-        		if(!genericVariables.get_started() && genericVariables.get_game_state() == "welcome"){
+        		if(!genericVariables.get_started() && genericVariables.get_game_state() == "loading"){
+        	        genericVariables.get_frame().setSize(400, 200);
+        	        genericVariables.get_frame().setLocation(genericVariables.get_s_WIDTH()/ 3-50, genericVariables.get_s_HEIGHT()/3-50);
         			Calendar introTimeStamp = Calendar.getInstance();
         			long millisGameStarted = game_startedTimeStamp.getTimeInMillis();
         			long millisIntro = introTimeStamp.getTimeInMillis();
         			int timeInterval = (int) ((millisIntro - millisGameStarted)/1000);
-        			if(timeInterval < 2) 
+        			if(timeInterval < 2) {
         				g.drawImage(genericVariables.view_intro_image, 0, 0, genericVariables.get_gw_WIDTH(), genericVariables.get_gw_HEIGHT(), null, null);
-        			else
-        				g.drawImage(genericVariables.get_view_welcome_image(), 0, 0, genericVariables.get_gw_WIDTH(), genericVariables.get_gw_HEIGHT(), Color.WHITE, null);
+        			}
+        			else {
+            	        genericVariables.get_frame().setSize(genericVariables.get_gw_WIDTH(), genericVariables.get_gw_HEIGHT());
+            	        genericVariables.get_frame().setLocation(genericVariables.get_s_WIDTH()/ 4-50, 0);
+        				genericVariables.set_game_state("welcome");
+        			}
     			}
+        		if(!genericVariables.get_started() && genericVariables.get_game_state() == "welcome") {
+    				g.drawImage(genericVariables.get_view_welcome_image(), 0, 0, genericVariables.get_gw_WIDTH(), genericVariables.get_gw_HEIGHT(), Color.WHITE, null);
+        		}
             }
             
         	private void draw_MainBorders(Graphics g) {

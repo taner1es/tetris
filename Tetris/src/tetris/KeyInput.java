@@ -12,6 +12,9 @@ public class KeyInput {
     		int key = e.getKeyCode();
     		
     		switch(genericVariables.get_game_state()) {
+    			case "loading":
+    				
+    				break;
     			case "welcome":
         			if(key == KeyEvent.VK_ENTER) {
         				genericVariables.set_started(true);
@@ -55,10 +58,6 @@ public class KeyInput {
 	            		}
 	            		if(key == KeyEvent.VK_DOWN) {
 	            			genericVariables.set_down(true);
-		            		genericVariables.set_speed_down(genericVariables.get_speed_game()/10);
-
-		                	System.out.println("speed_game : " + genericVariables.get_speed_game());
-		                	System.out.println("speed_down : " + genericVariables.get_speed_down());
 	            		}
 	            		//move shape
 	                	if(key == KeyEvent.VK_RIGHT) {
@@ -84,6 +83,9 @@ public class KeyInput {
     		int key = e.getKeyCode();
     		
     		switch(genericVariables.get_game_state()) {
+    			case "loading":
+				
+				break;
     			case "welcome":
     				
     				break;
