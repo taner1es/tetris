@@ -115,12 +115,18 @@ class Tetris extends genericVariables
 			}
 
 			if(active.get_shape_active()) {
-				gameComponents.checkcollisions(active);
-				if(!genericVariables.get_col_left_exists())gameComponents.left_event();
-		    	if(!genericVariables.get_col_right_exists())gameComponents.right_event();
+				
+				if(genericVariables.get_directDown()) {
+					gameComponents.directDown_event();
+				}else {
+					gameComponents.checkcollisions(active);
+					if(!genericVariables.get_col_left_exists())gameComponents.left_event();
+			    	if(!genericVariables.get_col_right_exists())gameComponents.right_event();
 
-				gameComponents.checkcollisions(active);
-				gameComponents.down_event();
+					gameComponents.checkcollisions(active);
+					gameComponents.down_event();
+				}
+				
 		    		
 			}
 	    	

@@ -38,6 +38,7 @@ class gameComponents extends genericVariables{
 			explode_lines[i] = 0;
 		}
 	}
+	
 	//let user select one of the options on the view during pause menu
 	protected static void pause_menu_select_func() {
 		switch(genericVariables.get_game_state()) {
@@ -211,6 +212,20 @@ class gameComponents extends genericVariables{
         		active.go_down();
     		}	
 		}
+	}
+
+	protected static void directDown_event() {
+		int last_index = genericVariables.get_my_tetris().get_all_shapes().size()-1;
+		shape active = get_my_tetris().get_all_shapes().lastElement();
+		shape aspect = active;
+		aspect.set_shape_active(false);
+		while(checkcollisions(aspect)) {
+			aspect.go_down();
+		}
+		aspect.set_shape_active(true);
+		genericVariables.get_my_tetris().get_all_shapes().setElementAt(aspect, last_index);
+		genericVariables.get_my_tetris().get_all_shapes().elementAt(last_index).set_shape_id(last_index);
+		genericVariables.set_directDown(false);
 	}
 	
 	//manage gamespeed

@@ -47,6 +47,7 @@ class genericVariables extends KeyInput{
 	private static boolean left;
 	private static boolean right;
 	private static boolean down;
+	private static boolean directDown = false;
 	private static boolean pause = false;
 	private static boolean pause_apply = false;
 	private static boolean started = false; //record game started or not
@@ -106,6 +107,7 @@ class genericVariables extends KeyInput{
 	protected static boolean get_left() { return left;}
 	protected static boolean get_right() { return right;}
 	protected static boolean get_down() { return down;}
+	protected static boolean get_directDown() { return directDown;}
 	protected static boolean get_pause() { return pause;}
 	protected static boolean get_pause_apply() { return pause_apply;}
 	protected static boolean get_started() { return started;}
@@ -149,6 +151,7 @@ class genericVariables extends KeyInput{
 	protected static void set_left(boolean p_left) { left = p_left;}
 	protected static void set_right(boolean p_right) { right = p_right;}
 	protected static void set_down(boolean p_down) { down = p_down;}
+	protected static void set_directDown(boolean p_directDown) { directDown = p_directDown;}
 	protected static void set_pause(boolean p_pause) { pause = p_pause;}
 	protected static void set_pause_apply(boolean p_pause_apply) { pause_apply = p_pause_apply;}
 	protected static void set_started(boolean p_started) { started = p_started;}
@@ -187,6 +190,7 @@ class genericVariables extends KeyInput{
     	left = false;
     	right = false;
     	down = false;
+    	directDown = false;
     	pause = false;
     	pause_apply = false;
     	started = false;

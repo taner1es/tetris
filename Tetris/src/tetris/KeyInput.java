@@ -46,13 +46,13 @@ public class KeyInput {
         				genericVariables.set_pause_apply(true);
     				break;
     			case "running":
-	    				//pause game
+    					//pause game
 	            		if(key == KeyEvent.VK_P) {
 	            				genericVariables.set_pause(true);
 	            				genericVariables.set_game_state("paused");
 	            		}
 	            		//rotate shape
-	            		if(key == KeyEvent.VK_SPACE && genericVariables.get_rotate_available()) {
+	            		if(key == KeyEvent.VK_UP && genericVariables.get_rotate_available()) {
 	            			genericVariables.get_my_tetris().rotate_shape();
 	            			genericVariables.set_rotate_available(false);
 	            		}
@@ -68,10 +68,9 @@ public class KeyInput {
 	                		genericVariables.set_right(false);
 	                		genericVariables.set_left(true);
 	                	}
-	                	/*else {
-	                		genericVariables.set_right(false);
-	                		genericVariables.set_left(false);
-	                	}*/
+	                	if(key == KeyEvent.VK_SPACE) {
+	                		genericVariables.set_directDown(true);
+	                	}
     				break;
     			default :
     				System.err.println("!! ERROR : GAME STATE @KeyInput.KeyPressed");
@@ -108,7 +107,10 @@ public class KeyInput {
             			genericVariables.set_down(false);
             			genericVariables.set_speed_down(genericVariables.get_speed_game());
             		}
-            		if(key == KeyEvent.VK_SPACE && !genericVariables.get_rotate_available()) {
+            		if(key == KeyEvent.VK_SPACE) {
+                		genericVariables.set_directDown(false);
+                	}
+            		if(key == KeyEvent.VK_UP && !genericVariables.get_rotate_available()) {
             			genericVariables.set_rotate_available(true);
             		}
     				break;   
