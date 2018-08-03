@@ -1,5 +1,6 @@
 package tetris;
 
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Random;
 import java.util.Vector;
@@ -28,14 +29,71 @@ class gameComponents extends genericVariables{
 	protected boolean get_call_new_shape() { return this.call_new_shape;}
 	protected static boolean get_exit_game() { return gameComponents.exit_game;}
 	
+	private static highScoreObject highscore;
+	
 	//setter methods
 	protected static void set_exit_game(boolean exit_game) { gameComponents.exit_game = exit_game;}
-	
+	protected static void set_highscore(highScoreObject p_highscore) { highscore = p_highscore; }
+	//getter methods
+	protected static highScoreObject get_highscore() { return highscore; }
 	
 	//constructor
 	gameComponents() {
 		for(int i = 0 ; i < 25 ; i++) {
 			explode_lines[i] = 0;
+		}
+	}
+	
+	
+	static boolean record_done = false;
+	
+	protected static void record_highScore() {
+		try {
+			if(!genericVariables.get_highscore_file_exists()) {
+				set_highscore(new highScoreObject());
+				System.out.println("new highscore object created.");
+			}
+			if(!record_done) {
+				get_highscore().get_highScoreDataMap().put(genericVariables.get_score(), genericVariables.get_user_name());
+				System.out.println("new record succesfully added to datamap");
+				SerializationUtil.serialize(get_highscore(), genericVariables.get_high_score_file_name());
+				record_done = true;
+			}
+			
+		} catch (IOException e) {
+			System.err.println("Problem Occured While Saving Highscore.. in record_highScore");
+			//e.printStackTrace();
+		}
+	}
+	
+	
+	
+	static int ch_order = 0;
+	static char ch_temp = '/';
+	static String name = "";
+	protected static void high_score_name_writing(){
+		if(genericVariables.get_game_state() == "highscore") {
+			if(ch_temp == '/')
+				ch_temp = 'A';
+			if(genericVariables.get_up()) {
+				ch_temp++;
+				if(ch_temp > 'Z')
+					ch_temp = '0';
+				genericVariables.set_up(false);
+			}
+			if(genericVariables.get_down()) {
+				ch_temp--;
+				if(ch_temp < '0')
+					ch_temp = 'Z';
+				genericVariables.set_down(false);
+			}
+			if(genericVariables.get_enter()) {
+				name += ch_temp;
+				ch_order++;
+				ch_temp = 'A';
+				genericVariables.set_user_name(name);
+				genericVariables.set_enter(false);
+			}
 		}
 	}
 	
@@ -48,7 +106,6 @@ class gameComponents extends genericVariables{
 						case 0:
 								genericVariables.set_pause(false);
 								genericVariables.set_game_state("running");
-								genericVariables.set_pause_apply(false);
 							break;
 						case 1:
 								genericVariables.set_restartGame(true);
@@ -67,9 +124,12 @@ class gameComponents extends genericVariables{
 				if(genericVariables.get_pause_apply()) {
 					switch(genericVariables.get_pause_selection()) {
 						case 0:
-							genericVariables.set_restartGame(true);
+							genericVariables.set_game_state("highscore");
 							break;
 						case 1:
+							genericVariables.set_restartGame(true);
+							break;
+						case 2:
 							gameComponents.set_exit_game(true);
 							genericVariables.set_game_state("exit");
 							break;
@@ -82,6 +142,8 @@ class gameComponents extends genericVariables{
 				
 				break;
 		}
+
+		genericVariables.set_pause_apply(false);
 	}
 	
 	
@@ -248,7 +310,6 @@ class gameComponents extends genericVariables{
     	genericVariables.get_my_tetris().reset_explode_lines();
     	genericVariables.set_score_multiplier(0);
     	genericVariables.set_score_add(0);
-    	System.out.println("asasd");
 		genericVariables.set_score_addTimeStamp(Calendar.getInstance());
 		shape sh;
 		box bx;

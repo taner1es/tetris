@@ -9,17 +9,19 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.io.IOException;
 import java.net.URL;
 import java.util.Calendar;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.NavigableMap;
+import java.util.Set;
 import java.util.Vector;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-
-
-
-
 
 class Tetris extends genericVariables
 {
@@ -50,14 +52,17 @@ class Tetris extends genericVariables
 
         genericVariables.get_frame().setResizable(false);
         genericVariables.get_frame().setUndecorated(true);
-        genericVariables.get_frame().setSize(400, 200);
-        genericVariables.get_frame().setLocation(genericVariables.get_s_WIDTH()/ 3, genericVariables.get_s_HEIGHT()/3-50);
+        /*genericVariables.get_frame().setSize(400, 200);
+        genericVariables.get_frame().setLocation(genericVariables.get_s_WIDTH()/ 3, genericVariables.get_s_HEIGHT()/3-50);*/
+        genericVariables.get_frame().setSize(900, 800);
+        genericVariables.get_frame().setLocation(400, 0);
         genericVariables.get_frame().setVisible(true);
         moveIt();
     }
     
     private void moveIt()
     {
+    	//genericVariables.set_game_state("highscore");
     	//start a game with generating a new shape
     	if(genericVariables.get_game_state() == "running" || genericVariables.get_game_state() == "loading")
     	gameComponents.swap_buffered_shape_to_game();
@@ -72,7 +77,6 @@ class Tetris extends genericVariables
         		genericVariables.set_game_startedTimeStamp(Calendar.getInstance());
         		moveIt();
         	}else {
-
             	//game running state
             	if(!genericVariables.get_endGame() && !genericVariables.get_pause() && genericVariables.get_started()) { 
             		run_gameLoop();
@@ -82,8 +86,7 @@ class Tetris extends genericVariables
             			break;
             		}
             	}
-            	sleep(genericVariables.get_sleep_time());
-            	
+        		sleep(genericVariables.get_sleep_time());
             	genericVariables.get_frame().repaint();
         	}
         }
@@ -144,41 +147,141 @@ class Tetris extends genericVariables
         	@SuppressWarnings("null")
         	@Override
 			protected void paintComponent(Graphics g)
-            {
-        		draw_Grid(g);
-        		draw_MainBorders(g);
-        		
-                //drawings for all frames.)
-            	
-            	draw_Shapes(g);
-            	draw_Buffer(g);
-            	draw_Score(g);
-
-    			
-            	
-        		if(genericVariables.get_started() && (genericVariables.get_pause() || genericVariables.get_endGame()))pause_gameLoop(g);
-        		if(!genericVariables.get_started() && genericVariables.get_game_state() == "loading"){
-        	        genericVariables.get_frame().setSize(400, 200);
-        	        genericVariables.get_frame().setLocation(genericVariables.get_s_WIDTH()/ 3-50, genericVariables.get_s_HEIGHT()/3-50);
-        			Calendar introTimeStamp = Calendar.getInstance();
-        			long millisGameStarted = game_startedTimeStamp.getTimeInMillis();
-        			long millisIntro = introTimeStamp.getTimeInMillis();
-        			int timeInterval = (int) ((millisIntro - millisGameStarted)/1000);
-        			if(timeInterval < 2) {
-        				g.drawImage(genericVariables.view_intro_image, 0, 0, genericVariables.get_gw_WIDTH(), genericVariables.get_gw_HEIGHT(), null, null);
-        			}
-        			else {
-            	        genericVariables.get_frame().setSize(genericVariables.get_gw_WIDTH(), genericVariables.get_gw_HEIGHT());
-            	        genericVariables.get_frame().setLocation(genericVariables.get_s_WIDTH()/ 4-50, 0);
-        				genericVariables.set_game_state("welcome");
-        			}
-    			}
-        		if(!genericVariables.get_started() && genericVariables.get_game_state() == "welcome") {
-    				g.drawImage(genericVariables.get_view_welcome_image(), 0, 0, genericVariables.get_gw_WIDTH(), genericVariables.get_gw_HEIGHT(), Color.WHITE, null);
-        		}
+            {	
+            	//game states : welcome, running, paused , end, exit , loading , highscore
+            	switch(genericVariables.get_game_state()) {
+            		case "welcome":
+            			if(!genericVariables.get_started()) {
+            				g.drawImage(genericVariables.get_view_welcome_image(), 0, 0, genericVariables.get_gw_WIDTH(), genericVariables.get_gw_HEIGHT(), Color.WHITE, null);
+                		}
+            			break;
+            		case "running":
+            			if(genericVariables.get_pause())
+            				genericVariables.set_game_state("paused");
+            			else if(genericVariables.get_endGame())
+            				genericVariables.set_game_state("end");
+            			else {
+                    		draw_Grid(g);
+                    		draw_MainBorders(g);
+                        	draw_Shapes(g);
+                        	draw_Buffer(g);
+                        	draw_Score(g);
+            			}
+            			break;
+            		case "paused":
+            				pause_gameLoop(g);
+            			break;
+            		case "end":
+            				pause_gameLoop(g);
+            			break;
+            		case "exit":
+            			
+            			break;
+            		case "loading":
+            			if(!genericVariables.get_started()){
+							try {
+								gameComponents.set_highscore(SerializationUtil.deserialize(genericVariables.get_high_score_file_name()));
+							} catch (ClassNotFoundException | IOException e) {
+								System.err.println("tetris.highscoredata file not found");
+								genericVariables.set_highscore_file_exists(false);
+								//e.printStackTrace();
+							}
+                	        genericVariables.get_frame().setSize(400, 200);
+                	        genericVariables.get_frame().setLocation(genericVariables.get_s_WIDTH()/ 3-50, genericVariables.get_s_HEIGHT()/3-50);
+                			Calendar introTimeStamp = Calendar.getInstance();
+                			long millisGameStarted = genericVariables.get_game_startedTimeStamp().getTimeInMillis();
+                			long millisIntro = introTimeStamp.getTimeInMillis();
+                			int timeInterval = (int) ((millisIntro - millisGameStarted)/1000);
+                			if(timeInterval < 2) {
+                				g.drawImage(genericVariables.get_view_intro_image(), 0, 0, genericVariables.get_gw_WIDTH(), genericVariables.get_gw_HEIGHT(), null, null);
+                			}
+                			else {
+                    	        genericVariables.get_frame().setSize(genericVariables.get_gw_WIDTH(), genericVariables.get_gw_HEIGHT());
+                    	        genericVariables.get_frame().setLocation(genericVariables.get_s_WIDTH()/ 4-50, 0);
+                				genericVariables.set_game_state("welcome");
+                			}
+            			}
+            			break;
+            		case "highscore":
+            				draw_highScorePage(g);
+            			break;
+            	}
             }
-            
-        	private void draw_MainBorders(Graphics g) {
+        	
+			private void draw_highScorePage(Graphics g) {
+				g.drawImage(genericVariables.get_view_bg_image(), 0, 0, genericVariables.get_gw_WIDTH(), genericVariables.get_gw_HEIGHT(), null, null);
+    			g.setFont(new Font(genericVariables.get_font_type(), Font.BOLD, 30));
+				int pos_x = 250;
+				int pos_y = 250;
+				int width = 60;
+				int height = 50;
+				int interval = 80;
+				int char_distance = 15;
+				String temp = "";
+				int score = genericVariables.get_score();
+				g.setColor(new Color(244, 95, 65));
+				g.fillRect(0, 50 , genericVariables.get_gw_WIDTH()-1, 150);
+				g.setColor(new Color(65, 244, 121));
+				g.drawString("Your Score : " + Integer.toString(score), 300, 100);
+				
+				
+    			if(gameComponents.ch_order < 5) {
+    				for(int i = 0 ; i < 5 ; i++) {
+    					g.setColor(Color.GREEN);
+    					g.fill3DRect(pos_x + (interval*i), pos_y, width ,height ,true);
+    					g.setColor(Color.BLACK);
+    					for(int k = 0 ; k < genericVariables.get_user_name().length() ; k++) {
+    						temp += genericVariables.get_user_name().charAt(k);
+    						g.drawString(temp, pos_x+(interval*k)+char_distance, pos_y+35);
+    						temp = "";
+    					}
+    				}
+    				g.setColor(Color.ORANGE);
+    				g.fill3DRect(pos_x + (interval*gameComponents.ch_order), pos_y, width ,height ,true);
+    				g.setColor(Color.BLACK);
+    				temp += gameComponents.ch_temp;
+    				g.drawString(temp,pos_x+(gameComponents.ch_order*interval)+char_distance, pos_y+35);
+    				gameComponents.high_score_name_writing();
+    			}else{
+    				genericVariables.set_up(false);
+    				genericVariables.set_down(false);
+    				genericVariables.set_enter(false);
+    				
+    				g.setColor(new Color(127, 65, 244));
+    				g.drawString(genericVariables.get_user_name(), 350, 150);
+    				
+    				//background of highscore table
+    				g.setColor(Color.DARK_GRAY);
+    				g.fillRect(pos_x-150, pos_y+50, 700, 375);
+    				g.setColor(Color.BLACK);
+    				g.drawString("{ no }           { name }               { score }", pos_x-100, pos_y+85);
+    				g.fillRect(pos_x-150, pos_y+105, 700, 4);
+    				
+    				
+
+    				gameComponents.record_highScore();
+					
+    				if(genericVariables.get_highscore_file_exists()) {
+        				highScoreObject hs = gameComponents.get_highscore();
+						NavigableMap<Integer, String> map = hs.get_highScoreDataMap().descendingMap();
+        				Set<Entry<Integer, String>> set = map.entrySet();
+						Iterator<Entry<Integer, String>> itr = set.iterator();
+        				int cnt = 0;
+        				while(itr.hasNext()) {
+    						Map.Entry<Integer, String> entry = itr.next();				   
+        					g.drawString("{ "+(cnt+1) +" }             "+entry.getValue() + "__________"+Integer.toString(entry.getKey()), pos_x-100, pos_y+140+(cnt*30));
+        					cnt++;
+        				}	
+    				}else {
+    					System.out.println("FILE NOT EXISTS !!");
+    				}
+    			}
+			}
+
+
+
+
+			private void draw_MainBorders(Graphics g) {
         		int size = 25;
         		Color color_back = Color.BLACK;
         		Color color_front = new Color(232, 104, 104);
@@ -213,30 +316,6 @@ class Tetris extends genericVariables
                 		g.fill3DRect(2*size + (i*size)+1, 28*size+1, size-2, size-2,true);
                 	}
                 }
-                //game screen border deactivated.
-               /* int size_small = 20;
-            	int right_end = genericVariables.get_gw_WIDTH();
-            	int bottom_end = genericVariables.get_gw_HEIGHT();
-                
-            	g.setColor(color_back);
-            	//verticals
-            	g.fillRect(0,0, size_small , bottom_end);
-            	g.fillRect(right_end-size_small,0,size_small,bottom_end);
-            	//horizontals
-            	g.fillRect(size_small, 0, right_end-size_small, size_small);
-            	g.fillRect(size_small, bottom_end-size_small, right_end-size_small, size_small);
-            	
-            	g.setColor(new Color(104, 232, 159));
-                for(int i = 0 ; i < right_end/size_small; i++) {
-                	//verticals
-                	if(i < bottom_end/size_small) {
-                		g.fill3DRect(0+1,(i*size_small)+1, size_small-2, size_small-2,true);
-                    	g.fill3DRect(right_end-size_small+1,(i*size_small)+1, size_small-2, size_small-2,true);
-                	}
-                	//horizontals
-                	g.fill3DRect((i*size_small)+1,0+1,size_small-2,size_small-2,true);
-                	g.fill3DRect((i*size_small)+1,bottom_end-size_small+1, size_small-2, size_small-2,true);
-        		}*/
 			}
         	
         	int font_size = 0;
@@ -420,12 +499,13 @@ class Tetris extends genericVariables
             
             @SuppressWarnings("null")
         	private void pause_gameLoop(Graphics g) {
+            	g.drawImage(genericVariables.get_view_bg_image(), 0, 0, genericVariables.get_gw_WIDTH(), genericVariables.get_gw_HEIGHT(), null, null);
             	Color color_back = Color.BLACK;
             	Color color_front = new Color(104, 106, 232);
             	Color color_selection = new Color(229, 232, 104);
             	
             	int size = 25;
-        		int pause_x = 200;
+        		int pause_x = 300;
         		int pause_y = 150;
         		int line_space = 47;
         		int tab_space = 47;
@@ -500,7 +580,6 @@ class Tetris extends genericVariables
             			g.drawString("EXIT", pause_x+tab_space+60 , pause_y+line_space*5);
             		}
             		
-            		gameComponents.pause_menu_select_func();
             		break;
             	
         		case "end":
@@ -511,31 +590,45 @@ class Tetris extends genericVariables
             			g.setColor(color_selection);
             			g.fill3DRect(pause_x+tab_space, pause_y+line_space*3-25 , 180, 35, true);
             			g.setColor(Color.BLACK);
-            			g.drawString("RESTART", pause_x+tab_space+35 , pause_y+line_space*3);
+            			g.drawString("RECORD", pause_x+tab_space+35 , pause_y+line_space*3);
             		}
             		else {
             			g.setColor(Color.WHITE);
-            			g.drawString("RESTART", pause_x+tab_space+35 , pause_y+line_space*3);
+            			g.drawString("RECORD", pause_x+tab_space+35 , pause_y+line_space*3);
             		}
+        			
+        			if(genericVariables.get_pause_selection() == 1){
+        				g.setColor(color_selection);
+        				g.fill3DRect(pause_x+tab_space, pause_y+line_space*4-25 , 180, 35, true);
+        				g.setColor(Color.BLACK);
+        				g.drawString("RESTART", pause_x+tab_space+35 , pause_y+line_space*4);
+        			}
+        			else {
+        				g.setColor(Color.WHITE);
+        				g.drawString("RESTART", pause_x+tab_space+35 , pause_y+line_space*4);
+        			}
             		
-            		if(genericVariables.get_pause_selection() == 1) {
+            		if(genericVariables.get_pause_selection() == 2) {
             			g.setColor(color_selection);
-            			g.fill3DRect(pause_x+tab_space, pause_y+line_space*4-25 , 180, 35, true);
+            			g.fill3DRect(pause_x+tab_space, pause_y+line_space*5-25 , 180, 35, true);
             			g.setColor(Color.BLACK);
-            			g.drawString("EXIT", pause_x+tab_space+60 , pause_y+line_space*4);
+            			g.drawString("EXIT", pause_x+tab_space+60 , pause_y+line_space*5);
             		}
             		else {
             			g.setColor(Color.WHITE);
-            			g.drawString("EXIT", pause_x+tab_space+60 , pause_y+line_space*4);
+            			g.drawString("EXIT", pause_x+tab_space+60 , pause_y+line_space*5);
             		}
             		
-            		gameComponents.pause_menu_select_func();
+        			break;
+        		case "highscore":
+        			//TODO:
         			break;
         		default :
         			System.err.println("ERROR : unkown game state");
         			System.err.println("genericVariables.get_game_state() called : " + genericVariables.get_game_state());
         			break;
         		}
+        		gameComponents.pause_menu_select_func();
         	}
     }
 }

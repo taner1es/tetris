@@ -47,6 +47,8 @@ class genericVariables extends KeyInput{
 	private static boolean left;
 	private static boolean right;
 	private static boolean down;
+	private static boolean up;
+	private static boolean enter = false;
 	private static boolean directDown = false;
 	private static boolean pause = false;
 	private static boolean pause_apply = false;
@@ -57,8 +59,11 @@ class genericVariables extends KeyInput{
 	private static boolean col_right_exists = false;
 	private static boolean col_left_exists = false;
 	private static boolean col_bot_exists = false;
+	private static boolean highscore_file_exists = true;
 	
 	private static final String font_type = "Tahoma";
+	private static final String high_score_file_name = "tetris.highscoredata";
+	private static String user_name = "";
 	private static String game_state = "loading";
     private static String[][] shape_codes = 
 		{
@@ -70,13 +75,12 @@ class genericVariables extends KeyInput{
 			/* 5. --> S*/		{"XAAXAAXXXXXXXXXX","AXXXAAXXXAXXXXXX"},
 			/* 6. --> Z*/		{"AAXXXAAXXXXXXXXX","XAXXAAXXAXXXXXXX"}
 		};
-
-	static Image view_welcome_image;
-	static Image view_intro_image;
-	static Image view_bg_image;
+	private static Image view_welcome_image;
+	private static Image view_intro_image;
+	private static Image view_bg_image;
 	
-	static Calendar game_startedTimeStamp = Calendar.getInstance();
-	static Calendar score_addTimeStamp;
+	private static Calendar game_startedTimeStamp = Calendar.getInstance();
+	private static Calendar score_addTimeStamp;
 	
 	static Color bg_color = new Color(190, 247, 236);
 	
@@ -107,6 +111,8 @@ class genericVariables extends KeyInput{
 	protected static boolean get_left() { return left;}
 	protected static boolean get_right() { return right;}
 	protected static boolean get_down() { return down;}
+	protected static boolean get_up() { return up;}	
+	protected static boolean get_enter() { return enter;}	
 	protected static boolean get_directDown() { return directDown;}
 	protected static boolean get_pause() { return pause;}
 	protected static boolean get_pause_apply() { return pause_apply;}
@@ -117,9 +123,12 @@ class genericVariables extends KeyInput{
 	protected static boolean get_col_right_exists() { return col_right_exists;}
 	protected static boolean get_col_left_exists() { return col_left_exists;}
 	protected static boolean get_col_bot_exists() { return col_bot_exists;}
+	protected static boolean get_highscore_file_exists() { return highscore_file_exists;}
 	
 	protected static String get_font_type() { return font_type;}
+	protected static String get_user_name() { return user_name;}
 	protected static String get_game_state() { return game_state;}
+	protected static String get_high_score_file_name() { return high_score_file_name;}
 	protected static String[][] get_shape_codes() { return shape_codes;}
 	
 	protected static Image get_view_welcome_image() { return view_welcome_image;}
@@ -151,6 +160,8 @@ class genericVariables extends KeyInput{
 	protected static void set_left(boolean p_left) { left = p_left;}
 	protected static void set_right(boolean p_right) { right = p_right;}
 	protected static void set_down(boolean p_down) { down = p_down;}
+	protected static void set_up(boolean p_up) { up = p_up;}
+	protected static void set_enter(boolean p_enter) { enter = p_enter;}
 	protected static void set_directDown(boolean p_directDown) { directDown = p_directDown;}
 	protected static void set_pause(boolean p_pause) { pause = p_pause;}
 	protected static void set_pause_apply(boolean p_pause_apply) { pause_apply = p_pause_apply;}
@@ -161,10 +172,12 @@ class genericVariables extends KeyInput{
 	protected static void set_col_right_exists(boolean p_col_right_exists) { col_right_exists = p_col_right_exists;}
 	protected static void set_col_left_exists(boolean p_col_left_exists) { col_left_exists = p_col_left_exists;}
 	protected static void set_col_bot_exists(boolean p_col_bot_exists) { col_bot_exists = p_col_bot_exists;}
+	protected static void set_highscore_file_exists(boolean p_highscore_file_exists) { highscore_file_exists = p_highscore_file_exists;}
 	
 	protected static void set_game_state(String p_state) { game_state = p_state; }
+	protected static void set_user_name(String p_user_name) { user_name = p_user_name; }
 	/**
-	 * Game States : welcome, running, paused , end, exit , loading
+	 * Game States : welcome, running, paused , end, exit , loading , highscore
 	 */
     protected static void set_view_welcome_image(Image p_image) { view_welcome_image = p_image;}
     protected static void set_view_intro_image(Image p_image) { view_intro_image = p_image;}
@@ -190,6 +203,7 @@ class genericVariables extends KeyInput{
     	left = false;
     	right = false;
     	down = false;
+    	up = false;
     	directDown = false;
     	pause = false;
     	pause_apply = false;

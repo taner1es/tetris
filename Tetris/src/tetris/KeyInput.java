@@ -12,6 +12,23 @@ public class KeyInput {
     		int key = e.getKeyCode();
     		
     		switch(genericVariables.get_game_state()) {
+    			case "highscore":
+    				if(!genericVariables.get_up()) {
+    					if(key == KeyEvent.VK_UP) {
+    						genericVariables.set_up(true);
+    					}
+    				}
+    				if(!genericVariables.get_down()) {
+    					if(key == KeyEvent.VK_DOWN) {
+    						genericVariables.set_down(true);
+    					}
+    				}
+    				if(!genericVariables.get_enter()) {
+    					if(key == KeyEvent.VK_ENTER) {
+    						genericVariables.set_enter(true);
+    					}
+    				}
+    				break;
     			case "loading":
     				
     				break;
@@ -23,27 +40,10 @@ public class KeyInput {
         				
     				break;
     			case "paused":
-    				if(key == KeyEvent.VK_DOWN) {
-    					if(genericVariables.get_pause_selection()+1 < 3)
-    						genericVariables.set_pause_selection(genericVariables.get_pause_selection()+1);
-    					else
-    						genericVariables.set_pause_selection(0);
-            		}else if(key == KeyEvent.VK_UP) {
-            			if(genericVariables.get_pause_selection() > 0)
-    						genericVariables.set_pause_selection(genericVariables.get_pause_selection()-1);
-    					else
-    						genericVariables.set_pause_selection(2);
-            		}
-        			if(key == KeyEvent.VK_ENTER)
-        				genericVariables.set_pause_apply(true);
+    				control_pause_menu_3_selection(key);
     				break;
     			case "end":
-    				if(key == KeyEvent.VK_DOWN || key == KeyEvent.VK_UP) {
-            			if(genericVariables.get_pause_selection() == 0) genericVariables.set_pause_selection(genericVariables.get_pause_selection()+1);
-            			else genericVariables.set_pause_selection(genericVariables.get_pause_selection()-1);
-            		}
-        			if(key == KeyEvent.VK_ENTER)
-        				genericVariables.set_pause_apply(true);
+    				control_pause_menu_3_selection(key);
     				break;
     			case "running":
     					//pause game
@@ -82,6 +82,9 @@ public class KeyInput {
     		int key = e.getKeyCode();
     		
     		switch(genericVariables.get_game_state()) {
+    			case "highscore":
+    				
+				break;
     			case "loading":
 				
 				break;
@@ -119,5 +122,20 @@ public class KeyInput {
     				break;
     		}
     	}
+    }
+    
+    private static void control_pause_menu_3_selection(int key) {
+
+		if(key == KeyEvent.VK_DOWN) {
+			if(genericVariables.get_pause_selection() == 0) genericVariables.set_pause_selection(1);
+			else if(genericVariables.get_pause_selection() == 1) genericVariables.set_pause_selection(2);
+			else if(genericVariables.get_pause_selection() == 2) genericVariables.set_pause_selection(0);
+		}else if(key == KeyEvent.VK_UP) {
+			if(genericVariables.get_pause_selection() == 0) genericVariables.set_pause_selection(2);
+			else if(genericVariables.get_pause_selection() == 2) genericVariables.set_pause_selection(1);
+			else if(genericVariables.get_pause_selection() == 1) genericVariables.set_pause_selection(0);
+		}
+		if(key == KeyEvent.VK_ENTER)
+			genericVariables.set_pause_apply(true);
     }
 }
