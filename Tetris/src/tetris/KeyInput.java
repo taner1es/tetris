@@ -38,10 +38,7 @@ public class KeyInput {
     				
     				break;
     			case "welcome":
-        			if(key == KeyEvent.VK_ENTER) {
-        				genericVariables.set_started(true);
-        				genericVariables.set_game_state("running");
-        			}
+    				control_pause_menu_3_selection(key);
     				break;
     			case "paused":
     				control_pause_menu_3_selection(key);

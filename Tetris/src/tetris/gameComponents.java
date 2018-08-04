@@ -97,6 +97,26 @@ class gameComponents extends genericVariables{
 	//let user select one of the options on the view during pause menu
 	protected static void pause_menu_select_func() {
 		switch(genericVariables.get_game_state()) {
+			case "welcome":
+				if(genericVariables.get_pause_apply()) {
+					switch(genericVariables.get_pause_selection()) {
+						case 0: /*PLAY*/
+	        				genericVariables.set_started(true);
+	        				genericVariables.set_game_state("running");
+	        				genericVariables.set_enter(false);
+							break; 
+						case 1: /*INSTRUCTIONS*/
+							break;
+						case 2: /*EXIT*/
+								gameComponents.set_exit_game(true);
+								genericVariables.set_game_state("exit");
+							break;
+						default:
+								System.err.println("pause menu selection apply problem.");
+							break;
+					}
+				}
+				break;
 			case "paused" :
 				if(genericVariables.get_pause_apply()) {
 					switch(genericVariables.get_pause_selection()) {

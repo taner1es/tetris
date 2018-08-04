@@ -31,7 +31,7 @@ class Tetris extends genericVariables
     private void go()
     {
     	genericVariables.set_game_startedTimeStamp(Calendar.getInstance());
-    	URL url_tetris_menu = Tetris.class.getResource("tetris_menu.png"); //gets the folder/file from runnable jar file location
+    	URL url_tetris_menu = Tetris.class.getResource("tetris_welcome.png"); //gets the folder/file from runnable jar file location
 		URL url_tetris_intro = Tetris.class.getResource("tetris_intro.gif"); 
 		URL url_tetris_bg = Tetris.class.getResource("tetris_bg.png"); 
 
@@ -81,6 +81,7 @@ class Tetris extends genericVariables
             		run_gameLoop();
                     
             	}else { //game paused state
+            		gameComponents.pause_menu_select_func();
             		if(gameComponents.get_exit_game()) {
             			break;
             		}
@@ -151,9 +152,7 @@ class Tetris extends genericVariables
             	switch(genericVariables.get_game_state()) {
             		case "welcome":
             			if(!genericVariables.get_started()) {
-
-            				g.drawImage(genericVariables.get_view_welcome_image(), 0, 0, genericVariables.get_gw_WIDTH(), genericVariables.get_gw_HEIGHT(), Color.WHITE, null);
-
+            				draw_WelcomePage(g);
                     		//draw_highScorePage(g);
                 		}
             			break;
@@ -203,6 +202,55 @@ class Tetris extends genericVariables
             			break;
             	}
             }
+        	
+        	private void draw_WelcomePage(Graphics g) {
+				g.drawImage(genericVariables.get_view_welcome_image(), 0, 0, genericVariables.get_gw_WIDTH(), genericVariables.get_gw_HEIGHT(), Color.WHITE, null);
+				
+				int size = 10;
+        		int pos_x = 250;
+        		int pos_y = 350;
+        		Color color_back = new Color(255, 161, 0);
+        		Color color_front = Color.WHITE;
+        		Color color_highlighted = new Color(146, 63, 255);
+        		int interval = 100;
+        		for(int i = 0; i < 3 ; i++) {
+        			if(genericVariables.get_pause_selection() == i) {
+        				g.setColor(color_back);
+        				color_front = color_highlighted;
+        			}else {
+        				g.setColor(Color.BLACK);
+        				color_front = Color.WHITE;
+        			}
+        				
+        			g.fillRect(pos_x+10, pos_y+20+(interval*i), 290, 50);
+    				draw_tetroline(g, pos_x , pos_y +(interval*i), 7, true, Color.BLACK, color_front, size);
+    				draw_tetroline(g, pos_x+300, pos_y+(interval*i), 7, true, Color.BLACK, color_front, size);
+    				draw_tetroline(g, pos_x, pos_y+(interval*i), 29, false, Color.BLACK, color_front, size);
+    				draw_tetroline(g, pos_x, pos_y+60+(interval*i), 29, false, Color.BLACK, color_front, size);
+        		}
+
+    			g.setFont(new Font(genericVariables.get_font_type(), Font.BOLD, 30));
+        		if(genericVariables.get_pause_selection() == 0) {
+        			g.setColor(color_highlighted);
+            		g.drawString("PLAY", pos_x+115, pos_y+55);
+            		g.setColor(new Color(84, 255, 0));
+            		g.drawString("INSTRUCTIONS", pos_x+40, pos_y+155);
+            		g.drawString("EXIT", pos_x+115, pos_y+255);
+        		}else if(genericVariables.get_pause_selection() == 1) {
+        			g.setColor(color_highlighted);
+        			g.drawString("INSTRUCTIONS", pos_x+40, pos_y+155);
+            		g.setColor(new Color(84, 255, 0));
+            		g.drawString("PLAY", pos_x+115, pos_y+55);
+            		g.drawString("EXIT", pos_x+115, pos_y+255);
+        		}else if(genericVariables.get_pause_selection() == 2) {
+        			g.setColor(color_highlighted);
+        			g.drawString("EXIT", pos_x+115, pos_y+255);
+        			g.setColor(new Color(84, 255, 0));
+            		g.drawString("PLAY", pos_x+115, pos_y+55);
+            		g.drawString("INSTRUCTIONS", pos_x+40, pos_y+155);
+        		}
+        			
+        	}
         	
 			private void draw_highScorePage(Graphics g) {
 				g.drawImage(genericVariables.get_view_bg_image(), 0, 0, genericVariables.get_gw_WIDTH(), genericVariables.get_gw_HEIGHT(), null, null);
@@ -345,10 +393,6 @@ class Tetris extends genericVariables
         		Color color_front = new Color(232, 104, 104);
         		
         		g.drawImage(genericVariables.get_view_bg_image(), 0, 0, genericVariables.get_gw_WIDTH(), genericVariables.get_gw_HEIGHT(), Color.WHITE, null);
-            	
-        		//draw container for score, buffer and game area
-            	g.setColor(new Color(104, 155, 232));
-            	g.fillRect(25-3, 3*25-3, 33*25+6, 26*25+6);
             	
             	//paint game area background
             	g.setColor(Color.DARK_GRAY);
@@ -639,7 +683,6 @@ class Tetris extends genericVariables
         			System.err.println("genericVariables.get_game_state() called : " + genericVariables.get_game_state());
         			break;
         		}
-        		gameComponents.pause_menu_select_func();
         	}
             
 
