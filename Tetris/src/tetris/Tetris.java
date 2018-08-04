@@ -189,7 +189,7 @@ class Tetris extends genericVariables
                 			long millisIntro = introTimeStamp.getTimeInMillis();
                 			int timeInterval = (int) ((millisIntro - millisGameStarted)/1000);
                 			if(timeInterval < 2) {
-                				g.drawImage(genericVariables.get_view_intro_image(), 0, 0, genericVariables.get_gw_WIDTH(), genericVariables.get_gw_HEIGHT(), null, null);
+                				g.drawImage(genericVariables.get_view_intro_image(), 0, 0, 400, 200, null, null);
                 			}
                 			else {
                     	        genericVariables.get_frame().setSize(genericVariables.get_gw_WIDTH(), genericVariables.get_gw_HEIGHT());
