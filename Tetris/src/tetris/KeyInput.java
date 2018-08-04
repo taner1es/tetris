@@ -37,7 +37,6 @@ public class KeyInput {
         				genericVariables.set_started(true);
         				genericVariables.set_game_state("running");
         			}
-        				
     				break;
     			case "paused":
     				control_pause_menu_3_selection(key);

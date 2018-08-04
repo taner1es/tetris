@@ -42,6 +42,7 @@ class genericVariables extends KeyInput{
 	private static int score_add = 0;
 	private static int speed_game = 30; //lower value has more speed // 16 gameSpeed draws 60 fps
 	private static int speed_down = 30;
+	private static int tetrobox_size = 25;
 	
 	
 	private static boolean left;
@@ -108,6 +109,7 @@ class genericVariables extends KeyInput{
 	protected static int get_score_add() { return score_add;}
 	protected static int get_speed_down() { return speed_down;}
 	protected static int get_speed_game() { return speed_game;}
+	protected static int get_tetrobox_size() { return tetrobox_size;}
 	
 	protected static boolean get_left() { return left;}
 	protected static boolean get_right() { return right;}
@@ -158,6 +160,7 @@ class genericVariables extends KeyInput{
 	protected static void set_score_add(int p_score_add) { score_add = p_score_add;}
 	protected static void set_speed_game(int p_speed_game) { speed_game = p_speed_game;}
 	protected static void set_speed_down(int p_speed_down) { speed_down = p_speed_down;}
+	protected static void set_tetrobox_size(int p_tetrobox_size) { tetrobox_size = p_tetrobox_size;}
 	
 	protected static void set_left(boolean p_left) { left = p_left;}
 	protected static void set_right(boolean p_right) { right = p_right;}

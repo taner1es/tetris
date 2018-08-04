@@ -17,6 +17,7 @@ class gameComponents extends genericVariables{
 	private int[] explode_lines = new int[25];
 	private boolean call_new_shape = true;
 	private static boolean exit_game = false;
+	private static highScoreObject highscore;
 	
 	//getter methods
 	protected Vector<shape> get_all_shapes() { return this.all_shapes;}
@@ -28,8 +29,6 @@ class gameComponents extends genericVariables{
 	protected int[] get_explode_lines() { return this.explode_lines;}
 	protected boolean get_call_new_shape() { return this.call_new_shape;}
 	protected static boolean get_exit_game() { return gameComponents.exit_game;}
-	
-	private static highScoreObject highscore;
 	
 	//setter methods
 	protected static void set_exit_game(boolean exit_game) { gameComponents.exit_game = exit_game;}
@@ -88,7 +87,8 @@ class gameComponents extends genericVariables{
 				name += ch_temp;
 				ch_order++;
 				ch_temp = 'A';
-				genericVariables.set_user_name(name);
+				if(name != "")
+					genericVariables.set_user_name(name);
 				genericVariables.set_enter(false);
 			}
 		}

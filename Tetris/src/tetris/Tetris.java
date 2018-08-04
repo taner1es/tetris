@@ -9,7 +9,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.io.IOException;
 import java.net.URL;
 import java.util.Calendar;
 import java.util.Iterator;
@@ -152,7 +151,10 @@ class Tetris extends genericVariables
             	switch(genericVariables.get_game_state()) {
             		case "welcome":
             			if(!genericVariables.get_started()) {
+
             				g.drawImage(genericVariables.get_view_welcome_image(), 0, 0, genericVariables.get_gw_WIDTH(), genericVariables.get_gw_HEIGHT(), Color.WHITE, null);
+
+                    		//draw_highScorePage(g);
                 		}
             			break;
             		case "running":
@@ -213,14 +215,44 @@ class Tetris extends genericVariables
 				int char_distance = 15;
 				String temp = "";
 				int score = genericVariables.get_score();
-				g.setColor(new Color(244, 95, 65));
-				g.fillRect(0, 50 , genericVariables.get_gw_WIDTH()-1, 150);
+				Color color_back;
+				Color color_front;
+				Color highlighted_username_color = new Color(255, 50, 74);
+				//title section
+				g.setColor(Color.DARK_GRAY);
+				g.fillRect(0, 50 , genericVariables.get_gw_WIDTH()-1, 170);
 				g.setColor(new Color(65, 244, 121));
-				g.drawString("Your Score : " + Integer.toString(score), 300, 100);
+				g.drawString("Your Score : " + Integer.toString(score), 300, 115);
+				//title section tetroborders
+				color_back = Color.BLACK;
+				color_front = new Color(150, 45, 81);
+				draw_tetroline(g, 0, 25, 7, true, color_back, color_front, genericVariables.get_tetrobox_size());
+				draw_tetroline(g, genericVariables.get_gw_WIDTH()-25, 25, 7, true,color_back , color_front, genericVariables.get_tetrobox_size());
+				draw_tetroline(g, 0, 25, genericVariables.get_gw_WIDTH()/25-2, false, color_back, color_front, genericVariables.get_tetrobox_size());
+				draw_tetroline(g, 0, 175, genericVariables.get_gw_WIDTH()/25-2, false, color_back, color_front, genericVariables.get_tetrobox_size());
 				
+				color_back = Color.BLACK;
+				color_front = new Color(97, 13, 193);
+
+				//background of highscore table
+				g.setColor(Color.DARK_GRAY);
+				g.fillRect(pos_x-150, pos_y+100, 700, 375);
+				g.setColor(Color.BLACK);
+				g.drawString("{ no }           { name }               { score }", pos_x-100, pos_y+135);
+				g.fillRect(pos_x-150, pos_y+155, 700, 4);
+				
+				draw_tetroline(g, pos_x-175, pos_y+50, 17, true, color_back, color_front, genericVariables.get_tetrobox_size());
+				draw_tetroline(g, pos_x-175+700, pos_y+50, 17, true, color_back, color_front, genericVariables.get_tetrobox_size());
+				draw_tetroline(g, pos_x-175, pos_y+50, 27, false, color_back, color_front, genericVariables.get_tetrobox_size());
+				draw_tetroline(g, pos_x-175, pos_y+450, 27, false, color_back, color_front, genericVariables.get_tetrobox_size());
 				
     			if(gameComponents.ch_order < 5) {
     				for(int i = 0 ; i < 5 ; i++) {
+    					//draw small tetroborders
+    					draw_tetroline(g, pos_x-10 +(i*interval), pos_y-20, 7, true, color_back, color_front, 10);
+    					draw_tetroline(g, pos_x+width +(i*interval), pos_y-20, 7, true, color_back, color_front, 10);
+    					draw_tetroline(g, pos_x-10 + (i*interval), pos_y-20, 6, false, color_back, color_front, 10);
+    					draw_tetroline(g, pos_x-10 + (i*interval), pos_y+height-10, 6, false, color_back, color_front, 10);
     					g.setColor(Color.GREEN);
     					g.fill3DRect(pos_x + (interval*i), pos_y, width ,height ,true);
     					g.setColor(Color.BLACK);
@@ -241,41 +273,43 @@ class Tetris extends genericVariables
     				genericVariables.set_down(false);
     				genericVariables.set_enter(false);
     				
-    				g.setColor(new Color(127, 65, 244));
-    				g.drawString(genericVariables.get_user_name(), 350, 150);
-    				
-    				//background of highscore table
-    				g.setColor(Color.DARK_GRAY);
-    				g.fillRect(pos_x-150, pos_y+50, 700, 375);
-    				g.setColor(Color.BLACK);
-    				g.drawString("{ no }           { name }               { score }", pos_x-100, pos_y+85);
-    				g.fillRect(pos_x-150, pos_y+105, 700, 4);
+    				g.setColor(highlighted_username_color);
+    				g.drawString(genericVariables.get_user_name(), 350, 160);
     				
     				
-
-    				gameComponents.record_highScore();
-					gameComponents.read_highscore_file();
-    				
-    				if(genericVariables.get_highscore_file_exists() && genericVariables.get_record_done()) {
-        				highScoreObject hs = gameComponents.get_highscore();
-						NavigableMap<Integer, String> map = hs.get_highScoreDataMap().descendingMap();
-        				Set<Entry<Integer, String>> set = map.entrySet();
-						Iterator<Entry<Integer, String>> itr = set.iterator();
-        				int cnt = 0;
-        				while(itr.hasNext()) {
-        					if(cnt < 10) {
-        						Map.Entry<Integer, String> entry = itr.next();				   
-            					g.drawString("{ "+(cnt+1) +" }             "+entry.getValue() + "__________"+Integer.toString(entry.getKey()), pos_x-100, pos_y+140+(cnt*30));
-            					cnt++;	
-        					}else {
-        						break;
-        					}
-        				}	
-    				}else {
-    					System.out.println("get_high_score_file = " + genericVariables.get_highscore_file_exists());
-    					System.out.println("get_record_done= " + genericVariables.get_record_done());
+    				if(!genericVariables.get_record_done()) {
+    					gameComponents.record_highScore();
+    					gameComponents.read_highscore_file();
     				}
     			}
+    			
+    			if(genericVariables.get_highscore_file_exists()) {
+					highScoreObject hs = gameComponents.get_highscore();
+					NavigableMap<Integer, String> map = hs.get_highScoreDataMap().descendingMap();
+    				Set<Entry<Integer, String>> set = map.entrySet();
+					Iterator<Entry<Integer, String>> itr = set.iterator();
+    				int cnt = 0;
+    				while(itr.hasNext()) {
+    					if(cnt < 10) {
+    						Map.Entry<Integer, String> entry = itr.next();
+    						if(entry.getValue().equals(genericVariables.get_user_name())) {
+    							g.setColor(highlighted_username_color);
+    						}else {
+    							g.setColor(Color.GRAY);
+    						}
+        					g.drawString("{ "+(cnt+1) +" }", pos_x-100, pos_y+190+(cnt*30));
+        					g.drawString(entry.getValue(), pos_x+90, pos_y+190+(cnt*30));
+        					g.drawString(Integer.toString(entry.getKey()), pos_x+370, pos_y+190+(cnt*30));
+        					
+        					cnt++;	
+    					}else {
+    						break;
+    					}
+    				}	
+				}else {
+					System.out.println("get_high_score_file = " + genericVariables.get_highscore_file_exists());
+					System.out.println("get_record_done= " + genericVariables.get_record_done());
+				}
 			}
 
 
@@ -298,61 +332,34 @@ class Tetris extends genericVariables
             	g.setColor(Color.DARK_GRAY);
             	g.fillRect(50, 3*25, 19*25, 25*25);
         		
-        		//BORDER BLOCKS
-                //Left & Right side blocks
-                for(int i = 0 ; i < 26 ; i++) {
-                	g.setColor(color_back);
-                	g.fillRect(size, 3*size + (i*size), size, size);
-                	g.fillRect(21*size, 3*size + (i*size), size, size);
-                	
-                	g.setColor(color_front);
-                	g.fill3DRect(size+1, 3*size + (i*size)+1, size-2, size-2,true);
-                	g.fill3DRect(21*size+1, 3*size + (i*size)+1, size-2, size-2,true);
-                	
-                	if(i < 20) {
-                		g.setColor(color_back);
-                		g.fillRect(2*size + (i*size), 28*size, size, size);
-                		g.setColor(color_front);
-                		g.fill3DRect(2*size + (i*size)+1, 28*size+1, size-2, size-2,true);
-                	}
-                }
+            	//verticals main border blocks
+            	draw_tetroline(g, 1*size, 2*size, 26, true, color_back, color_front, genericVariables.get_tetrobox_size()); //left
+            	draw_tetroline(g, 21*size, 2*size, 26, true, color_back, color_front, genericVariables.get_tetrobox_size()); //right
+            	//horizontal bottom main border
+            	draw_tetroline(g, size, 27*size, 20, false, color_back, color_front, genericVariables.get_tetrobox_size());
 			}
         	
         	int font_size = 0;
         	int max_font_size = 40;
 			private void draw_Score(Graphics g) {
-				int size = 25;
 				Color color_back = Color.black;
 				Color color_front = new Color(232, 232, 104);
 				
     			g.setFont(new Font(genericVariables.get_font_type(), Font.BOLD, 30));
     			
-    			
-            	for(int i = 1 ; i <= 8 ; i++) {
-            		//score frame vertical edges
-            		if(i <= 5) {
-                    	g.setColor(color_back);
-                    	g.fillRect(600, 575+(i*size), size, size);
-                    	g.fillRect(825, 575+(i*size), size, size);
 
-                    	g.setColor(color_front);
-                    	g.fill3DRect(600+1, 575+(i*size)+1, size-2, size-2,true);
-                    	g.fill3DRect(825+1, 575+(i*size)+1, size-2, size-2,true);
-            		}
-            		//score frame horizontal edges
-            		g.setColor(color_back);
-                	g.fillRect(600+(i*size), 600, size, size);
-                	g.fillRect(600+(i*size), 700, size, size);
-                	
-                	g.setColor(color_front);
-            		g.fill3DRect(600+(i*size)+1, 600+1, size-2, size-2,true);
-            		g.fill3DRect(600+(i*size)+1, 700+1, size-2, size-2,true);
-            	}
             	//score frame background
             	g.setColor(Color.DARK_GRAY);
             	g.fillRect(625, 625, 200, 75);
             	
-            	//point
+    			//vertical tetrolines
+    			draw_tetroline(g, 600, 575, 5, true, color_back, color_front, genericVariables.get_tetrobox_size());
+    			draw_tetroline(g, 825, 575, 5, true, color_back, color_front, genericVariables.get_tetrobox_size());
+    			//horizontal tetrolines
+    			draw_tetroline(g, 600, 575, 8, false, color_back, color_front, genericVariables.get_tetrobox_size());
+    			draw_tetroline(g, 600, 675, 8, false, color_back, color_front, genericVariables.get_tetrobox_size());
+    			
+    		   	//point
             	String score = Integer.toString(genericVariables.get_score());
             	g.setColor(Color.white);
             	g.drawString(score, 675, 670);
@@ -401,8 +408,6 @@ class Tetris extends genericVariables
         						            				case "Z":g.setColor(Color.ORANGE);break;
                     			}
                     			g.fill3DRect(draw_x+1, draw_y+1, size-2, size-2,true);
-                    			//g.fillRect(draw_x+1, draw_y+1, size-2, size-2);
-                				//g.drawString(Integer.toString(i), draw_x+3, draw_y+17); //draws box numbers.
             				}
                 		}
             		}
@@ -412,34 +417,20 @@ class Tetris extends genericVariables
             
             private void draw_Buffer(Graphics g) {
             	int size = 25;
-            	int draw_x;
-            	int draw_y;
+            	int draw_x = 600;
+            	int draw_y = 50;
             	
             	Color color_back = Color.black;
             	Color color_front = new Color(115, 232, 104);
-            	for(int i = 1 ; i <= 18 ; i++) {
-                	//buffer frame horizontal edges
-            		if(i <= 8) {
-                    	g.setColor(color_back);
-                    	g.fillRect(600+(i*size), 75, size, size);
-                    	g.fillRect(600+(i*size), 500, size, size);
 
-                    	g.setColor(color_front);
-                    	g.fill3DRect(600+(i*size)+1, 75+1, size-2, size-2,true);
-                    	g.fill3DRect(600+(i*size)+1, 500+1, size-2, size-2,true);
-            		}
-                	//buffer frame vertical edges
-                	g.setColor(color_back);
-                	g.fillRect(600, 50+(i*size), size, size);
-                	g.fillRect(825, 50+(i*size), size, size);
-
-                	g.setColor(color_front);
-                	g.fill3DRect(600+1, 50+(i*size)+1, size-2, size-2,true);
-                	g.fill3DRect(825+1, 50+(i*size)+1, size-2, size-2,true);
-            	}
             	//buffer frame background
             	g.setColor(Color.DARK_GRAY);
             	g.fillRect(625, 100, 200, 400);
+            	
+            	draw_tetroline(g, 600, 50, 18, true, color_back, color_front, genericVariables.get_tetrobox_size());
+            	draw_tetroline(g, 825, 50, 18, true, color_back, color_front, genericVariables.get_tetrobox_size());
+            	draw_tetroline(g, 600, 50, 8, false, color_back, color_front, genericVariables.get_tetrobox_size());
+            	draw_tetroline(g, 600, 475, 8, false, color_back, color_front, genericVariables.get_tetrobox_size());
             	
             	Vector<shape>my_shapes = gameComponents.get_buffered_shapes();
             	//draw each boxes.
@@ -462,8 +453,6 @@ class Tetris extends genericVariables
         						            				case "Z":g.setColor(Color.ORANGE);break;
                     			}
                     			g.fill3DRect((draw_x + 420)+1, (draw_y + k*125 +100)+1, size-2, size-2,true);
-                				//g.fill3DRect((draw_x + 420), (draw_y + k*125 +100), size, size,false);
-                				//g.drawString(Integer.toString(i), draw_x+3, draw_y+17);
             				}
                 		}
             		}
@@ -630,5 +619,28 @@ class Tetris extends genericVariables
         		}
         		gameComponents.pause_menu_select_func();
         	}
+            
+
+            private void draw_tetroline(Graphics g,int pos_x,int pos_y,int length, boolean vertical,Color color_back, Color color_front,int size) {
+            	if(vertical) {
+            		for(int i = 1 ; i <= length ; i++) {
+                		
+                    	g.setColor(color_back);
+                    	g.fillRect(pos_x, pos_y+(i*size), size, size);
+
+                    	g.setColor(color_front);
+                    	g.fill3DRect(pos_x+1, pos_y+(i*size)+1, size-2, size-2,true);
+                	}
+            	}else {
+            		for(int i = 1 ; i <= length ; i++) {
+                    	g.setColor(color_back);
+                    	g.fillRect(pos_x+(i*size), pos_y+size, size, size);
+
+                    	g.setColor(color_front);
+                    	g.fill3DRect(pos_x+(i*size)+1, pos_y+size+1, size-2, size-2,true);
+            		}
+            	}
+            	
+            }
     }
 }
