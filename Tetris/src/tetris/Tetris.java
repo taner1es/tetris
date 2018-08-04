@@ -179,13 +179,7 @@ class Tetris extends genericVariables
             			break;
             		case "loading":
             			if(!genericVariables.get_started()){
-							try {
-								gameComponents.set_highscore(SerializationUtil.deserialize(genericVariables.get_high_score_file_name()));
-							} catch (ClassNotFoundException | IOException e) {
-								System.err.println("tetris.highscoredata file not found");
-								genericVariables.set_highscore_file_exists(false);
-								//e.printStackTrace();
-							}
+							gameComponents.read_highscore_file();
                 	        genericVariables.get_frame().setSize(400, 200);
                 	        genericVariables.get_frame().setLocation(genericVariables.get_s_WIDTH()/ 3-50, genericVariables.get_s_HEIGHT()/3-50);
                 			Calendar introTimeStamp = Calendar.getInstance();
@@ -260,20 +254,26 @@ class Tetris extends genericVariables
     				
 
     				gameComponents.record_highScore();
-					
-    				if(genericVariables.get_highscore_file_exists()) {
+					gameComponents.read_highscore_file();
+    				
+    				if(genericVariables.get_highscore_file_exists() && genericVariables.get_record_done()) {
         				highScoreObject hs = gameComponents.get_highscore();
 						NavigableMap<Integer, String> map = hs.get_highScoreDataMap().descendingMap();
         				Set<Entry<Integer, String>> set = map.entrySet();
 						Iterator<Entry<Integer, String>> itr = set.iterator();
         				int cnt = 0;
         				while(itr.hasNext()) {
-    						Map.Entry<Integer, String> entry = itr.next();				   
-        					g.drawString("{ "+(cnt+1) +" }             "+entry.getValue() + "__________"+Integer.toString(entry.getKey()), pos_x-100, pos_y+140+(cnt*30));
-        					cnt++;
+        					if(cnt < 10) {
+        						Map.Entry<Integer, String> entry = itr.next();				   
+            					g.drawString("{ "+(cnt+1) +" }             "+entry.getValue() + "__________"+Integer.toString(entry.getKey()), pos_x-100, pos_y+140+(cnt*30));
+            					cnt++;	
+        					}else {
+        						break;
+        					}
         				}	
     				}else {
-    					System.out.println("FILE NOT EXISTS !!");
+    					System.out.println("get_high_score_file = " + genericVariables.get_highscore_file_exists());
+    					System.out.println("get_record_done= " + genericVariables.get_record_done());
     				}
     			}
 			}

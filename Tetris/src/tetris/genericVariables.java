@@ -60,6 +60,7 @@ class genericVariables extends KeyInput{
 	private static boolean col_left_exists = false;
 	private static boolean col_bot_exists = false;
 	private static boolean highscore_file_exists = true;
+	private static boolean record_done = false;
 	
 	private static final String font_type = "Tahoma";
 	private static final String high_score_file_name = "tetris.highscoredata";
@@ -124,6 +125,7 @@ class genericVariables extends KeyInput{
 	protected static boolean get_col_left_exists() { return col_left_exists;}
 	protected static boolean get_col_bot_exists() { return col_bot_exists;}
 	protected static boolean get_highscore_file_exists() { return highscore_file_exists;}
+	protected static boolean get_record_done() { return record_done;}
 	
 	protected static String get_font_type() { return font_type;}
 	protected static String get_user_name() { return user_name;}
@@ -173,6 +175,7 @@ class genericVariables extends KeyInput{
 	protected static void set_col_left_exists(boolean p_col_left_exists) { col_left_exists = p_col_left_exists;}
 	protected static void set_col_bot_exists(boolean p_col_bot_exists) { col_bot_exists = p_col_bot_exists;}
 	protected static void set_highscore_file_exists(boolean p_highscore_file_exists) { highscore_file_exists = p_highscore_file_exists;}
+	protected static void set_record_done(boolean p_record_done) { record_done = p_record_done;}
 	
 	protected static void set_game_state(String p_state) { game_state = p_state; }
 	protected static void set_user_name(String p_user_name) { user_name = p_user_name; }

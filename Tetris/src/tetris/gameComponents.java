@@ -33,7 +33,7 @@ class gameComponents extends genericVariables{
 	
 	//setter methods
 	protected static void set_exit_game(boolean exit_game) { gameComponents.exit_game = exit_game;}
-	protected static void set_highscore(highScoreObject p_highscore) { highscore = p_highscore; }
+	protected static boolean set_highscore(highScoreObject p_highscore) { highscore = p_highscore; return true;}
 	//getter methods
 	protected static highScoreObject get_highscore() { return highscore; }
 	
@@ -44,20 +44,17 @@ class gameComponents extends genericVariables{
 		}
 	}
 	
-	
-	static boolean record_done = false;
-	
 	protected static void record_highScore() {
 		try {
 			if(!genericVariables.get_highscore_file_exists()) {
 				set_highscore(new highScoreObject());
 				System.out.println("new highscore object created.");
 			}
-			if(!record_done) {
+			if(!genericVariables.get_record_done()) {
 				get_highscore().get_highScoreDataMap().put(genericVariables.get_score(), genericVariables.get_user_name());
 				System.out.println("new record succesfully added to datamap");
 				SerializationUtil.serialize(get_highscore(), genericVariables.get_high_score_file_name());
-				record_done = true;
+				genericVariables.set_record_done(true);;
 			}
 			
 		} catch (IOException e) {
@@ -623,4 +620,15 @@ class gameComponents extends genericVariables{
     	else return false;
     			
     }
+	protected static void read_highscore_file() {
+		try {
+			if(gameComponents.set_highscore(SerializationUtil.deserialize(genericVariables.get_high_score_file_name()))) {
+				genericVariables.set_highscore_file_exists(true);
+			}
+		} catch (ClassNotFoundException | IOException e) {
+			System.err.println("tetris.highscoredata file not found");
+			genericVariables.set_highscore_file_exists(false);
+			//e.printStackTrace();
+		}
+	}
 }
