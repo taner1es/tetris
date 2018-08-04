@@ -249,10 +249,14 @@ class Tetris extends genericVariables
     			if(gameComponents.ch_order < 5) {
     				for(int i = 0 ; i < 5 ; i++) {
     					//draw small tetroborders
+    					if(i == gameComponents.ch_order) color_front = Color.RED;
+    					else color_front = new Color(97, 13, 193);
     					draw_tetroline(g, pos_x-10 +(i*interval), pos_y-20, 7, true, color_back, color_front, 10);
     					draw_tetroline(g, pos_x+width +(i*interval), pos_y-20, 7, true, color_back, color_front, 10);
     					draw_tetroline(g, pos_x-10 + (i*interval), pos_y-20, 6, false, color_back, color_front, 10);
     					draw_tetroline(g, pos_x-10 + (i*interval), pos_y+height-10, 6, false, color_back, color_front, 10);
+    					
+    					
     					g.setColor(Color.GREEN);
     					g.fill3DRect(pos_x + (interval*i), pos_y, width ,height ,true);
     					g.setColor(Color.BLACK);
@@ -262,15 +266,16 @@ class Tetris extends genericVariables
     						temp = "";
     					}
     				}
-    				g.setColor(Color.ORANGE);
+    				if(genericVariables.get_up()) g.setColor(Color.RED);
+    				else g.setColor(Color.ORANGE);
     				g.fill3DRect(pos_x + (interval*gameComponents.ch_order), pos_y, width ,height ,true);
     				g.setColor(Color.BLACK);
     				temp += gameComponents.ch_temp;
     				g.drawString(temp,pos_x+(gameComponents.ch_order*interval)+char_distance, pos_y+35);
+    				
     				gameComponents.high_score_name_writing();
     			}else{
     				genericVariables.set_up(false);
-    				genericVariables.set_down(false);
     				genericVariables.set_enter(false);
     				
     				g.setColor(highlighted_username_color);
@@ -310,6 +315,25 @@ class Tetris extends genericVariables
 					System.out.println("get_high_score_file = " + genericVariables.get_highscore_file_exists());
 					System.out.println("get_record_done= " + genericVariables.get_record_done());
 				}
+    			
+    			if(genericVariables.get_record_done()) {
+					g.setColor(Color.DARK_GRAY);
+					
+					g.fillRect(pos_x-20, pos_y-10,420 ,60 );
+
+					draw_tetroline(g, pos_x-30, pos_y-20, 7, true, color_back, color_front, 10);
+					draw_tetroline(g, pos_x+400, pos_y-20, 7, true, color_back, color_front, 10);
+					draw_tetroline(g, pos_x-30, pos_y-20, 43, false, color_back, color_front, 10);
+					draw_tetroline(g, pos_x-30, pos_y+height-10, 43, false, color_back, color_front, 10);
+
+					g.setColor(Color.WHITE);
+					g.drawString("PRESS \"ESC\" FOR MENU", pos_x, pos_y+35);
+					
+    				if(genericVariables.get_esc()) {
+    					genericVariables.set_game_state("end");
+    					genericVariables.set_esc(false);
+    				}
+    			}				
 			}
 
 
@@ -322,8 +346,6 @@ class Tetris extends genericVariables
         		
         		g.drawImage(genericVariables.get_view_bg_image(), 0, 0, genericVariables.get_gw_WIDTH(), genericVariables.get_gw_HEIGHT(), Color.WHITE, null);
             	
-        		
-        		
         		//draw container for score, buffer and game area
             	g.setColor(new Color(104, 155, 232));
             	g.fillRect(25-3, 3*25-3, 33*25+6, 26*25+6);

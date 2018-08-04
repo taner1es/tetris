@@ -50,6 +50,7 @@ class genericVariables extends KeyInput{
 	private static boolean down;
 	private static boolean up;
 	private static boolean enter = false;
+	private static boolean esc = false;
 	private static boolean directDown = false;
 	private static boolean pause = false;
 	private static boolean pause_apply = false;
@@ -116,6 +117,7 @@ class genericVariables extends KeyInput{
 	protected static boolean get_down() { return down;}
 	protected static boolean get_up() { return up;}	
 	protected static boolean get_enter() { return enter;}	
+	protected static boolean get_esc() { return esc;}	
 	protected static boolean get_directDown() { return directDown;}
 	protected static boolean get_pause() { return pause;}
 	protected static boolean get_pause_apply() { return pause_apply;}
@@ -167,6 +169,7 @@ class genericVariables extends KeyInput{
 	protected static void set_down(boolean p_down) { down = p_down;}
 	protected static void set_up(boolean p_up) { up = p_up;}
 	protected static void set_enter(boolean p_enter) { enter = p_enter;}
+	protected static void set_esc(boolean p_esc) { esc = p_esc;}
 	protected static void set_directDown(boolean p_directDown) { directDown = p_directDown;}
 	protected static void set_pause(boolean p_pause) { pause = p_pause;}
 	protected static void set_pause_apply(boolean p_pause_apply) { pause_apply = p_pause_apply;}
@@ -199,17 +202,25 @@ class genericVariables extends KeyInput{
     
     protected static void reset() {
     	shape_cnt = 0;
+    	frameCounter = 0;
     	frameCounter_left = 0;
     	frameCounter_right = 0;
     	frameCounter_collision = 0;
     	frameCounter_collision_bot = 0;
-    	frameCounter = 0;
     	pause_selection = 0;
+    	score = 0;
+    	score_multiplier = 0;
+    	score_add = 0;
+    	speed_down = 30;
+    	speed_game = 30; //lower value has more speed // 16 gameSpeed draws 60 fps
+    	tetrobox_size = 25;
     	
     	left = false;
     	right = false;
     	down = false;
     	up = false;
+    	enter = false;
+    	esc = false;
     	directDown = false;
     	pause = false;
     	pause_apply = false;
@@ -220,11 +231,16 @@ class genericVariables extends KeyInput{
     	col_right_exists = false;
     	col_left_exists = false;
     	col_bot_exists = false;
+    	highscore_file_exists = false;
+    	record_done = false;
 
+    	user_name = "";
     	game_state = "loading";
-    	score = 0;
-    	speed_game = 30; //lower value has more speed // 16 gameSpeed draws 60 fps
-    	speed_down = 30;
+    	gameComponents.ch_order = 0;
+    	gameComponents.ch_temp = '/';
+    	gameComponents.name = "";
+    	
+    	game_startedTimeStamp = Calendar.getInstance();
     }
     
     

@@ -28,6 +28,11 @@ public class KeyInput {
     						genericVariables.set_enter(true);
     					}
     				}
+    				if(!genericVariables.get_esc()) {
+    					if(key == KeyEvent.VK_ESCAPE) {
+    						genericVariables.set_esc(true);
+    					}
+    				}
     				break;
     			case "loading":
     				
@@ -82,7 +87,26 @@ public class KeyInput {
     		
     		switch(genericVariables.get_game_state()) {
     			case "highscore":
-    				
+    				if(genericVariables.get_up()) {
+    					if(key == KeyEvent.VK_UP) {
+    						genericVariables.set_up(false);
+    					}
+    				}
+    				if(genericVariables.get_down()) {
+    					if(key == KeyEvent.VK_DOWN) {
+    						genericVariables.set_down(false);
+    					}
+    				}
+    				if(genericVariables.get_enter()) {
+    					if(key == KeyEvent.VK_ENTER) {
+    						genericVariables.set_enter(false);
+    					}
+    				}
+    				if(genericVariables.get_esc()) {
+    					if(key == KeyEvent.VK_ESCAPE) {
+    						genericVariables.set_esc(false);
+    					}
+    				}
 				break;
     			case "loading":
 				
