@@ -12,6 +12,13 @@ public class KeyInput {
     		int key = e.getKeyCode();
     		
     		switch(genericVariables.get_game_state()) {
+				case "instructions":
+					if(!genericVariables.get_esc()) {
+    					if(key == KeyEvent.VK_ESCAPE) {
+    						genericVariables.set_esc(true);
+    					}
+    				}
+					break;
     			case "highscore":
     				if(!genericVariables.get_up()) {
     					if(key == KeyEvent.VK_UP) {
@@ -83,6 +90,13 @@ public class KeyInput {
     		int key = e.getKeyCode();
     		
     		switch(genericVariables.get_game_state()) {
+    			case "instructions":
+    				if(genericVariables.get_esc()) {
+    					if(key == KeyEvent.VK_ESCAPE) {
+    						genericVariables.set_esc(false);
+    					}
+    				}
+				break;
     			case "highscore":
     				if(genericVariables.get_up()) {
     					if(key == KeyEvent.VK_UP) {

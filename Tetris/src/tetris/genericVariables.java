@@ -78,9 +78,11 @@ class genericVariables extends KeyInput{
 			/* 5. --> S*/		{"XAAXAAXXXXXXXXXX","AXXXAAXXXAXXXXXX"},
 			/* 6. --> Z*/		{"AAXXXAAXXXXXXXXX","XAXXAAXXAXXXXXXX"}
 		};
+    
 	private static Image view_welcome_image;
 	private static Image view_intro_image;
 	private static Image view_bg_image;
+	private static Image view_instructions_image;
 	
 	private static Calendar game_startedTimeStamp = Calendar.getInstance();
 	private static Calendar score_addTimeStamp;
@@ -140,6 +142,7 @@ class genericVariables extends KeyInput{
 	protected static Image get_view_welcome_image() { return view_welcome_image;}
 	protected static Image get_view_intro_image() { return view_intro_image;}
 	protected static Image get_view_bg_image() { return view_bg_image;}
+	protected static Image get_view_instructions_image() { return view_instructions_image;}
 	
 	protected static Calendar get_game_startedTimeStamp() { return game_startedTimeStamp;}
 	protected static Calendar get_score_addTimeStamp() { return score_addTimeStamp;}
@@ -186,11 +189,12 @@ class genericVariables extends KeyInput{
 	protected static void set_game_state(String p_state) { game_state = p_state; }
 	protected static void set_user_name(String p_user_name) { user_name = p_user_name; }
 	/**
-	 * Game States : welcome, running, paused , end, exit , loading , highscore
+	 * Game States : welcome, running, paused , end, exit , loading , highscore , instructions
 	 */
     protected static void set_view_welcome_image(Image p_image) { view_welcome_image = p_image;}
     protected static void set_view_intro_image(Image p_image) { view_intro_image = p_image;}
     protected static void set_view_bg_image(Image p_image) { view_bg_image = p_image;}
+    protected static void set_view_instructions_image(Image p_image) { view_instructions_image = p_image;}
     
     protected static void set_game_startedTimeStamp(Calendar p_Date) { game_startedTimeStamp = p_Date;}
     protected static void set_score_addTimeStamp(Calendar p_Date) { score_addTimeStamp = p_Date;}

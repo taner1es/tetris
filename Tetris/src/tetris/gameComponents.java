@@ -103,9 +103,9 @@ class gameComponents extends genericVariables{
 						case 0: /*PLAY*/
 	        				genericVariables.set_started(true);
 	        				genericVariables.set_game_state("running");
-	        				genericVariables.set_enter(false);
 							break; 
 						case 1: /*INSTRUCTIONS*/
+							genericVariables.set_game_state("instructions");
 							break;
 						case 2: /*EXIT*/
 								gameComponents.set_exit_game(true);

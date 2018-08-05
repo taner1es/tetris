@@ -1,7 +1,5 @@
 package tetris;
 /*
- * Version No : 0.16
- * Version Notes : 
  *  @Author : Taner Esmeroğlu
  */
 
@@ -34,10 +32,12 @@ class Tetris extends genericVariables
     	URL url_tetris_menu = Tetris.class.getResource("tetris_welcome.png"); //gets the folder/file from runnable jar file location
 		URL url_tetris_intro = Tetris.class.getResource("tetris_intro.gif"); 
 		URL url_tetris_bg = Tetris.class.getResource("tetris_bg.png"); 
+		URL url_tetris_instructions = Tetris.class.getResource("tetris_instructions.png"); 
 
 		genericVariables.set_view_welcome_image(new ImageIcon(url_tetris_menu).getImage());
 		genericVariables.set_view_intro_image(new ImageIcon(url_tetris_intro).getImage());
 		genericVariables.set_view_bg_image(new ImageIcon(url_tetris_bg).getImage());
+		genericVariables.set_view_instructions_image(new ImageIcon(url_tetris_instructions).getImage());
 		
 		
     	//this block to configure window settings 
@@ -51,8 +51,6 @@ class Tetris extends genericVariables
 
         genericVariables.get_frame().setResizable(false);
         genericVariables.get_frame().setUndecorated(true);
-        /*genericVariables.get_frame().setSize(400, 200);
-        genericVariables.get_frame().setLocation(genericVariables.get_s_WIDTH()/ 3, genericVariables.get_s_HEIGHT()/3-50);*/
         genericVariables.get_frame().setSize(900, 800);
         genericVariables.get_frame().setLocation(400, 0);
         genericVariables.get_frame().setVisible(true);
@@ -61,37 +59,58 @@ class Tetris extends genericVariables
     
     private void moveIt()
     {
-    	//genericVariables.set_game_state("highscore");
     	//start a game with generating a new shape
-    	if(genericVariables.get_game_state() == "running" || genericVariables.get_game_state() == "loading")
-    	gameComponents.swap_buffered_shape_to_game();
+    	if(genericVariables.get_game_state() == "running" || genericVariables.get_game_state() == "loading") {
+    		gameComponents.swap_buffered_shape_to_game();	
+    	}
     	
     	//endless loop for game running.
         while (true)
         {
+    		if(genericVariables.get_game_state() == "exit") {
+    			System.exit(0);
+    			break;
+    		}
         	//restarting
         	if(genericVariables.get_restartGame()){
         		genericVariables.set_my_tetris(new gameComponents());
         		genericVariables.reset();
         		genericVariables.set_game_startedTimeStamp(Calendar.getInstance());
         		moveIt();
-        	}else {
-            	//game running state
-            	if(!genericVariables.get_endGame() && !genericVariables.get_pause() && genericVariables.get_started()) { 
+        	}else {/**
+        		 * Game States : welcome, running, paused , end, exit , loading , highscore , instructions
+        		 */	
+        		switch(genericVariables.get_game_state()) {
+        		case "welcome":
+        			gameComponents.pause_menu_select_func();
+        			break;
+        		case "running":
             		run_gameLoop();
-                    
-            	}else { //game paused state
-            		gameComponents.pause_menu_select_func();
-            		if(gameComponents.get_exit_game()) {
-            			break;
+        			break;
+        		case "paused":
+        			gameComponents.pause_menu_select_func();
+        			break;
+        		case "end":
+        			gameComponents.pause_menu_select_func();
+        			break;
+        		case "loading":
+        			break;
+        		case "highscore":
+        			break;
+        		case "instructions":
+            		if(genericVariables.get_esc()) {
+            			genericVariables.set_game_state("welcome");
+            			genericVariables.set_esc(false);
             		}
-            	}
+        			break;
+        		default :
+        			System.out.println("no game state found");
+        			break;
+        		}
+
         		sleep(genericVariables.get_sleep_time());
             	genericVariables.get_frame().repaint();
         	}
-        }
-        if(gameComponents.get_exit_game()) {
-        	System.exit(0);
         }
     }
     
@@ -150,6 +169,9 @@ class Tetris extends genericVariables
             {	
             	//game states : welcome, running, paused , end, exit , loading , highscore
             	switch(genericVariables.get_game_state()) {
+            		case "instructions":
+            				g.drawImage(genericVariables.get_view_instructions_image(), 0, 0, genericVariables.get_gw_WIDTH(), genericVariables.get_gw_HEIGHT(), null);
+            			break;
             		case "welcome":
             			if(!genericVariables.get_started()) {
             				draw_WelcomePage(g);
@@ -706,6 +728,18 @@ class Tetris extends genericVariables
             		}
             	}
             	
+            }
+
+        	
+        	private void draw_tetrosquare(Graphics g,int pos_x,int pos_y,int x_length, int y_length,Color color_back, Color color_front,Color fill_rect_at_back,int size) {
+        		g.setColor(fill_rect_at_back);
+        		g.fillRect(pos_x+size, pos_y+size, x_length-size, y_length-size);
+        		
+        		draw_tetroline(g,pos_x,pos_y,(y_length/size),true,color_back,color_front,size);
+        		draw_tetroline(g,(pos_x+x_length),pos_y,(y_length/size),true,color_back,color_front,size);
+        		
+        		draw_tetroline(g,pos_x,pos_y,(x_length/size),false,color_back,color_front,size);
+        		draw_tetroline(g,pos_x,pos_y+y_length-size,(x_length/size),false,color_back,color_front,size);
             }
     }
 }
