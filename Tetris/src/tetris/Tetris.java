@@ -29,12 +29,12 @@ class Tetris extends genericVariables
     private void go()
     {
     	genericVariables.set_game_startedTimeStamp(Calendar.getInstance());
-    	URL url_tetris_menu = Tetris.class.getResource("tetris_welcome.png"); //gets the folder/file from runnable jar file location
+    	URL url_tetris_welcome = Tetris.class.getResource("tetris_welcome.png"); //gets the folder/file from runnable jar file location
 		URL url_tetris_intro = Tetris.class.getResource("tetris_intro.gif"); 
 		URL url_tetris_bg = Tetris.class.getResource("tetris_bg.png"); 
 		URL url_tetris_instructions = Tetris.class.getResource("tetris_instructions.png"); 
 
-		genericVariables.set_view_welcome_image(new ImageIcon(url_tetris_menu).getImage());
+		genericVariables.set_view_welcome_image(new ImageIcon(url_tetris_welcome).getImage());
 		genericVariables.set_view_intro_image(new ImageIcon(url_tetris_intro).getImage());
 		genericVariables.set_view_bg_image(new ImageIcon(url_tetris_bg).getImage());
 		genericVariables.set_view_instructions_image(new ImageIcon(url_tetris_instructions).getImage());
