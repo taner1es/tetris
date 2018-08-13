@@ -43,6 +43,26 @@ class gameComponents extends genericVariables{
 		}
 	}
 	
+	protected static void check_audios() {
+		genericVariables.reset_sound(genericVariables.get_clip_rotate());
+		genericVariables.reset_sound(genericVariables.get_clip_explosion());
+		genericVariables.reset_sound(genericVariables.get_clip_loading());
+		genericVariables.reset_sound(genericVariables.get_clip_move());
+		genericVariables.reset_sound(genericVariables.get_clip_drop());
+		genericVariables.reset_sound(genericVariables.get_clip_theme_music());
+		
+		if(genericVariables.get_game_state() == "running") {
+			genericVariables.get_clip_loading().stop();
+			genericVariables.get_clip_loading().setFramePosition(0);
+		}else if(genericVariables.get_game_state() == "paused"){
+			System.out.println(genericVariables.get_game_state());
+			genericVariables.get_clip_theme_music().stop();
+		}else {
+			genericVariables.get_clip_theme_music().stop();
+			genericVariables.get_clip_theme_music().setFramePosition(0);
+		}
+	}
+	
 	protected static void record_highScore() {
 		try {
 			if(!genericVariables.get_highscore_file_exists()) {
@@ -174,38 +194,39 @@ class gameComponents extends genericVariables{
 		call_new_shape = b;
 	}
 	protected void rotate_shape() {
-		int last_index = all_shapes.size()-1;
-		int actual_x = all_shapes.lastElement().get_shape_start_loc_X()+100;		
-		int actual_y = all_shapes.lastElement().get_shape_start_loc_Y();		
-		String type = all_shapes.lastElement().get_shape_type();
-		
-		int type_no = all_shapes.lastElement().get_shape_type_no(); //shape_codes array first dimension number
-		int rot_no = all_shapes.lastElement().get_shape_rotation_no(); // shape_codes array second dimension number
-		String code = null;
-		if(type_no != 3 ) {
-			 // will be taken from array list with new rotation no
-			if(genericVariables.get_shape_codes()[type_no].length-1 == rot_no) {
-				rot_no = 0;
-				code = genericVariables.get_shape_codes()[type_no][rot_no];
-			}else {
-				rot_no++;
-				code = genericVariables.get_shape_codes()[type_no][rot_no];
+		if(genericVariables.get_clip_rotate().getFramePosition() == 0) {
+			int last_index = all_shapes.size()-1;
+			int actual_x = all_shapes.lastElement().get_shape_start_loc_X()+100;		
+			int actual_y = all_shapes.lastElement().get_shape_start_loc_Y();		
+			String type = all_shapes.lastElement().get_shape_type();
+			
+			int type_no = all_shapes.lastElement().get_shape_type_no(); //shape_codes array first dimension number
+			int rot_no = all_shapes.lastElement().get_shape_rotation_no(); // shape_codes array second dimension number
+			String code = null;
+			if(type_no != 3 ) {
+				 // will be taken from array list with new rotation no
+				if(genericVariables.get_shape_codes()[type_no].length-1 == rot_no) {
+					rot_no = 0;
+					code = genericVariables.get_shape_codes()[type_no][rot_no];
+				}else {
+					rot_no++;
+					code = genericVariables.get_shape_codes()[type_no][rot_no];
+				}
+				shape rotatedshape;
+				rotatedshape = stringtoShape(code,type,type_no,rot_no,actual_x,actual_y-25);
+				rotatedshape.set_shape_active(false);
+				if(checkcollisions(rotatedshape)) {
+					rotatedshape.set_shape_active(true);
+					all_shapes.setElementAt(rotatedshape, last_index);
+					all_shapes.elementAt(last_index).set_shape_id(last_index);
+					genericVariables.get_clip_rotate().start();
+				}	
+				else System.err.println("Collision exists while rotating.");
 			}
-			shape rotatedshape;
-			rotatedshape = stringtoShape(code,type,type_no,rot_no,actual_x,actual_y-25);
-			rotatedshape.set_shape_active(false);
-			if(checkcollisions(rotatedshape)) {
-				rotatedshape.set_shape_active(true);
-				all_shapes.setElementAt(rotatedshape, last_index);
-				all_shapes.elementAt(last_index).set_shape_id(last_index);
+			else {
+				System.err.println("no rotation for this shape.");
 			}
-				
-			else System.err.println("Collision exists while rotating.");
-		}
-		else {
-			System.err.println("no rotation for this shape.");
-		}
-		
+		}	
 	}
 
 	protected void reset_explode_lines() {
@@ -216,31 +237,33 @@ class gameComponents extends genericVariables{
 	
 	protected static void left_event() {
 		//left event
-		shape active = get_my_tetris().get_all_shapes().lastElement();
-    	if(genericVariables.get_left() && active.get_shape_active()) {
-    		if(!genericVariables.get_down()) {
-				if(genericVariables.get_frameCounter_left() == 1 ) {
-	    			active.go_left();
-	        		genericVariables.set_frameCounter_left(genericVariables.get_frameCounter_left()+1);
-	    		}else if(genericVariables.get_frameCounter_left() >= genericVariables.get_speed_game()/2) {
-	    			active.go_left();
-	    			genericVariables.set_frameCounter_left(2);
-	    		}else {
-	    			genericVariables.set_frameCounter_left(genericVariables.get_frameCounter_left()+1);
-	    		}
-			}
-			else {
-				if(genericVariables.get_frameCounter_left() == 1 ) {
-	    			active.go_left();
-	        		genericVariables.set_frameCounter_left(genericVariables.get_frameCounter_left()+1);
-	    		}else if(genericVariables.get_frameCounter_left() >= genericVariables.get_speed_game()/7) {
-	    			active.go_left();
-	    			genericVariables.set_frameCounter_left(2);
-	    		}else {
-	    			genericVariables.set_frameCounter_left(genericVariables.get_frameCounter_left()+1);
-	    		}
-			}
-    	}
+		if(genericVariables.get_clip_move().getFramePosition() == 0) {
+			shape active = get_my_tetris().get_all_shapes().lastElement();
+	    	if(genericVariables.get_left() && active.get_shape_active()) {
+	    		if(!genericVariables.get_down()) {
+					if(genericVariables.get_frameCounter_left() == 1 ) {
+		    			active.go_left();
+		        		genericVariables.set_frameCounter_left(genericVariables.get_frameCounter_left()+1);
+		    		}else if(genericVariables.get_frameCounter_left() >= genericVariables.get_speed_game()/2) {
+		    			active.go_left();
+		    			genericVariables.set_frameCounter_left(2);
+		    		}else {
+		    			genericVariables.set_frameCounter_left(genericVariables.get_frameCounter_left()+1);
+		    		}
+				}
+				else {
+					if(genericVariables.get_frameCounter_left() == 1 ) {
+		    			active.go_left();
+		        		genericVariables.set_frameCounter_left(genericVariables.get_frameCounter_left()+1);
+		    		}else if(genericVariables.get_frameCounter_left() >= genericVariables.get_speed_game()/7) {
+		    			active.go_left();
+		    			genericVariables.set_frameCounter_left(2);
+		    		}else {
+		    			genericVariables.set_frameCounter_left(genericVariables.get_frameCounter_left()+1);
+		    		}
+				}
+	    	}
+		}
 	}
 	
 	protected static void right_event() {
@@ -305,6 +328,7 @@ class gameComponents extends genericVariables{
 		genericVariables.get_my_tetris().get_all_shapes().setElementAt(aspect, last_index);
 		genericVariables.get_my_tetris().get_all_shapes().elementAt(last_index).set_shape_id(last_index);
 		genericVariables.set_directDown(false);
+		genericVariables.get_clip_drop().start();
 	}
 	
 	//manage gamespeed
@@ -406,6 +430,7 @@ class gameComponents extends genericVariables{
     	}
     	if(counter == 19) {
     		genericVariables.get_my_tetris().get_explode_lines()[line_number] = 0;
+    		genericVariables.get_clip_explosion().start();
     		drop_upper_boxes(line_number);
     	}
     		

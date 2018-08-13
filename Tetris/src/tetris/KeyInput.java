@@ -160,16 +160,21 @@ public class KeyInput {
     
     private static void control_pause_menu_3_selection(int key) {
 
-		if(key == KeyEvent.VK_DOWN) {
+		if(key == KeyEvent.VK_DOWN && !genericVariables.get_clip_move().isRunning()) {
+			genericVariables.get_clip_move().start();
 			if(genericVariables.get_pause_selection() == 0) genericVariables.set_pause_selection(1);
 			else if(genericVariables.get_pause_selection() == 1) genericVariables.set_pause_selection(2);
 			else if(genericVariables.get_pause_selection() == 2) genericVariables.set_pause_selection(0);
-		}else if(key == KeyEvent.VK_UP) {
+		}else if(key == KeyEvent.VK_UP && !genericVariables.get_clip_move().isRunning()) {
+			genericVariables.get_clip_move().start();
 			if(genericVariables.get_pause_selection() == 0) genericVariables.set_pause_selection(2);
 			else if(genericVariables.get_pause_selection() == 2) genericVariables.set_pause_selection(1);
 			else if(genericVariables.get_pause_selection() == 1) genericVariables.set_pause_selection(0);
 		}
-		if(key == KeyEvent.VK_ENTER)
+		if(key == KeyEvent.VK_ENTER && !genericVariables.get_clip_explosion().isRunning()) {
+			genericVariables.get_clip_explosion().start();
 			genericVariables.set_pause_apply(true);
+		}
+			
     }
 }

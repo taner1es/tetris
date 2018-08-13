@@ -7,7 +7,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.net.URL;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.Map;
@@ -16,7 +15,6 @@ import java.util.NavigableMap;
 import java.util.Set;
 import java.util.Vector;
 
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -26,20 +24,15 @@ class Tetris extends genericVariables
     {
     	new Tetris().go();
     }
+    
+   
     private void go()
     {
     	genericVariables.set_game_startedTimeStamp(Calendar.getInstance());
-    	URL url_tetris_welcome = Tetris.class.getResource("tetris_welcome.png"); //gets the folder/file from runnable jar file location
-		URL url_tetris_intro = Tetris.class.getResource("tetris_intro.gif"); 
-		URL url_tetris_bg = Tetris.class.getResource("tetris_bg.png"); 
-		URL url_tetris_instructions = Tetris.class.getResource("tetris_instructions.png"); 
-
-		genericVariables.set_view_welcome_image(new ImageIcon(url_tetris_welcome).getImage());
-		genericVariables.set_view_intro_image(new ImageIcon(url_tetris_intro).getImage());
-		genericVariables.set_view_bg_image(new ImageIcon(url_tetris_bg).getImage());
-		genericVariables.set_view_instructions_image(new ImageIcon(url_tetris_instructions).getImage());
-		
-		
+    	
+    	loaders.load_sounds();
+    	loaders.load_images();
+    	
     	//this block to configure window settings 
         genericVariables.set_frame(new JFrame("Tetris"));
         genericVariables.get_frame().setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -67,10 +60,12 @@ class Tetris extends genericVariables
     	//endless loop for game running.
         while (true)
         {
-    		if(genericVariables.get_game_state() == "exit") {
-    			System.exit(0);
-    			break;
-    		}
+        	System.out.println(genericVariables.get_game_state());
+        	gameComponents.check_audios();
+	    	if(genericVariables.get_game_state() == "exit") {
+				System.exit(0);
+				break;
+			}
         	//restarting
         	if(genericVariables.get_restartGame()){
         		genericVariables.set_my_tetris(new gameComponents());
@@ -94,6 +89,9 @@ class Tetris extends genericVariables
         			gameComponents.pause_menu_select_func();
         			break;
         		case "loading":
+        			if(genericVariables.get_clip_loading().isOpen() && !genericVariables.get_clip_loading().isRunning()) {
+        				genericVariables.get_clip_loading().start();
+        			}
         			break;
         		case "highscore":
         			break;
@@ -122,13 +120,16 @@ class Tetris extends genericVariables
 			e.printStackTrace();
 		}
     }
-	private void run_gameLoop() {
+	
+    
+    private void run_gameLoop() {
+    	genericVariables.get_clip_theme_music().start();
 		if(genericVariables.get_my_tetris().get_all_shapes() != null) {
 			if(genericVariables.get_down()) {
 				genericVariables.set_speed_down(genericVariables.get_speed_game()/10);
 			}
 			
-			shape active = genericVariables.get_my_tetris().get_all_shapes().lastElement();
+			shape active = genericVariables.get_active_shape();
 			
 			if(genericVariables.get_col_left_exists() || genericVariables.get_col_right_exists()) {
 				genericVariables.set_frameCounter_collision(genericVariables.get_frameCounter_collision()+1);
@@ -137,8 +138,7 @@ class Tetris extends genericVariables
 			}
 
 			if(active.get_shape_active()) {
-				
-				if(genericVariables.get_directDown()) {
+				if(genericVariables.get_directDown() && !genericVariables.get_clip_drop().isRunning()) {
 					gameComponents.directDown_event();
 				}else {
 					gameComponents.checkcollisions(active);
@@ -731,7 +731,8 @@ class Tetris extends genericVariables
             }
 
         	
-        	private void draw_tetrosquare(Graphics g,int pos_x,int pos_y,int x_length, int y_length,Color color_back, Color color_front,Color fill_rect_at_back,int size) {
+        	@SuppressWarnings("unused")
+			private void draw_tetrosquare(Graphics g,int pos_x,int pos_y,int x_length, int y_length,Color color_back, Color color_front,Color fill_rect_at_back,int size) {
         		g.setColor(fill_rect_at_back);
         		g.fillRect(pos_x+size, pos_y+size, x_length-size, y_length-size);
         		

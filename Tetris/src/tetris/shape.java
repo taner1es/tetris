@@ -80,6 +80,7 @@ class shape extends genericVariables{
 		for(int i= 0 ; i< 4 ; i++) {
 			sh_boxes.get(i).set_box_x(sh_boxes.get(i).get_box_x()-25);
 		}
+		genericVariables.get_clip_move().start();
 	}
 	//go right
 	protected void go_right() {
@@ -87,6 +88,7 @@ class shape extends genericVariables{
 		for(int i= 0 ; i< 4 ; i++) {
 			sh_boxes.get(i).set_box_x(sh_boxes.get(i).get_box_x()+25);
 		}
+		genericVariables.get_clip_move().start();
 	}
 	//calculate shape start location and end location to clarify collision checker
 	protected void calc_shape_start_end_loc(){

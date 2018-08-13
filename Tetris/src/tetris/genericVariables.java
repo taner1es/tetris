@@ -6,6 +6,8 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.util.Calendar;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.Clip;
 import javax.swing.JFrame;
 
 
@@ -89,6 +91,20 @@ class genericVariables extends KeyInput{
 	
 	static Color bg_color = new Color(190, 247, 236);
 	
+	private static AudioInputStream audio_explosion;
+	private static AudioInputStream audio_move;
+	private static AudioInputStream audio_rotate;
+	private static AudioInputStream audio_loading;
+	private static AudioInputStream audio_drop;
+	private static AudioInputStream audio_theme_music;
+	
+	private static Clip clip_explosion;
+	private static Clip clip_move;
+	private static Clip clip_rotate;
+	private static Clip clip_loading;
+	private static Clip clip_drop;
+	private static Clip clip_theme_music;
+	
 	//getter methods
 	protected static JFrame get_frame() { return frame;}
 	protected static DrawPanel get_drawPanel() { return drawPanel;}
@@ -148,6 +164,23 @@ class genericVariables extends KeyInput{
 	protected static Calendar get_score_addTimeStamp() { return score_addTimeStamp;}
 	
 	protected static Color get_bg_color() { return bg_color; }
+	
+	protected static AudioInputStream get_audio_explosion() { return audio_explosion;}
+	protected static AudioInputStream get_audio_move() { return audio_move;}
+	protected static AudioInputStream get_audio_rotate() { return audio_rotate;}
+	protected static AudioInputStream get_audio_loading() { return audio_loading;}
+	protected static AudioInputStream get_audio_drop() { return audio_drop;}
+	protected static AudioInputStream get_audio_theme_music() { return audio_theme_music;}
+	
+	protected static Clip get_clip_explosion() { return clip_explosion;}
+	protected static Clip get_clip_move() { return clip_move;}
+	protected static Clip get_clip_rotate() { return clip_rotate;}
+	protected static Clip get_clip_loading() { return clip_loading;}
+	protected static Clip get_clip_drop() { return clip_drop;}
+	protected static Clip get_clip_theme_music() { return clip_theme_music;}
+	
+	protected static shape get_active_shape() { return genericVariables.get_my_tetris().get_all_shapes().lastElement();}
+	
 	//setter methods
 	protected static void set_frame(JFrame p_frame) { frame = p_frame;}
 	protected static void set_drawPanel(DrawPanel p_drawPanel) { drawPanel = p_drawPanel;}
@@ -198,11 +231,23 @@ class genericVariables extends KeyInput{
     
     protected static void set_game_startedTimeStamp(Calendar p_Date) { game_startedTimeStamp = p_Date;}
     protected static void set_score_addTimeStamp(Calendar p_Date) { score_addTimeStamp = p_Date;}
-	
+    
+    protected static void set_audio_explosion(AudioInputStream p_audio) { audio_explosion = p_audio;}
+    protected static void set_audio_move(AudioInputStream p_audio) { audio_move = p_audio;}
+    protected static void set_audio_rotate(AudioInputStream p_audio) { audio_rotate = p_audio;}
+    protected static void set_audio_loading(AudioInputStream p_audio) { audio_loading = p_audio;}
+    protected static void set_audio_drop(AudioInputStream p_audio) { audio_drop = p_audio;}
+    protected static void set_audio_theme_music(AudioInputStream p_audio) { audio_theme_music = p_audio;}
+    
+	protected static void set_clip_explosion(Clip p_clip) { clip_explosion = p_clip;}
+	protected static void set_clip_move(Clip p_clip) { clip_move = p_clip;}
+	protected static void set_clip_rotate(Clip p_clip) { clip_rotate = p_clip;}
+	protected static void set_clip_loading(Clip p_clip) { clip_loading = p_clip;}
+	protected static void set_clip_drop(Clip p_clip) { clip_drop = p_clip;}
+	protected static void set_clip_theme_music(Clip p_clip) { clip_theme_music = p_clip;}
+    
     //increase methods
     protected static void inc_frameCounter_collision_bot() { frameCounter_collision_bot++; }
-    
-    
     
     protected static void reset() {
     	shape_cnt = 0;
@@ -245,6 +290,13 @@ class genericVariables extends KeyInput{
     	gameComponents.name = "";
     	
     	game_startedTimeStamp = Calendar.getInstance();
+    }
+    
+    protected static void reset_sound(Clip clip) {
+    	if(clip.getFrameLength() <= clip.getFramePosition()) {
+    		clip.stop();
+    		clip.setFramePosition(0);
+    	}
     }
     
     
