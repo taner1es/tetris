@@ -1,7 +1,8 @@
-package tetris;
+package tetris.code;
 
 import java.util.Vector;
-import tetris.box;
+
+import tetris.code.box;
 
 class shape extends genericVariables{
 	Vector<box> sh_boxes = new Vector<box>(4);

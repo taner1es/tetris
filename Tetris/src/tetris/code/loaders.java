@@ -1,4 +1,4 @@
-package tetris;
+package tetris.code;
 
 import java.io.IOException;
 import java.net.URL;
@@ -13,10 +13,10 @@ public class loaders {
 
     protected static void load_images() {
     	//image files URLs
-    	URL url_tetris_welcome = Tetris.class.getResource("tetris_welcome.png"); //gets the folder/file from runnable jar file location
-		URL url_tetris_intro = Tetris.class.getResource("tetris_intro.gif"); 
-		URL url_tetris_bg = Tetris.class.getResource("tetris_bg.png"); 
-		URL url_tetris_instructions = Tetris.class.getResource("tetris_instructions.png"); 
+    	URL url_tetris_welcome = Tetris.class.getResource("../images/tetris_welcome.png"); //gets the folder/file from runnable jar file location
+		URL url_tetris_intro = Tetris.class.getResource("../images/tetris_intro.gif"); 
+		URL url_tetris_bg = Tetris.class.getResource("../images/tetris_bg.png"); 
+		URL url_tetris_instructions = Tetris.class.getResource("../images/tetris_instructions.png"); 
 
 		//set image variables with content
 		genericVariables.set_view_welcome_image(new ImageIcon(url_tetris_welcome).getImage());
@@ -26,12 +26,12 @@ public class loaders {
     }
     protected static void load_sounds() {
     	//sound files URLs
-		URL url_tetris_audio_explosion = Tetris.class.getResource("explosion.wav");
-		URL url_tetris_audio_move = Tetris.class.getResource("move.wav");
-		URL url_tetris_audio_rotate = Tetris.class.getResource("rotate.wav");
-		URL url_tetris_audio_loading = Tetris.class.getResource("loading.wav");
-		URL url_tetris_audio_drop = Tetris.class.getResource("drop.wav");
-		URL url_tetris_audio_theme_music = Tetris.class.getResource("theme_music.wav");
+		URL url_tetris_audio_explosion = Tetris.class.getResource("../sounds/explosion.wav");
+		URL url_tetris_audio_move = Tetris.class.getResource("../sounds/move.wav");
+		URL url_tetris_audio_rotate = Tetris.class.getResource("../sounds/rotate.wav");
+		URL url_tetris_audio_loading = Tetris.class.getResource("../sounds/loading.wav");
+		URL url_tetris_audio_drop = Tetris.class.getResource("../sounds/drop.wav");
+		URL url_tetris_audio_theme_music = Tetris.class.getResource("../sounds/theme_music.wav");
 		
 		//create then set audio inputs with content
 		AudioInputStream audio_explosion = null;

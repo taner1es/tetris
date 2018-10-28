@@ -1,4 +1,4 @@
-package tetris;
+package tetris.externaltools;
  
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -7,6 +7,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+
+import tetris.code.highScoreObject;
  
 /**
  * This class is a utility class for performing the serialization and
@@ -20,7 +22,7 @@ public class SerializationUtil {
      * deserialize to Object from given file. We use the general Object so as
      * that it can work for any Java Class.
      */
-    protected static highScoreObject deserialize(String fileName) throws IOException,
+    public static highScoreObject deserialize(String fileName) throws IOException,
         	ClassNotFoundException {
         FileInputStream fis = new FileInputStream(fileName);
         BufferedInputStream bis = new BufferedInputStream(fis);
@@ -33,7 +35,7 @@ public class SerializationUtil {
     /**
      * serialize the given object and save it to given file
      */
-    protected static void serialize(highScoreObject obj, String fileName)
+    public static void serialize(highScoreObject obj, String fileName)
             throws IOException {
         FileOutputStream fos = new FileOutputStream(fileName);
         BufferedOutputStream bos = new BufferedOutputStream(fos);

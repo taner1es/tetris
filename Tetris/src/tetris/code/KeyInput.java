@@ -1,4 +1,4 @@
-package tetris;
+package tetris.code;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;

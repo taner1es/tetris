@@ -1,9 +1,11 @@
-package tetris;
+package tetris.code;
 
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Random;
 import java.util.Vector;
+
+import tetris.externaltools.SerializationUtil;
 
 //this class is the most important class.
 class gameComponents extends genericVariables{ 

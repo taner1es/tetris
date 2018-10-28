@@ -1,4 +1,4 @@
-package tetris;
+package tetris.code;
 
 import java.awt.Color;
 import java.awt.GraphicsDevice;
@@ -10,8 +10,7 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.Clip;
 import javax.swing.JFrame;
 
-
-import tetris.Tetris.DrawPanel;
+import tetris.code.Tetris.DrawPanel;
 
 
 class genericVariables extends KeyInput{

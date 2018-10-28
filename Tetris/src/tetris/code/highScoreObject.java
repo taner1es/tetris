@@ -1,9 +1,9 @@
-package tetris;
+package tetris.code;
 
 import java.io.Serializable;
 import java.util.TreeMap;
 
- class highScoreObject implements Serializable{
+ public class highScoreObject implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 		

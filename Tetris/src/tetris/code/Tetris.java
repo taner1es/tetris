@@ -1,4 +1,4 @@
-package tetris;
+package tetris.code;
 /*
  *  @Author : Taner Esmeroğlu
  */
