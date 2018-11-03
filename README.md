@@ -60,7 +60,8 @@ C:\gitClonedProject\jdk-11.0.1\bin\java.exe -cp ../../ tetris.code.Tetris
 
 ## Contributing
 
-* [TODO]
+* You're always welcome to submit a bug,advice or pull request
+* You can contact me with taner.esmrglu@gmail.com
 
 ## Versioning
 
@@ -74,9 +75,3 @@ C:\gitClonedProject\jdk-11.0.1\bin\java.exe -cp ../../ tetris.code.Tetris
 ## License
 
 This project is licensed under the GNU General Public License v3.0 - see the [LICENSE.md](LICENSE) file for details
-
-## Acknowledgments
-
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
