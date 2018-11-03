@@ -3,7 +3,7 @@
 ### What is this project ?
 	This is one of the clones of epic tetris game, developed from scratch with standard 
 	java libraries by me. And if you interested you can check everything behind a project 
-	that created by an amator video-game programmer.
+	that created by an amateur video-game programmer.
 ### What is the goal of the project ? 
 	Just practising for beginning to developing games. Rookies of the game developing 
 	hobbyists may want to check this project, to see how to develop game without using 
