@@ -1,84 +1,79 @@
-# Project Title
+# Tetris Clone Project
 
-One Paragraph of project description goes here
+### What is this project ?
+	This is one of the clones of epic tetris game, developed from scratch with standard 
+	java libraries by me. And if you interested you can check everything behind a project 
+	that created by an amator video-game programmer.
+### What is the goal of the project ? 
+	Just practising for beginning to developing games. Rookies of the game developing 
+	hobbyists may want to check this project, to see how to develop game without using 
+	any tools that prepared for game development like presents in game engines.
+## How to build it?
 
-## Getting Started
-
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
 ### Prerequisites
 
-What things you need to install the software and how to install them
+You only need a Oracle JavaSE Development kit 9.0.4 or upper. Below versions may work but
+I didn't try and to avoid any problem that is why I recommend.
+
+### STEP 1 - Download JavaSE SDK ZIP
 
 ```
-Give examples
+https://www.oracle.com/technetwork/java/javase/downloads/index.html
 ```
 
-### Installing
-
-A step by step series of examples that tell you how to get a development env running
-
-Say what the step will be
+### STEP 2 - Open PowerShell CLI and Create a new folder to work on
 
 ```
-Give the example
+mkdir C:\gitClonedProject
 ```
-
-And repeat
-
-```
-until finished
-```
-
-End with an example of getting some data out of the system or using it for a little demo
-
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
+### STEP 3 - Extract files to the folder that we created (don't forget to replace pre-fix of downloaded zip file path)
 
 ```
-Give an example
+Expand-Archive [your downloads directory path will be here]\jdk-11.0.1_windows-x64_bin.zip C:\gitClonedProject\
 ```
 
-### And coding style tests
-
-Explain what these tests test and why
+### STEP 4 - get tetris project files to your local computer
 
 ```
-Give an example
+git clone https://github.com/taner1es/Tetris.git C:\gitClonedProject\Tetris
 ```
 
-## Deployment
+### STEP 5 - now we're ready to build project 
 
-Add additional notes about how to deploy this on a live system
+Switch Current Directory : 
+```
+cd C:\gitClonedProject\Tetris\Tetris\src\tetris\code\
+```
+Compile the source code:
+```
+C:\gitClonedProject\jdk-11.0.1\bin\javac.exe -cp ../../ ./Tetris.java
+```
+Run the game to test your binaries works fine or not: 
+```
+C:\gitClonedProject\jdk-11.0.1\bin\java.exe -cp ../../ tetris.code.Tetris
+```
 
 ## Built With
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+* [TODO]
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
+* [TODO]
 
 ## Versioning
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+* [TODO]
 
-## Authors
+## Author(s)
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
+* **Taner Esmeroğlu** - *Starter* - [taner1es](https://github.com/taner1es)
 
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the GNU General Public License v3.0 - see the [LICENSE.md](LICENSE) file for details
 
 ## Acknowledgments
 
