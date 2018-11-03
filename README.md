@@ -8,6 +8,16 @@
 	Just practising for beginning to developing games. Rookies of the game developing 
 	hobbyists may want to check this project, to see how to develop game without using 
 	any tools that prepared for game development like presents in game engines.
+	
+### How can I test a released version of the project ?
+	For now there is well-tested version but still it is pre-released state. Because, still there 
+	are somethings that I want to add to the project but you can download pre-release version
+	to test,play and enjoy with. Also if you want to build project on your local and to do some 
+	contribution by following the steps at below, you are always welcome. Please contact with me 
+	if you are interested that much.
+	
+* Release Page : https://github.com/taner1es/Tetris/releases
+	
 ## How to build it?
 
 
