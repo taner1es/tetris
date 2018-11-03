@@ -16,6 +16,8 @@
 You only need a Oracle JavaSE Development kit 9.0.4 or upper. Below versions may work but
 I didn't try and to avoid any problem that is why I recommend.
 
+## IF you already have JDK installed on your local system, you can skip to step 4
+
 ### STEP 1 - Download JavaSE SDK ZIP
 
 ```
