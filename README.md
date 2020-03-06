@@ -1,4 +1,6 @@
-# Tetris Clone Project
+﻿# Tetris Clone Project
+
+![Playshot](playshot.gif)
 
 ### What is this project ?
 	This is one of the clones of epic tetris game, developed from scratch with standard 
